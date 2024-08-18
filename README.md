@@ -4,7 +4,7 @@
 
 # Simplici 
 
-Simplici is a minecraft mod that aims to add physics based technology to the game.
+Simplici is a minecraft mod that aims to add vanilla style vehicle and doohickeys to VS2.
 
 <img alt="fabric" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg">
 <img alt="forge" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg">
@@ -14,11 +14,6 @@ Simplici is a minecraft mod that aims to add physics based technology to the gam
 #### Will this be ported to older versions
 
 No.
-
-#### Is this mod designed to work with other tech mods
-
-No, however im trying to keep it compatible with stuff like AE2 or Create
-
 
 ## Contributing
 
