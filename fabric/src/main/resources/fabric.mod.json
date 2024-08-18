@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "simplici",
+  "version": "${version}",
+  "name": "VS Simplici Mod",
+  "description": "vanilla+ based VS2 mod",
+  "authors": [ "Dustley" ],
+  "contributors": [
+    "Triode"
+  ],
+  "contact": {
+    "homepage": "https://valkyrienskies.org/",
+    "sources": "https://github.com/ValkyrienSkies/Simplici"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/simplici/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.valkyrienskies.simplici.fabric.SimpliciModFabric"
+    ],
+    "client": [
+      "org.valkyrienskies.simplici.fabric.SimpliciModFabric${'$'}Client"
+    ],
+    "preLaunch": [
+      "org.valkyrienskies.simplici.fabric.ValkyrienPreLaunch"
+    ],
+    "modmenu": [
+      "org.valkyrienskies.simplici.fabric.SimpliciModFabric${'$'}ModMenu"
+    ],
+    "fabric-datagen": [
+      "org.valkyrienskies.simplici.fabric.SimpliciDataGenerator"
+    ]
+  },
+  "mixins": [
+    "simplici-common.mixins.json",
+    "simplici.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=1.20.1",
+    "valkyrienskies": ">=${vs2_version}",
+    "fabricloader": ">=0.14.21"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "org.valkyrienskies.simplici.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

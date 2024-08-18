@@ -1,0 +1,11 @@
+{
+  "itemGroup.simplici.simplici_tab": "Simplici",
+  "itemGroup.simplici": "Simplici",
+
+  "block.simplici.simple_propeller": "Propeller",
+  "block.simplici.blast_propeller": "Blast Propeller",
+  "block.simplici.firework_thruster": "Firework Thruster",
+
+  "block.simplici.hinge": "Hinge",
+  "block.simplici.rotator": "Rotator"
+}
