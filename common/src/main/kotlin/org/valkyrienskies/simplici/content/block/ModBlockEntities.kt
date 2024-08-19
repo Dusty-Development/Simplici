@@ -28,60 +28,21 @@ object ModBlockEntities {
     private val BLOCKENTITIES = DeferredRegister.create(Simplici.MOD_ID, Registries.BLOCK_ENTITY_TYPE)
     private val BlockEntityRenderers = mutableListOf<RendererEntry<*>>()
 
-    val DRIVER_SEAT : RegistrySupplier<BlockEntityType<DriverSeatBlockEntity>>
+    val DRIVER_SEAT = ModBlocks.DRIVER_SEAT.withBE(::DriverSeatBlockEntity).byName("driver_seat")
+    val SIMPLE_PROPELLER  = ModBlocks.SIMPLE_PROPELLER.withBE(::SimplePropellerBlockEntity).byName("simple_propeller").withRenderer { SimplePropellerBlockEntityRenderer( ModModels.PROPELLER ) }
+    val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer { BlastPropellerBlockEntityRenderer( ModModels.PROPELLER ) }
+    val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
-    val SIMPLE_PROPELLER : RegistrySupplier<BlockEntityType<SimplePropellerBlockEntity>>
-    val BLAST_PROPELLER : RegistrySupplier<BlockEntityType<BlastPropellerBlockEntity>>
-    val FIREWORK_THRUSTER : RegistrySupplier<BlockEntityType<FireworkThrusterBlockEntity>>
+    val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
+    val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
 
-    val HINGE : RegistrySupplier<BlockEntityType<HingeBlockEntity>>
-    val ROTATOR : RegistrySupplier<BlockEntityType<RotatorBlockEntity>>
+    fun register() = BLOCKENTITIES.applyAll()
 
-    init {
-
-        DRIVER_SEAT = ModBlocks.CONTROL_PANEL
-            .withBE(::DriverSeatBlockEntity)
-            .byName("driver_seat")
-
-        SIMPLE_PROPELLER = ModBlocks.SIMPLE_PROPELLER
-            .withBE(::SimplePropellerBlockEntity)
-            .byName("simple_propeller")
-            .withRenderer {
-                SimplePropellerBlockEntityRenderer(
-                    ModModels.PROPELLER
-                )
-            }
-        BLAST_PROPELLER = ModBlocks.BLAST_PROPELLER
-            .withBE(::BlastPropellerBlockEntity)
-            .byName("blast_propeller")
-            .withRenderer {
-                BlastPropellerBlockEntityRenderer(
-                    ModModels.PROPELLER
-                )
-            }
-        FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER
-            .withBE(::FireworkThrusterBlockEntity)
-            .byName("firework_thruster")
-
-        HINGE = ModBlocks.HINGE
-            .withBE(::HingeBlockEntity)
-            .byName("hinge")
-        ROTATOR = ModBlocks.ROTATOR
-                .withBE(::RotatorBlockEntity)
-            .byName("rotator")
-    }
-
-    fun register() {
-        BLOCKENTITIES.applyAll()
-    }
-
-    private infix fun <T : BlockEntity> Set<RegistrySupplier<out Block>>.withBE(blockEntity: (BlockPos, BlockState) -> T) =
-        Pair(this, blockEntity)
-
-    private infix fun <T : BlockEntity> RegistrySupplier<out Block>.withBE(blockEntity: (BlockPos, BlockState) -> T) =
-        Pair(setOf(this), blockEntity)
-
+    private infix fun <T : BlockEntity> Set<RegistrySupplier<out Block>>.withBE(blockEntity: (BlockPos, BlockState) -> T) = Pair(this, blockEntity)
+    private infix fun <T : BlockEntity> RegistrySupplier<out Block>.withBE(blockEntity: (BlockPos, BlockState) -> T) = Pair(setOf(this), blockEntity)
     private infix fun <T : BlockEntity> Block.withBE(blockEntity: (BlockPos, BlockState) -> T) = Pair(this, blockEntity)
+
+    // Block Entity renderers built off of vs-Tournament
 
     private data class RendererEntry<T: BlockEntity>(
         val type: RegistrySupplier<BlockEntityType<T>>,
@@ -89,14 +50,9 @@ object ModBlockEntities {
     )
 
     fun initClientRenderers(clientRenderers: Simplici.ClientRenderers) {
-        BlockEntityRenderers.forEach { x ->
-            val rp = BlockEntityRendererProvider {
-                x.renderer() as BlockEntityRenderer<BlockEntity>
-            }
-            clientRenderers.registerBlockEntityRenderer(
-                x.type.get() as BlockEntityType<BlockEntity>,
-                rp
-            )
+        BlockEntityRenderers.forEach { blockEntityRendererEntry ->
+            val rendererProvider = BlockEntityRendererProvider { blockEntityRendererEntry.renderer() as BlockEntityRenderer<BlockEntity> }
+            clientRenderers.registerBlockEntityRenderer( blockEntityRendererEntry.type.get() as BlockEntityType<BlockEntity>, rendererProvider )
         }
     }
 
@@ -110,8 +66,5 @@ object ModBlockEntities {
             ).build(type)
         }
 
-    private infix fun <T : BlockEntity> RegistrySupplier<BlockEntityType<T>>.withRenderer(renderer: () -> Any) =
-        this.also {
-            BlockEntityRenderers += RendererEntry(it, renderer)
-        }
+    private infix fun <T : BlockEntity> RegistrySupplier<BlockEntityType<T>>.withRenderer(renderer: () -> Any) = this.also { BlockEntityRenderers += RendererEntry(it, renderer) }
 }

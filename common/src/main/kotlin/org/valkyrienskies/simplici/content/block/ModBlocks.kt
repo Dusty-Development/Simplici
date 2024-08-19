@@ -15,12 +15,17 @@ import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
+import org.valkyrienskies.simplici.registry.NoBlockItem
+import org.valkyrienskies.simplici.registry.NoCreativeTab
+import org.valkyrienskies.simplici.registry.NoTabBlockItem
 
 @Suppress("unused")
 object ModBlocks {
     internal val BLOCKS = DeferredRegister.create(Simplici.MOD_ID, Registries.BLOCK)
 
-    val CONTROL_PANEL = BLOCKS.register("control_panel", ::DriverSeatBlock)
+    val DRIVER_SEAT = BLOCKS.register("driver_seat", ::DriverSeatBlock)
+    val PILOT_SEAT = BLOCKS.register("pilot_seat", ::DriverSeatBlock)
+    val PASSENGER_SEAT = BLOCKS.register("passenger_seat", ::DriverSeatBlock)
 
     val SIMPLE_PROPELLER = BLOCKS.register("simple_propeller", ::SimplePropellerBlock)
     val BLAST_PROPELLER = BLOCKS.register("blast_propeller", ::BlastPropellerBlock)
@@ -38,8 +43,10 @@ object ModBlocks {
     // aka all blocks
     fun registerItems(items: DeferredRegister<Item>) {
         BLOCKS.forEach {
-            if (it !is NoBlockItem) {
-                items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
+            if (it.get() !is NoBlockItem) {
+                println("${it.name} is a: ${it is NoCreativeTab}")
+                if(it is NoCreativeTab) items.register(it.name) { NoTabBlockItem(it.get(), Item.Properties()) }
+                else items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
             }
         }
     }

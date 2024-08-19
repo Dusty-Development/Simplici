@@ -11,6 +11,7 @@ import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.api.services.ModPlatformHelper
 
 object ModModels {
+    val MODELS = mutableSetOf<ResourceLocation>()
 
     val PROPELLER = model("block/engine/propeller")
 
@@ -27,7 +28,6 @@ object ModModels {
         return model
     }
 
-    val MODELS = mutableSetOf<ResourceLocation>()
 
     interface Renderer {
         fun render(

@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
@@ -19,14 +20,19 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.POWER
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.VoxelShape
+import org.valkyrienskies.simplici.api.util.DirectionalShape
+import org.valkyrienskies.simplici.api.util.RotShapes
 
 class RotatorBlock : BaseEntityBlock(
     Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f)
 ) {
 
-    override fun getRenderShape(blockState: BlockState): RenderShape {
-        return RenderShape.MODEL
-    }
+    private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)
+
+    override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.up(shape)[blockState.getValue(FACING)]
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(POWER)

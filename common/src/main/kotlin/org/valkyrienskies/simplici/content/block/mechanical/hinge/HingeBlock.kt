@@ -30,7 +30,7 @@ class HingeBlock : BaseEntityBlock(
     private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
-    override fun getShape( blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext ): VoxelShape = DirectionalShape.north(shape)[blockState.getValue(FACING)]
+    override fun getShape( blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext ): VoxelShape = DirectionalShape.up(shape)[blockState.getValue(FACING)]
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = HingeBlockEntity(pos, state)
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -55,6 +55,8 @@ class HingeBlock : BaseEntityBlock(
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
         var dir = ctx.nearestLookingDirection
+        if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
+            dir = dir.opposite
         return defaultBlockState()
             .setValue(FACING, dir)
     }

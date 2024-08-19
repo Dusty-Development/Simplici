@@ -46,7 +46,6 @@ public class SimpliciModFabric implements ModInitializer {
             Simplici.initClient();
             Simplici.initClientRenderers(new ClientRenderersFabric());
 
-
             ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) ->
                     ModModels.INSTANCE.getMODELS().forEach(out));
         }

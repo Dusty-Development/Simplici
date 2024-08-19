@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
@@ -17,17 +18,26 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.VoxelShape
+import org.valkyrienskies.simplici.api.util.DirectionalShape
+import org.valkyrienskies.simplici.api.util.RotShapes
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
 import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
 class BlastPropellerBlock : BaseEntityBlock(
     Properties.of().mapColor(MapColor.METAL).strength(2.5F).sound(
-        SoundType.NETHERITE_BLOCK).noOcclusion()), IThrusterBlock {
+        SoundType.NETHERITE_BLOCK).noOcclusion()), IThrusterBlock
+{
+
+    private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.up(shape)[blockState.getValue( FACING )]
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = BlastPropellerBlockEntity(pos, state)
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

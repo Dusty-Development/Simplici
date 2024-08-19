@@ -15,7 +15,8 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
-import org.valkyrienskies.simplici.content.block.NoBlockItem
+import org.valkyrienskies.simplici.registry.NoBlockItem
+import org.valkyrienskies.simplici.registry.NoCreativeTab
 
 class HingeHeadBlock : DirectionalBlock(Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f)), NoBlockItem
 {
@@ -23,7 +24,7 @@ class HingeHeadBlock : DirectionalBlock(Properties.of().sound(SoundType.STONE).s
     val SHAPE = RotShapes.box(0.0, 12.0, 0.0, 16.0, 16.0, 16.0)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
-    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.north(SHAPE)[blockState.getValue(
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.up(SHAPE)[blockState.getValue(
         BlockStateProperties.FACING
     )]
 

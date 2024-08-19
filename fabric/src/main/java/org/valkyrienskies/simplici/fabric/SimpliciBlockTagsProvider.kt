@@ -11,6 +11,6 @@ class SimpliciBlockTagsProvider(output: FabricDataOutput, registriesFuture: Comp
     FabricTagProvider.BlockTagProvider(output, registriesFuture) {
     override fun addTags(arg: HolderLookup.Provider) {
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(ModBlocks.CONTROL_PANEL.get())
+            .add(ModBlocks.DRIVER_SEAT.get())
     }
 }
