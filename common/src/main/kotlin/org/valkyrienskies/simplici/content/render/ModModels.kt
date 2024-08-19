@@ -12,6 +12,8 @@ import org.valkyrienskies.simplici.api.services.ModPlatformHelper
 
 object ModModels {
 
+    val PROPELLER = model("block/engine/propeller")
+
     private fun getModel(rl: ResourceLocation): BakedModel {
         val model = ModPlatformHelper
             .get()
@@ -99,7 +101,5 @@ object ModModels {
         MODELS += rl
         return Model(rl, checkSides, useAO)
     }
-
-    val PROPELLER = model("block/engine/propeller")
 
 }

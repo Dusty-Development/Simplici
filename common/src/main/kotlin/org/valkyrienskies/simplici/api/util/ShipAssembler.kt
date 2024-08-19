@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.api.util
+package org.valkyrienskies.simplici.content.block.mechanical.api.util
 
 import com.google.common.collect.Sets
 import it.unimi.dsi.fastutil.objects.ObjectArrayList

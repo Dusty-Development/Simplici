@@ -1,10 +1,9 @@
-package org.valkyrienskies.simplici.api.util
+package org.valkyrienskies.simplici.content.ship.modules.thruster
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterControlModule
 import org.valkyrienskies.core.api.ships.LoadedServerShip
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 

@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "simplici:block/hinge_front",
-		"1": "simplici:block/rotator_side",
-		"2": "simplici:block/hinge_back",
-		"particle": "simplici:block/rotator_side"
+		"0": "simplici:block/hinge/hinge_front",
+		"1": "simplici:block/hinge/rotator_side",
+		"2": "simplici:block/hinge/hinge_back",
+		"particle": "simplici:block/hinge/rotator_side"
 	},
 	"elements": [
 		{

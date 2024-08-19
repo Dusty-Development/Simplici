@@ -22,7 +22,7 @@ object Simplici {
         ModScreens.register()
         ModEntities.register()
 
-        VSConfigClass.registerConfig("simplici", ModConfig::class.java)
+        VSConfigClass.registerConfig(MOD_ID, ModConfig::class.java)
     }
 
     @JvmStatic

@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.api.util
+package org.valkyrienskies.simplici.content.block.mechanical.api.util
 
 import java.io.Serializable
 

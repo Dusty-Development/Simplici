@@ -12,6 +12,7 @@ import org.valkyrienskies.simplici.content.block.engine.blast_propeller.BlastPro
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlock
 import org.valkyrienskies.simplici.content.block.engine.simple_propeller.SimplePropellerBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
+import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
@@ -26,6 +27,7 @@ object ModBlocks {
     val FIREWORK_THRUSTER = BLOCKS.register("firework_thruster", ::FireworkThrusterBlock)
 
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
+    val HINGE_HEAD = BLOCKS.register("hinge_head", ::HingeHeadBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
 
     fun register() {
@@ -36,7 +38,9 @@ object ModBlocks {
     // aka all blocks
     fun registerItems(items: DeferredRegister<Item>) {
         BLOCKS.forEach {
-            items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
+            if (it !is NoBlockItem) {
+                items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
+            }
         }
     }
 }

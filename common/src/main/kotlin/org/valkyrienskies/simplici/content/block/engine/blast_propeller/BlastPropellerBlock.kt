@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
-import org.valkyrienskies.simplici.api.util.ThrusterBlockHelper
+import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
 import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
