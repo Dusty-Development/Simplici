@@ -1,49 +1,32 @@
 package org.valkyrienskies.simplici.content.block.mechanical.rotator
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import net.minecraft.Util
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.ClipContext
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.GrindstoneBlock
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.HitResult
 import org.joml.AxisAngle4d
 import org.joml.Quaterniond
-import org.joml.Quaterniondc
-import org.joml.Vector3d
-import org.valkyrienskies.simplici.ModConfig
-import org.valkyrienskies.simplici.api.extension.snapToGrid
-import org.valkyrienskies.simplici.content.block.ModBlockEntities
-import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeConstraintBlockEntity
-import org.valkyrienskies.simplici.content.ship.modules.motor.RotatorControlModule
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
 import org.valkyrienskies.core.apigame.constraints.VSHingeOrientationConstraint
-import org.valkyrienskies.mod.common.dimensionId
+import org.valkyrienskies.simplici.ModConfig
+import org.valkyrienskies.simplici.content.block.ModBlockEntities
+import org.valkyrienskies.simplici.content.ship.modules.motor.RotatorControlModule
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.mod.common.util.toMinecraft
-import org.valkyrienskies.mod.common.world.clipIncludeShips
-import org.valkyrienskies.physics_api.ConstraintId
-import java.awt.TextComponent
+import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeHelper
 
 
 // THIS WAS ALL TAKEN FROM BUGGY REWRITE WHEN AVAILABLE
 
-class RotatorBlockEntity(pos: BlockPos, state: BlockState)
-    : HingeConstraintBlockEntity(ModBlockEntities.ROTATOR.get(), pos, state)
+class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.ROTATOR.get(), pos, state)
 {
     private var isFlipped = false
 
@@ -58,41 +41,65 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState)
         super.saveAdditional(tag)
     }
 
+    override fun createConstraints(shipId: ShipId, constrainedShipId: ShipId, compliance: Double, maxForce: Double) {
+        // The facing rotations
+        val facing = blockState.getValue(FACING)
+        val headFacing = level!!.getBlockState(mechanicalHeadBlockPos!!).getValue(FACING)
+
+        val hingeOrientation = HingeHelper.getRotationQuaternionFromDirection(facing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
+        val headOrientation = HingeHelper.getRotationQuaternionFromDirection(headFacing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
+
+        // Hinge constraint
+        val hingeConstraint = VSHingeOrientationConstraint(
+            shipId,
+            constrainedShipId,
+            compliance,
+            hingeOrientation,
+            headOrientation,
+            maxForce
+        )
+        (level as ServerLevel).shipObjectWorld.createNewConstraint(hingeConstraint)?.let { constraints.add(it) }
+
+        // Attach constraint
+        val attachConstraint = VSAttachmentConstraint(
+            shipId,
+            constrainedShipId,
+            compliance,
+            blockPos.toJOMLD().add(0.5,0.5,0.5),
+            mechanicalHeadBlockPos!!.toJOMLD().add(0.5,0.5,0.5),
+            maxForce,
+            0.0
+        )
+        (level as ServerLevel).shipObjectWorld.createNewConstraint(attachConstraint)?.let { constraints.add(it) }
+    }
+
     override fun breakConstraints() {
         if (level!!.isClientSide()) return
         isConstrained = false
 
-        if (constrainedBlockPos != null) {
-            (level as ServerLevel).getShipObjectManagingPos(constrainedBlockPos!!)?.let { RotatorControlModule.getOrCreate(it).removeSpinner(constrainedBlockPos!!) }
+        if (mechanicalHeadBlockPos != null) {
+            (level as ServerLevel).getShipObjectManagingPos(mechanicalHeadBlockPos!!)?.let { RotatorControlModule.getOrCreate(it).removeSpinner(mechanicalHeadBlockPos!!) }
         }
         (level as ServerLevel).getShipObjectManagingPos(blockPos) ?.let { RotatorControlModule.getOrCreate(it).removeSpinner(blockPos) }
 
         super.breakConstraints()
     }
 
-    override fun onUse(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult ) {
-        if(player.isHolding(Items.LEVER) && !level.isClientSide() && hand == InteractionHand.MAIN_HAND) isFlipped = isFlipped.not() else super.onUse(state, level, pos, player, hand, hit)
+    override fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult ) {
+        if(player.isHolding(Items.LEVER) && !level!!.isClientSide() && hand == InteractionHand.MAIN_HAND) isFlipped = isFlipped.not() else super.onUse(player, hand, hit)
     }
 
     override fun tick() {
-        if (constrainedBlockPos == null) return
-
-        if (isLoading && level?.isLoaded(constrainedBlockPos!!) == true) {
-            loadConstraints()
-            return
-        }
+        super.tick()
 
         if(!level?.isClientSide!!) {
-            val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(constrainedBlockPos!!)
-            if (constrainedShip != null) RotatorControlModule.getOrCreate(constrainedShip).addSpinner(constrainedBlockPos!!, blockState, isFlipped)
+            val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(mechanicalHeadBlockPos!!)
+            if (constrainedShip != null) RotatorControlModule.getOrCreate(constrainedShip).addSpinner(mechanicalHeadBlockPos!!, blockState, isFlipped)
 
             if(ModConfig.SERVER.NEWTONIAN_MOTORS) {
                 val ship = (level as ServerLevel).getShipObjectManagingPos(blockPos)
                 if (ship != null) RotatorControlModule.getOrCreate(ship).addSpinner(blockPos, blockState, !isFlipped)
             }
         }
-
-        if (level!!.getBlockState(constrainedBlockPos!!).isAir && ModConfig.SERVER.REJECT_FLOATING_HINGES) breakConstraints()
-
     }
 }

@@ -40,16 +40,16 @@ class HingeBlock : BaseEntityBlock(
 
     override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         super.onPlace(state, level, pos, oldState, isMoving)
-        (level.getBlockEntity(pos) as HingeBlockEntity).onPlaced(state, level, pos, oldState, isMoving)
+        (level.getBlockEntity(pos) as HingeBlockEntity).onPlaced()
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
-        (level.getBlockEntity(pos) as HingeBlockEntity).onRemoved(state, level, pos, newState, isMoving)
+        (level.getBlockEntity(pos) as HingeBlockEntity).onRemoved()
         super.onRemove(state, level, pos, newState, isMoving)
     }
 
     override fun use( state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult ): InteractionResult {
-        (level.getBlockEntity(pos) as HingeBlockEntity).onUse(state, level, pos, player, hand, hit)
+        (level.getBlockEntity(pos) as HingeBlockEntity).onUse(player, hand, hit)
         return super.use(state, level, pos, player, hand, hit)
     }
 

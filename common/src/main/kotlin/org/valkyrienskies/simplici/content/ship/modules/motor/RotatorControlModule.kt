@@ -46,7 +46,6 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
 
             if (!powerAtRpm.isNaN() && !inversionMultiplier.isNaN()){
                 physShip.applyInvariantTorque(torqueGlobal.mul(powerAtRpm * inversionMultiplier)) // replace with curve
-                println("RPM: $rpm torque:$powerAtRpm")
             }
         }
     }
@@ -64,15 +63,15 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
 
         val powerCurve = InterpolationCurve()
             .createDataPoint(0.0, 30000.0)
-            .createDataPoint(100.0, 30000.0)
-            .createDataPoint(200.0, 28000.0)
-            .createDataPoint(300.0, 25000.0)
-            .createDataPoint(400.0, 15000.0)
-            .createDataPoint(500.0, 10000.0)
-            .createDataPoint(600.0, 8000.0)
-            .createDataPoint(700.0, 6000.0)
-            .createDataPoint(800.0, 5000.0)
-            .createDataPoint(900.0, 2500.0)
-            .createDataPoint(1000.0, 0.0)
+            .createDataPoint(50.0, 30000.0)
+            .createDataPoint(100.0, 28000.0)
+            .createDataPoint(250.0, 25000.0)
+            .createDataPoint(300.0, 15000.0)
+            .createDataPoint(350.0, 10000.0)
+            .createDataPoint(400.0, 8000.0)
+            .createDataPoint(450.0, 6000.0)
+            .createDataPoint(500.0, 5000.0)
+            .createDataPoint(550.0, 2500.0)
+            .createDataPoint(600.0, 0.0)
     }
 }

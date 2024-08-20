@@ -44,16 +44,16 @@ class RotatorBlock : BaseEntityBlock(
 
     override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         super.onPlace(state, level, pos, oldState, isMoving)
-        (level.getBlockEntity(pos) as RotatorBlockEntity).onPlaced(state, level, pos, oldState, isMoving)
+        (level.getBlockEntity(pos) as RotatorBlockEntity).onPlaced()
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
-        (level.getBlockEntity(pos) as RotatorBlockEntity).onRemoved(state, level, pos, newState, isMoving)
+        (level.getBlockEntity(pos) as RotatorBlockEntity).onRemoved()
         super.onRemove(state, level, pos, newState, isMoving)
     }
 
     override fun use( state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult ): InteractionResult {
-        (level.getBlockEntity(pos) as RotatorBlockEntity).onUse(state, level, pos, player, hand, hit)
+        (level.getBlockEntity(pos) as RotatorBlockEntity).onUse(player, hand, hit)
         return super.use(state, level, pos, player, hand, hit)
     }
 
@@ -70,7 +70,7 @@ class RotatorBlock : BaseEntityBlock(
         if (level as? ServerLevel == null) return
 
         val signal = level.getBestNeighborSignal(pos)
-        level.setBlock(pos, state.setValue(POWER, signal), 2)
+        level.setBlock(pos, state.setValue(POWER, signal), 0)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
