@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
+import org.valkyrienskies.simplici.content.block.ModBlockEntities.withRenderer
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.simple_propeller.SimplePropellerBlockEntity

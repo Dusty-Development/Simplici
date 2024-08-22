@@ -44,20 +44,6 @@ class SimpliciModForge {
             }
         }
 
-        MOD_BUS.addListener { event: ModelEvent.RegisterAdditional ->
-            println("${Simplici.MOD_ID}: Registering models")
-            ModModels.MODELS.forEach { rl ->
-                println("${Simplici.MOD_ID}: Registering model $rl")
-                event.register(rl)
-            }
-        }
-
-        MOD_BUS.addListener { event: EntityRenderersEvent.RegisterRenderers ->
-            entityRenderers(
-                event
-            )
-        }
-
         init()
 
         val deferredRegister = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Simplici.MOD_ID)
@@ -67,16 +53,6 @@ class SimpliciModForge {
         deferredRegister.register(getModBus())
     }
 
-    private fun entityRenderers(event: EntityRenderersEvent.RegisterRenderers) {
-        initClientRenderers(
-            object : Simplici.ClientRenderers {
-                override fun <T : BlockEntity> registerBlockEntityRenderer(
-                    t: BlockEntityType<T>,
-                    r: BlockEntityRendererProvider<T>
-                ) = event.registerBlockEntityRenderer(t, r)
-            }
-        )
-    }
 
     companion object {
         fun getModBus(): IEventBus = MOD_BUS

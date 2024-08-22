@@ -6,6 +6,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
+import org.joml.Math
 import org.joml.Vector3d
 import org.valkyrienskies.simplici.api.util.InterpolationCurve
 import org.valkyrienskies.core.api.ships.ServerShip
@@ -15,10 +16,13 @@ import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.mod.common.util.toJOMLD
+import org.valkyrienskies.simplici.ModConfig
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.pow
 
 class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
 
-    private val spinners = HashMap<BlockPos, Pair<BlockState, Boolean>>()
+    private val spinners = ConcurrentHashMap<BlockPos, Pair<BlockState, Boolean>>()
 
     fun addSpinner(pos: BlockPos, state: BlockState, isInverted: Boolean) {
         spinners.put(pos, Pair(state, isInverted))
@@ -42,12 +46,17 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
             val inversionMultiplier = if(it.value.second) 1.0 else -1.0
 
             val rpm = omega.mul(rotationAxis, Vector3d()).length() * 10
-            val powerAtRpm = powerCurve.getValueAtX(rpm)
+            val powerAtRpm = calculateTorqueFromRpm(rpm)
+            println(powerAtRpm)
 
             if (!powerAtRpm.isNaN() && !inversionMultiplier.isNaN()){
                 physShip.applyInvariantTorque(torqueGlobal.mul(powerAtRpm * inversionMultiplier)) // replace with curve
             }
         }
+    }
+
+    private fun calculateTorqueFromRpm(rpm:Double) : Double {
+        return Math.clamp(0.0, ModConfig.SERVER.ROTATOR_TORQUE, ((1 - ((rpm / ModConfig.SERVER.ROTATOR_RPM).pow(ModConfig.SERVER.ROTATOR_FALLOFF))) * ModConfig.SERVER.ROTATOR_TORQUE))
     }
 
     override fun onTick() { }
@@ -61,17 +70,5 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
             return module
         }
 
-        val powerCurve = InterpolationCurve()
-            .createDataPoint(0.0, 30000.0)
-            .createDataPoint(50.0, 30000.0)
-            .createDataPoint(100.0, 28000.0)
-            .createDataPoint(250.0, 25000.0)
-            .createDataPoint(300.0, 15000.0)
-            .createDataPoint(350.0, 10000.0)
-            .createDataPoint(400.0, 8000.0)
-            .createDataPoint(450.0, 6000.0)
-            .createDataPoint(500.0, 5000.0)
-            .createDataPoint(550.0, 2500.0)
-            .createDataPoint(600.0, 0.0)
     }
 }

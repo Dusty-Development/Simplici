@@ -39,9 +39,10 @@ object ModBlocks {
     // Blocks should also be registered as items, if you want them to be able to be held
     // aka all blocks
     fun registerItems(items: DeferredRegister<Item>) {
+        println(BLOCKS)
         BLOCKS.forEach {
+            //so "it" is null?
             if (it.get() !is NoBlockItem) {
-                println("${it.name} is a: ${it is NoCreativeTab}")
                 if(it is NoCreativeTab) items.register(it.name) { NoTabBlockItem(it.get(), Item.Properties()) }
                 else items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
             }

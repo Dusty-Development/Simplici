@@ -39,5 +39,13 @@ object ModConfig {
 
         @JsonSchema(description = "")
         val FIREWORK_THRUSTER_FORCE = 5000000.0
+
+        @JsonSchema(description = "")
+        val ROTATOR_RPM = 128.0
+        @JsonSchema(description = "")
+        val ROTATOR_TORQUE = 50000.0
+        @JsonSchema(description = "")
+        val ROTATOR_FALLOFF = 8.0
+
     }
 }

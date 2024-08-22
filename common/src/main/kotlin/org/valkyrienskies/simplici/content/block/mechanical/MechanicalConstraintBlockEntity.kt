@@ -23,10 +23,7 @@ import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
-import org.valkyrienskies.mod.common.util.toBlockPos
-import org.valkyrienskies.mod.common.util.toJOML
-import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.mod.common.util.toMinecraft
+import org.valkyrienskies.mod.common.util.*
 import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.mod.common.yRange
 import org.valkyrienskies.physics_api.ConstraintId
@@ -38,6 +35,9 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     : BlockEntity(blockEntityType, pos, state)
 {
 
+    var staticTicks = 0
+    val staticMaxTicks = 1
+
     var isConstrained:Boolean = false
     var mechanicalHeadBlockPos: BlockPos? = null
     var constrainedShipId: ShipId? = null
@@ -47,6 +47,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
     open fun resetHingeHead() {
         // Destroy present head if needed
+        staticTicks = staticMaxTicks
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
 
         val ship = level.getShipObjectManagingPos(blockPos)
@@ -77,14 +78,13 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     // Creates a new ship and puts our hinge head on it
     // this freaks tf out sometimes
     fun createHingeHeadShip(parentShip: LoadedShip?) {
-        println("CreatedShip")
         if (level!!.isClientSide) return
 
         // Make a ship
         val dimensionId = level?.dimensionId
 
         // Create the ship with some temp defaults
-        val serverShip = (level as ServerLevel).shipObjectWorld.createNewShipAtBlock(blockPos.toJOML(), false, 1.0, dimensionId!!)
+        val serverShip = (level as ServerLevel).shipObjectWorld.createNewShipAtBlock(blockPos.toJOML(), false, parentShip?.transform?.shipToWorldScaling?.x() ?: 1.0, dimensionId!!)
         constrainedShipId = serverShip.id
 
         // Create the head block
@@ -93,6 +93,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         (level as ServerLevel).setBlock(centerPos, newBlockState, 1 or 2)
         mechanicalHeadBlockPos = centerPos
 
+        serverShip.isStatic = true
 
         // Only if we are on a ship.
         if (parentShip != null) {
@@ -104,8 +105,8 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
             val shipTransform = ShipTransformImpl(newShipPosInWorld, newShipPosInShipyard, newShipRotation, newShipScaling)
             (serverShip as ShipDataCommon).transform = shipTransform
+            serverShip.updatePrevTickShipTransform()
         }
-        println(constrainedShipId)
 
     }
 
@@ -145,7 +146,16 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         val constraintCompliance = (1e-7 / ModConfig.SERVER.HINGE_COMPLIANCE / massAverage)
         val constraintMaxForce = 1e150 * massAverage
 
-        createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)
+        if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)
+
+        if(staticTicks == 0) {
+            shipReference?.isStatic = false
+            constrainedShipReference?.isStatic = false
+        }
+        if(staticTicks > 0) {
+            shipReference?.isStatic = true
+            constrainedShipReference?.isStatic = true
+        }
 
         isConstrained = true
     }
@@ -186,6 +196,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         }
 
         applyConstraints()
+        if (staticTicks >= 0) staticTicks--
     }
 
     // SAVE DATA \\
