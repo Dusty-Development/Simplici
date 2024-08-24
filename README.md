@@ -54,8 +54,7 @@ after gradle builds run the "runClient" gradle task for the desired launcher
 
 - [@Dustley](https://github.com/Dustley)
 - [@Triode](https://github.com/StewStrong)
-- [@TechTastic](https://github.com/TechTastic)
-- [@ThePlasticPotato](https://github.com/ThePlasticPotato)
+- [Dusty-Development Team]([https://github.com/TechTastic](https://github.com/Dusty-Development))
 
 #### 🔗 Links
 [![portfolio](https://img.shields.io/badge/Dustley's_Channel-000?style=for-the-badge&logo=youtube&logoColor=red)](https://www.youtube.com/channel/UC6_mejtQMMNBCyeju8Z0NpA)
