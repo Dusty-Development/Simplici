@@ -11,13 +11,15 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
-import org.valkyrienskies.simplici.content.block.ModBlockEntities.withRenderer
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.simple_propeller.SimplePropellerBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.blast_propeller.BlastPropellerBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.blast_propeller.BlastPropellerBlockEntityRenderer
-import org.valkyrienskies.simplici.content.block.engine.simple_propeller.SimplePropellerBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
@@ -30,12 +32,19 @@ object ModBlockEntities {
     private val BlockEntityRenderers = mutableListOf<RendererEntry<*>>()
 
     val DRIVER_SEAT = ModBlocks.DRIVER_SEAT.withBE(::DriverSeatBlockEntity).byName("driver_seat")
+
     val SIMPLE_PROPELLER  = ModBlocks.SIMPLE_PROPELLER.withBE(::SimplePropellerBlockEntity).byName("simple_propeller").withRenderer { SimplePropellerBlockEntityRenderer( ModModels.PROPELLER ) }
     val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer { BlastPropellerBlockEntityRenderer( ModModels.PROPELLER ) }
     val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
+    val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { SmallWheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
+//    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel")
+//    val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::WheelLargeBlockEntity).byName("large_wheel")
+
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
+
+    val SENSOR = ModBlocks.SENSOR.withBE(::SensorBlockEntity).byName("sensor")
 
     fun register() = BLOCKENTITIES.applyAll()
 

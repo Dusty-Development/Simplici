@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplici:block/mechanical/wheel/small_wheel",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "simplici:block/mechanical/wheel/small_wheel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplici:block/mechanical/wheel/small_wheel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplici:block/mechanical/wheel/small_wheel",
+      "y": 270
+    }
+  }
+}

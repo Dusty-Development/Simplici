@@ -14,22 +14,22 @@ object SimpliciModForgeClient {
     private var happendClientSetup = false
 
     fun registerClient() {
-        MOD_BUS.addListener { event: ModelEvent.BakingCompleted ->
-            clientSetup( event )
-        }
-        MOD_BUS.addListener { event: ModelEvent.RegisterAdditional ->
-            println("${Simplici.MOD_ID}: Registering models")
-            ModModels.MODELS.forEach { rl ->
-                println("${Simplici.MOD_ID}: Registering model $rl")
-                event.register(rl)
-            }
-        }
-
-        MOD_BUS.addListener { event: EntityRenderersEvent.RegisterRenderers ->
-            entityRenderers(
-                event
-            )
-        }
+//        MOD_BUS.addListener { event: ModelEvent.BakingCompleted ->
+//            clientSetup( event )
+//        }
+//        MOD_BUS.addListener { event: ModelEvent.RegisterAdditional ->
+//            println("${Simplici.MOD_ID}: Registering models")
+//            ModModels.MODELS.forEach { rl ->
+//                println("${Simplici.MOD_ID}: Registering model $rl")
+//                event.register(rl)
+//            }
+//        }
+//
+//        MOD_BUS.addListener { event: EntityRenderersEvent.RegisterRenderers ->
+//            entityRenderers(
+//                event
+//            )
+//        }
     }
 
 

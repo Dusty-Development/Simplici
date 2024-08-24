@@ -27,30 +27,31 @@ import thedarkcolour.kotlinforforge.forge.runForDist
 @Mod(Simplici.MOD_ID)
 class SimpliciModForge {
     init {
-        runForDist (
-            clientTarget = {
-                SimpliciModForgeClient.registerClient()
-            },
-            serverTarget = {}
-        )
-        LOADING_CONTEXT.registerExtensionPoint(
-            ConfigScreenHandler.ConfigScreenFactory::class.java
-        ) {
-            ConfigScreenHandler.ConfigScreenFactory { _: Minecraft?, parent: Screen? ->
-                createConfigScreenFor(
-                    parent!!,
-                    getRegisteredConfig(ModConfig::class.java)
-                )
-            }
-        }
+//        runForDist (
+//            clientTarget = {
+//                SimpliciModForgeClient.registerClient()
+//            },
+//            serverTarget = {}
+//        )
+//        LOADING_CONTEXT.registerExtensionPoint(
+//            ConfigScreenHandler.ConfigScreenFactory::class.java
+//        ) {
+//            ConfigScreenHandler.ConfigScreenFactory { _: Minecraft?, parent: Screen? ->
+//                createConfigScreenFor(
+//                    parent!!,
+//                    getRegisteredConfig(ModConfig::class.java)
+//                )
+//            }
+//        }
+//
+//        init()
+//
+//        val deferredRegister = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Simplici.MOD_ID)
+//        deferredRegister.register("general") {
+//            CreativeTabs.create()
+//        }
+//        deferredRegister.register(getModBus())
 
-        init()
-
-        val deferredRegister = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Simplici.MOD_ID)
-        deferredRegister.register("general") {
-            CreativeTabs.create()
-        }
-        deferredRegister.register(getModBus())
     }
 
 

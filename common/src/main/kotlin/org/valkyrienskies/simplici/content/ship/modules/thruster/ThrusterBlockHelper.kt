@@ -25,13 +25,14 @@ object ThrusterBlockHelper {
         ThrusterControlModule.getOrCreate(ship).removeThruster(pos)
     }
 
-    fun onThrusterUse(state: BlockState, level: Level, pos: BlockPos) {
+    fun onThrusterUse(state: BlockState, level: Level, pos: BlockPos, mode: ThrusterMode) {
         if (level.isClientSide) return
         level as ServerLevel
 
+        println(mode)
         val ship: LoadedServerShip = level.getShipObjectManagingPos(pos) ?: return
         ThrusterControlModule.getOrCreate(ship).removeThruster(pos)
-        ThrusterControlModule.getOrCreate(ship).addThruster(pos, state)
+        ThrusterControlModule.getOrCreate(ship).addThruster(pos, state, mode)
     }
 
     fun tickThruster(level: Level, pos: BlockPos, state: BlockState) {

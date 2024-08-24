@@ -5,9 +5,11 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlock
-import org.valkyrienskies.simplici.content.block.engine.blast_propeller.BlastPropellerBlock
+import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlock
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlock
-import org.valkyrienskies.simplici.content.block.engine.simple_propeller.SimplePropellerBlock
+import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlock
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
+import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
@@ -28,9 +30,15 @@ object ModBlocks {
     val BLAST_PROPELLER = BLOCKS.register("blast_propeller", ::BlastPropellerBlock)
     val FIREWORK_THRUSTER = BLOCKS.register("firework_thruster", ::FireworkThrusterBlock)
 
+    val SMALL_WHEEL = BLOCKS.register("small_wheel", ::SmallWheelBlock)
+//    val MEDIUM_WHEEL = BLOCKS.register("medium_wheel", ::BlastPropellerBlock)
+//    val LARGE_WHEEL = BLOCKS.register("large_wheel", ::FireworkThrusterBlock)
+
     val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
+
+    val SENSOR = BLOCKS.register("sensor", ::SensorBlock)
 
     fun register() {
         BLOCKS.applyAll()

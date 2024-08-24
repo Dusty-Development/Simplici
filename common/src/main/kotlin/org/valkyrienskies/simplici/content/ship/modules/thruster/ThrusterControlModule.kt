@@ -17,18 +17,18 @@ import java.util.concurrent.ConcurrentHashMap
 
 class ThrusterControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
 
-    val thrusters = ConcurrentHashMap<BlockPos, BlockState>()
+    val thrusters = ConcurrentHashMap<BlockPos, Pair<BlockState, ThrusterMode>>()
 
     override fun onPhysTick(physShip: PhysShipImpl) {
 
         // Loops over all thrusters and updates the max thrust of that direction
         thrusters.forEach {
             // Get the thruster max force
-            val thrusterMaxForce = ThrusterSpecs.getMaxThrustForThruster((it.value.block as IThrusterBlock).thrusterType)
+            val thrusterMaxForce = ThrusterSpecs.getMaxThrustForThruster((it.value.first.block as IThrusterBlock).thrusterType)
 
-            val direction = it.value.getValue(BlockStateProperties.FACING) // The local thruster direction
+            val direction = it.value.first.getValue(BlockStateProperties.FACING) // The local thruster direction
 
-            val redstonePower = it.value.getValue(BlockStateProperties.POWER).toDouble() // Restone power to the block from 0 -> 15
+            val redstonePower = it.value.first.getValue(BlockStateProperties.POWER).toDouble() // Restone power to the block from 0 -> 15
 
             // The global force multiplied by the 0 -> 1 redstone power
             val forceGlobal = direction.normal.toJOMLD().mul(redstonePower / 15.0)
@@ -36,7 +36,10 @@ class ThrusterControlModule(override val shipControl: SimpliciShipControl) : ISh
             // Applies the force to the position
             val pos = it.key.toJOMLD().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
             if(forceGlobal.mul(thrusterMaxForce, Vector3d()).isFinite) {
-                physShip.applyRotDependentForceToPos(forceGlobal.mul(thrusterMaxForce), pos)
+                when (it.value.second) {
+                    ThrusterMode.STATIC -> physShip.applyRotDependentForceToPos(forceGlobal.mul(thrusterMaxForce), pos)
+                    ThrusterMode.DYNAMIC -> physShip.applyInvariantForceToPos(forceGlobal.mul(thrusterMaxForce), pos)
+                }
             }
         }
 
@@ -44,7 +47,8 @@ class ThrusterControlModule(override val shipControl: SimpliciShipControl) : ISh
 
     override fun onTick() { }
 
-    fun addThruster(pos: BlockPos, state: BlockState) { thrusters.putIfAbsent(pos, state) }
+    fun addThruster(pos: BlockPos, state: BlockState) { thrusters.putIfAbsent(pos, Pair(state, ThrusterMode.STATIC)) }
+    fun addThruster(pos: BlockPos, state: BlockState, mode: ThrusterMode) { thrusters.putIfAbsent(pos, Pair(state, mode)) }
     fun removeThruster(pos: BlockPos) { thrusters.remove(pos) }
 
     companion object {

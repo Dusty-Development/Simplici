@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.blast_propeller
+package org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller
 
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.AxisAngle4f
 import org.joml.Quaternionf
-import org.joml.Vector3f
 import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.extension.pose
 import org.valkyrienskies.simplici.content.render.ModModels

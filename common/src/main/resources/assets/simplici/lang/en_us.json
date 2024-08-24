@@ -2,10 +2,22 @@
   "itemGroup.simplici.simplici_tab": "Simplici",
   "itemGroup.simplici": "Simplici",
 
+  "block.simplici.driver_seat": "Driver's Seat",
+  "block.simplici.pilot_seat": "Pilot's Seat",
+  "block.simplici.passenger_seat": "Passenger Seat",
+
   "block.simplici.simple_propeller": "Propeller",
   "block.simplici.blast_propeller": "Blast Propeller",
   "block.simplici.firework_thruster": "Firework Thruster",
 
   "block.simplici.hinge": "Hinge",
-  "block.simplici.rotator": "Rotator"
+  "block.simplici.rotator": "Rotator",
+  "block.simplici.mechanical_head": "Mechanical Head",
+
+  "block.simplici.small_wheel": "Small Wheel",
+  "block.simplici.medium_wheel": "Medium Wheel",
+  "block.simplici.large_wheel": "Large Wheel",
+  "block.simplici.bike_wheel": "Bike Wheel",
+
+  "block.simplici.sensor": "Sensor"
 }

@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.simple_propeller
+package org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller
 
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -28,7 +28,7 @@ class SimplePropellerBlockEntityRenderer (
         pose.pose {
             translate(0.5, 0.5, 0.5)
             mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation)
-            be.rotation += be.blockState.getValue(BlockStateProperties.POWER).toDouble() * ModConfig.CLIENT.SIMPLE_PROPELLER_ROT_SPEED * (Minecraft.getInstance().deltaFrameTime)
+            be.rotation += be.blockState.getValue(BlockStateProperties.POWER).toDouble()*2 * ModConfig.CLIENT.SIMPLE_PROPELLER_ROT_SPEED * (Minecraft.getInstance().deltaFrameTime)
             if(be.rotation >= 360.0) be.rotation -= 360.0
             pose.mulPose(Quaternionf(AxisAngle4f(Math.toRadians( be.rotation ).toFloat(), 0f, 1f, 0f)))
             translate(-0.5, 0.0, -0.5)

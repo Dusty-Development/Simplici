@@ -26,8 +26,9 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
-import org.valkyrienskies.simplici.content.block.engine.blast_propeller.BlastPropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
+import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterMode
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
 class FireworkThrusterBlock : BaseEntityBlock(
@@ -52,7 +53,7 @@ class FireworkThrusterBlock : BaseEntityBlock(
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
     override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        ThrusterBlockHelper.onThrusterUse(state, level, pos)
+        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.STATIC)
         return super.use(state, level, pos, player, hand, hit)
     }
 

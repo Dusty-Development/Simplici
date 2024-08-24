@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "simplici:block/mechanical/wheel/small_wheel",
+		"particle": "simplici:block/mechanical/wheel/small_wheel"
+	},
+	"elements": [
+		{
+			"from": [3, 12, 0],
+			"to": [13, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 14, 8]},
+			"faces": {
+				"north": {"uv": [0, 10, 5, 12], "texture": "#0", "cullface": "north"},
+				"east": {"uv": [0, 8, 8, 10], "texture": "#0"},
+				"south": {"uv": [10, 0, 15, 2], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [8, 8, 16, 10], "texture": "#0"},
+				"up": {"uv": [5, 8, 0, 0], "texture": "#0", "cullface": "up"},
+				"down": {"uv": [10, 0, 5, 8], "texture": "#0"}
+			}
+		}
+	]
+}

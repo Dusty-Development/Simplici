@@ -190,7 +190,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
             return
         }
         if (level!!.isEmptyBlock(mechanicalHeadBlockPos!!)) {
-            breakConstraints()
+            onRemoved()
             level!!.destroyBlock(blockPos, true) // This doesn't trigger a break event...
             return
         }

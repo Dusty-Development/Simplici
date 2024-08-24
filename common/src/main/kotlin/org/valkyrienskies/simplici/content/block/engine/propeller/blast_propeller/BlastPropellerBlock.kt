@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.blast_propeller
+package org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -25,8 +25,10 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
+import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
 import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
+import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterMode
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
 class BlastPropellerBlock : BaseEntityBlock(
@@ -42,7 +44,7 @@ class BlastPropellerBlock : BaseEntityBlock(
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(BlockStateProperties.POWER)
-        builder.add(BlockStateProperties.FACING)
+        builder.add(FACING)
         super.createBlockStateDefinition(builder)
     }
 
@@ -51,7 +53,12 @@ class BlastPropellerBlock : BaseEntityBlock(
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
     override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        ThrusterBlockHelper.onThrusterUse(state, level, pos)
+        val be = level.getBlockEntity(pos) as BlastPropellerBlockEntity
+        be.type = when (be.type) {
+            ThrusterMode.STATIC -> ThrusterMode.DYNAMIC
+            ThrusterMode.DYNAMIC -> ThrusterMode.STATIC
+        }
+        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.DYNAMIC)
         return super.use(state, level, pos, player, hand, hit)
     }
 
@@ -76,7 +83,7 @@ class BlastPropellerBlock : BaseEntityBlock(
         if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
             dir = dir.opposite
         return defaultBlockState()
-                .setValue(BlockStateProperties.FACING, dir)
+                .setValue(FACING, dir)
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -85,7 +92,7 @@ class BlastPropellerBlock : BaseEntityBlock(
         blockEntityType: BlockEntityType<T>
     ): BlockEntityTicker<T> {
         return BlockEntityTicker {
-                levelB: Level, posB: BlockPos, stateB: BlockState, _: T ->
+                levelB: Level, posB: BlockPos, stateB: BlockState, be: T ->
             ThrusterBlockHelper.tickThruster(levelB, posB, stateB)
         }
     }
