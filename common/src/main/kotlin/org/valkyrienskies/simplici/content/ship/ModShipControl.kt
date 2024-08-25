@@ -3,11 +3,14 @@ package org.valkyrienskies.simplici.content.ship
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.player.Player
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 
@@ -27,6 +30,7 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
     // Control
     @JsonIgnore var seatedPlayer: Player? = null
     @JsonIgnore var controlSeat: ShipMountingEntity? = null
+    @JsonIgnore var currentControlData:ShipControlData? = null
     @JsonIgnore var isControlled = true
 
     // Damping
@@ -49,6 +53,9 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
         loadedModules.forEach {
             it.onPhysTick(physShip)
         }
+
+        val data = getControlData()
+        data?.let { println(it.forwardImpulse) }
     }
 
     // Every server tick:
@@ -57,7 +64,19 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
         loadedModules.forEach {
             it.onTick()
         }
+    }
 
+    private fun getControlData(): ShipControlData? {
+        val controllingPlayer = ship?.getAttachment(SeatedControllingPlayer::class.java)
+
+        if (controllingPlayer != null) {
+            val player = controllingPlayer!!
+
+            currentControlData = ShipControlData.create(player)
+            return currentControlData
+        }
+
+        return null
     }
 
     companion object {

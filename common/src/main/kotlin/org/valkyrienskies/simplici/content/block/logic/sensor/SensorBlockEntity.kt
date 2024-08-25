@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.phys.HitResult
 import org.joml.Math
-import org.joml.Vector3d
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
@@ -22,10 +21,6 @@ class SensorBlockEntity(pos: BlockPos, state: BlockState)
 {
 
     var lastVal = 0
-
-    private fun basePoint(): Vector3d = blockPos.toJOMLD()
-        .add(0.5, 0.5,0.5)
-        .add(blockState.getValue(BlockStateProperties.FACING).normal.toJOMLD().mul(0.5))
 
     fun getResult(level: ServerLevel): Int {
         val ship = level.getShipObjectManagingPos(blockPos)
