@@ -1,25 +1,16 @@
 package org.valkyrienskies.simplici.content.ship.modules.wheel
 
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.level.ClipContext
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.HitResult
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
-import org.valkyrienskies.core.api.ships.properties.ShipTransform
 import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
-import org.valkyrienskies.mod.common.VSClientGameUtils
-import org.valkyrienskies.mod.common.getShipObjectManagingPos
-import org.valkyrienskies.mod.common.hooks.VSGameEvents
+import org.valkyrienskies.core.impl.game.ships.serialization.shipserver.dto.ServerShipDataV4
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.mod.common.util.toMinecraft
-import org.valkyrienskies.mod.common.world.clipIncludeShips
-import org.valkyrienskies.physics_api.PoseVel
 import org.valkyrienskies.simplici.api.math.SpringHelper
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
@@ -29,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap
 class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
 
     private val wheels = ConcurrentHashMap<BlockPos, WheelForcesData>()
+    private val engines = ConcurrentHashMap<BlockPos, EngineData>()
+
 
     fun addOrUpdateWheel(pos: BlockPos, wheelForcesData: WheelForcesData) {
         wheels.put(pos, wheelForcesData)
@@ -37,22 +30,25 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         wheels.remove(pos)
     }
 
+    fun addOrUpdateEngine(pos: BlockPos, engineData: EngineData) {
+        engines.put(pos, engineData)
+    }
+    fun removeEngine(pos: BlockPos) {
+        engines.remove(pos)
+    }
+
     override fun onTick() {
     }
 
     override fun onPhysTick(physShip: PhysShipImpl) {
         wheels.forEach {
-            val worldBlockPos = it.key.center.toJOML().sub(physShip.transform.positionInShip)
-
-            val suspensionForce = calculateSuspension(physShip,it.key,it.value)
-            val slidingForce = calculateSliding(physShip,it.key,it.value)
-            val force = Vector3d(slidingForce,suspensionForce,0.0)
-
-            if(it.value.colliding) physShip.applyRotDependentForceToPos(force.mul(physShip.inertia.shipMass / wheels.size), worldBlockPos)
+            calculateSuspension(physShip,it.key,it.value)
+            calculateSliding(physShip,it.key,it.value)
         }
     }
 
-    fun calculateSuspension(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData):Double {
+    private fun calculateSuspension(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
+        if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
         val shipUpVector = physShip.transform.transformDirectionNoScalingFromWorldToShip(Vector3d(0.0,1.0,0.0), Vector3d()) // This is for the ship in world space
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
@@ -60,17 +56,25 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val offset = wheelData.floorCastDistance - wheelData.restDistance
         val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, 25.0, 10.0))
-        return spring
+
+        val force = Vector3d(0.0, spring, 0.0).mul(physShip.inertia.shipMass / wheels.size)
+        if(wheelData.colliding) physShip.applyInvariantForceToPos(force, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
-    fun calculateSliding(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData):Double {
+    private fun calculateSliding(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
+        if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
-        val shipUpVector = physShip.transform.transformDirectionNoScalingFromWorldToShip(Vector3d(0.0,1.0,0.0), Vector3d()) // This is for the ship in world space
+        val direction = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
+        val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(direction, Vector3d()).normalize()
+        val globalDirWithSteering = globalDir.rotateY(wheelData.steeringAngle, Vector3d())
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
-        val localVelocity = -velocity.y() //-velocity.mul(shipUpVector, Vector3d()).length() // <---- GOIN WRONG HERE THIS IS WRONG
+        var floorVelocity = wheelData.floorVel
+        if(wheelData.floorVel == null) floorVelocity = Vector3d()
 
-        val offset = wheelData.floorCastDistance - wheelData.restDistance
-        return 0.0
+        val slidingVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDirWithSteering)
+
+        val force = -slidingVelocity * 1.0
+        if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
     private fun pointVelocity(physShip: PhysShipImpl, worldPointPosition: Vector3dc): Vector3dc {

@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.FAC
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.joml.Vector3d
+import org.joml.Vector3dc
+import org.valkyrienskies.core.api.ships.LoadedShip
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
@@ -78,11 +80,19 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
             wheelData.floorCastDistance = startPos.distance(worldHit) - wheelRadius
             wheelData.colliding = true
 
-            wheelData.floorID = hitShip?.id // Sets the id of the floor to the ship
+            if(hitShip != null) {
+                val floorVelocity = pointVelocity(hitShip, worldHit)
+                wheelData.floorVel = Vector3d(floorVelocity) // Sets the id of the floor to the ship
+            }
         }
 
         currentDist = wheelData.floorCastDistance
         return wheelData
+    }
+
+    private fun pointVelocity(physShip: LoadedShip, worldPointPosition: Vector3dc): Vector3dc {
+        val centerOfMassPos = worldPointPosition.sub(physShip.transform.positionInWorld, Vector3d())
+        return physShip.velocity.add(physShip.omega.cross(centerOfMassPos, Vector3d()), Vector3d())
     }
 
     // EVENTS \\

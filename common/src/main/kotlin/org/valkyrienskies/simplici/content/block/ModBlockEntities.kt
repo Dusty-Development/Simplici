@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
@@ -40,6 +41,9 @@ object ModBlockEntities {
     val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { SmallWheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
 //    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel")
 //    val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::WheelLargeBlockEntity).byName("large_wheel")
+
+    val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")
+    val RACE_ENGINE = ModBlocks.RACE_ENGINE.withBE(::SmallWheelBlockEntity).byName("race_engine")
 
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")

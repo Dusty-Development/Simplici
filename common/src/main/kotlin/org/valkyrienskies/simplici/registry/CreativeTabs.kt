@@ -13,7 +13,7 @@ object CreativeTabs {
             .icon { ItemStack(ModBlocks.HINGE.get().asItem()) }
             .displayItems { _, output ->
                 ModItems.ITEMS.forEach {
-                    if (it.get() !is NoCreativeTab) output.accept(it.get())
+                    if (it.name != "mechanical_head") output.accept(it.get())
                 }
             }
             .build()

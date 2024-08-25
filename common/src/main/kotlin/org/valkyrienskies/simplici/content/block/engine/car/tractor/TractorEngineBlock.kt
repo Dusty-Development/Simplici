@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel
+package org.valkyrienskies.simplici.content.block.engine.car.tractor
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
@@ -22,8 +22,9 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
+import org.valkyrienskies.simplici.content.block.engine.car.EngineBlockEntity
 
-class SmallWheelBlock : BaseEntityBlock(
+class TractorEngineBlock : BaseEntityBlock(
     Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f)
 ) {
 
@@ -33,7 +34,7 @@ class SmallWheelBlock : BaseEntityBlock(
     override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.north(shape)[blockState.getValue(
         FACING
     )]
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = SmallWheelBlockEntity(pos, state)
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = TractorEngineBlockEntity(pos, state)
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
@@ -42,17 +43,12 @@ class SmallWheelBlock : BaseEntityBlock(
 
     override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         super.onPlace(state, level, pos, oldState, isMoving)
-        (level.getBlockEntity(pos) as SmallWheelBlockEntity).onPlaced()
+        (level.getBlockEntity(pos) as EngineBlockEntity).onPlaced()
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
-        (level.getBlockEntity(pos) as SmallWheelBlockEntity).onRemoved()
+        (level.getBlockEntity(pos) as EngineBlockEntity).onRemoved()
         super.onRemove(state, level, pos, newState, isMoving)
-    }
-
-    override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        (level.getBlockEntity(pos) as SmallWheelBlockEntity).onUse(player, hand, hit)
-        return InteractionResult.CONSUME
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
@@ -70,7 +66,7 @@ class SmallWheelBlock : BaseEntityBlock(
     ): BlockEntityTicker<T> {
 
         return BlockEntityTicker { levelB: Level, posB: BlockPos, stateB: BlockState, t: T ->
-            (t as SmallWheelBlockEntity).tick()
+            (t as EngineBlockEntity).tick()
         }
     }
 

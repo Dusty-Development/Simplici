@@ -57,6 +57,7 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
         loadedModules.forEach {
             it.onTick()
         }
+
     }
 
     companion object {

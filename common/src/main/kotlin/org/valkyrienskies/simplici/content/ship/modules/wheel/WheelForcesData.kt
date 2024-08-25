@@ -12,8 +12,10 @@ data class WheelForcesData(
     var wheelRadius:Double = 0.5,
     var restDistance:Double = 0.5,
     var wheelDistanceLimit:Double = 1.0,
+    var steeringAngle:Double = 0.0,
     var wheelLocalDirection:Direction = Direction.NORTH,
     var state:BlockState = ModBlocks.SMALL_WHEEL.get().defaultBlockState(),
     var colliding:Boolean = false,
-    var floorID: ShipId? = null
+    var floorVel: Vector3d? = null,
+    var floorFrictionMultiplier: Double = 1.0
 )

@@ -5,6 +5,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlock
+import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlock
 import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlock
 import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlock
 import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlock
@@ -14,9 +15,6 @@ import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
-import org.valkyrienskies.simplici.registry.NoBlockItem
-import org.valkyrienskies.simplici.registry.NoCreativeTab
-import org.valkyrienskies.simplici.registry.NoTabBlockItem
 
 @Suppress("unused")
 object ModBlocks {
@@ -34,6 +32,9 @@ object ModBlocks {
 //    val MEDIUM_WHEEL = BLOCKS.register("medium_wheel", ::BlastPropellerBlock)
 //    val LARGE_WHEEL = BLOCKS.register("large_wheel", ::FireworkThrusterBlock)
 
+    val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
+    val RACE_ENGINE = BLOCKS.register("race_engine", ::TractorEngineBlock)
+
     val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
@@ -50,10 +51,11 @@ object ModBlocks {
         println(BLOCKS)
         BLOCKS.forEach {
             //so "it" is null?
-            if (it.get() !is NoBlockItem) {
-                if(it is NoCreativeTab) items.register(it.name) { NoTabBlockItem(it.get(), Item.Properties()) }
-                else items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
-            }
+//            if (it.get() !is NoBlockItem) {
+//                if(it is NoCreativeTab) items.register(it.name) { NoTabBlockItem(it.get(), Item.Properties()) }
+//                else items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
+//            }
+            items.register(it.name) { BlockItem(it.get(), Item.Properties()) }
         }
     }
 }

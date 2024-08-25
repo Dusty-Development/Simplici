@@ -59,7 +59,7 @@ class BlastPropellerBlock : BaseEntityBlock(
             ThrusterMode.DYNAMIC -> ThrusterMode.STATIC
         }
         ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.DYNAMIC)
-        return super.use(state, level, pos, player, hand, hit)
+        return InteractionResult.CONSUME
     }
 
     override fun neighborChanged(

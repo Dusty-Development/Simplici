@@ -13,9 +13,8 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
-import org.valkyrienskies.simplici.registry.NoBlockItem
 
-class MechanicalHeadBlock : DirectionalBlock(Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f).noCollission().noParticlesOnBreak()), NoBlockItem
+class MechanicalHeadBlock : DirectionalBlock(Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f).noCollission().noParticlesOnBreak())
 {
 
     val SHAPE = RotShapes.box(0.0, 12.0, 0.0, 16.0, 16.0, 16.0)

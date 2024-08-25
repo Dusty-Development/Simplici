@@ -41,6 +41,7 @@ class ThrusterControlModule(override val shipControl: SimpliciShipControl) : ISh
                     ThrusterMode.DYNAMIC -> physShip.applyInvariantForceToPos(forceGlobal.mul(thrusterMaxForce), pos)
                 }
             }
+
         }
 
     }
