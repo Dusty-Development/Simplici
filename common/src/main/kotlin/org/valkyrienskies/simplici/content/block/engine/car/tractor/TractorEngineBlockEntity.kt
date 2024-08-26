@@ -8,7 +8,7 @@ import org.valkyrienskies.simplici.content.block.engine.car.EngineBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntity
 
 class TractorEngineBlockEntity(pos: BlockPos, state: BlockState) : EngineBlockEntity(ModBlockEntities.TRACTOR_ENGINE.get(), pos, state) {
-    override val maxPower: Double = 500000.0
+    override val maxPower: Double = 150000.0
     override val maxSpeed: Double = 12.0
     override val powerCurve: InterpolationCurve = InterpolationCurve()
 

@@ -32,7 +32,7 @@ class SmallWheelBlockEntityRenderer (
             translate(0.5, 0.5, 0.5)
             translate(0.0, -dist, 0.0)
 
-            mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation)
+            mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation.rotateY(Math.toRadians(be.steeringAngle).toFloat()))
             pose.mulPose(Quaternionf(AxisAngle4f(0f, 0f, 1f, 0f)))
 
             translate(-0.5, 0.0, -0.5)

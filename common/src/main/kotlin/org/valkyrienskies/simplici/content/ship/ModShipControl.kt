@@ -3,14 +3,12 @@ package org.valkyrienskies.simplici.content.ship
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.player.Player
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 
@@ -54,8 +52,7 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
             it.onPhysTick(physShip)
         }
 
-        val data = getControlData()
-        data?.let { println(it.forwardImpulse) }
+        getControlData()
     }
 
     // Every server tick:
@@ -76,6 +73,7 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
             return currentControlData
         }
 
+        currentControlData = null
         return null
     }
 

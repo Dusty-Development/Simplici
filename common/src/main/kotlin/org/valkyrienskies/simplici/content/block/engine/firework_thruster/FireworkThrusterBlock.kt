@@ -53,7 +53,7 @@ class FireworkThrusterBlock : BaseEntityBlock(
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
     override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.STATIC)
+        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.STATIC, player)
         return super.use(state, level, pos, player, hand, hit)
     }
 

@@ -96,7 +96,7 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstrain
             val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(mechanicalHeadBlockPos!!)
             if (constrainedShip != null) RotatorControlModule.getOrCreate(constrainedShip).addSpinner(mechanicalHeadBlockPos!!, blockState, isFlipped)
 
-            if(ModConfig.SERVER.NEWTONIAN_MOTORS) {
+            if(ModConfig.SERVER.NewtonianMotors) {
                 val ship = (level as ServerLevel).getShipObjectManagingPos(blockPos)
                 if (ship != null) RotatorControlModule.getOrCreate(ship).addSpinner(blockPos, blockState, !isFlipped)
             }

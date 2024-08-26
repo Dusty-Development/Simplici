@@ -53,12 +53,13 @@ class SimplePropellerBlock : BaseEntityBlock(
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
     override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
+        if(level.isClientSide) return InteractionResult.CONSUME
         val be = level.getBlockEntity(pos) as SimplePropellerBlockEntity
         be.type = when (be.type) {
             ThrusterMode.STATIC -> ThrusterMode.DYNAMIC
             ThrusterMode.DYNAMIC -> ThrusterMode.STATIC
         }
-        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.DYNAMIC)
+        ThrusterBlockHelper.onThrusterUse(state, level, pos, be.type, player)
         return InteractionResult.CONSUME
     }
 

@@ -32,21 +32,24 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     abstract val wheelRestHeight: Double // From center of block to center of wheel in rest
     abstract val wheelDistanceLimit: Double
 
+    var steeringAngle = 0.0
     var lastDist = 0.0
     var currentDist = 0.0
 
     var steeringType: WheelSteeringType = NONE
-    var isConstrained: Boolean = false
-    var isLoading: Boolean = false
+    var wheelData: WheelForcesData = WheelForcesData()
 
     fun generateWheelForcesData(): WheelForcesData {
         lastDist = currentDist
 
-        val wheelData = WheelForcesData()
+        steeringAngle = wheelData.steeringAngle
+
+        wheelData = WheelForcesData()
 
         wheelData.state = blockState
         wheelData.wheelLocalDirection = blockState.getValue(FACING)
         wheelData.wheelRadius = wheelRadius
+        wheelData.steeringType = steeringType
         wheelData.restDistance = wheelRestHeight
         wheelData.floorCastDistance = wheelRestHeight
         wheelData.colliding = false
@@ -98,12 +101,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     // EVENTS \\
 
     open fun tick() {
-
-        if (isLoading) {
-            loadConstraints()
-            return
-        }
-
+        println(steeringAngle)
         val data = generateWheelForcesData()
 
         if (level!!.isClientSide) return
@@ -129,7 +127,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
             LEAN_CLOCKWISE -> LEAN_COUNTER_CLOCKWISE
             LEAN_COUNTER_CLOCKWISE -> NONE
         }
-        player.sendSystemMessage(Component.literal("Changed steering type to: $steeringType"))
+        if(level?.isClientSide == false) player.sendSystemMessage(Component.literal("Changed steering type to: $steeringType"))
     }
 
 
@@ -137,20 +135,11 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
     override fun load(tag: CompoundTag) {
         super.load(tag)
-        isLoading = true
-//        mechanicalHeadBlockPos = BlockPos.of(tag.getLong("head_pos"))
-    }
-
-    fun loadConstraints() {
-        if (level!!.isClientSide()) return
-//        isConstrained = (mechanicalHeadBlockPos != null)
-//        applyConstraints()
-        isLoading = false
+        steeringType = valueOf(tag.getString("steering_type"))
     }
 
     override fun saveAdditional(tag: CompoundTag) {
-        if (level!!.isClientSide() && isConstrained) return
-//        mechanicalHeadBlockPos?.let { tag.putLong("head_pos", it.asLong()) }
+        tag.putString("steering_type", steeringType.toString())
         super.saveAdditional(tag)
     }
 }

@@ -1,14 +1,11 @@
 package org.valkyrienskies.simplici.content.ship.modules.motor
 
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.util.Mth
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import org.joml.Math
 import org.joml.Vector3d
-import org.valkyrienskies.simplici.api.util.InterpolationCurve
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
@@ -56,7 +53,7 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
     }
 
     private fun calculateTorqueFromRpm(rpm:Double) : Double {
-        return Math.clamp(0.0, ModConfig.SERVER.ROTATOR_TORQUE, ((1 - ((rpm / ModConfig.SERVER.ROTATOR_RPM).pow(ModConfig.SERVER.ROTATOR_FALLOFF))) * ModConfig.SERVER.ROTATOR_TORQUE))
+        return Math.clamp(0.0, ModConfig.SERVER.RotatorTorque, ((1 - ((rpm / ModConfig.SERVER.RotatorRPM).pow(ModConfig.SERVER.RotatorFalloff))) * ModConfig.SERVER.RotatorTorque))
     }
 
     override fun onTick() { }

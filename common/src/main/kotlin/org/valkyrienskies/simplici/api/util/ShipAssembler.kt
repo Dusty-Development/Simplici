@@ -199,13 +199,13 @@ object ShipAssembler {
                     }
                 }
             }
-            if ((ModConfig.SERVER.MAX_SHIP_BLOCKS > 0) and (blocks.size > ModConfig.SERVER.MAX_SHIP_BLOCKS)) {
+            if ((ModConfig.SERVER.MaxShipAssemblyBlocks > 0) and (blocks.size > ModConfig.SERVER.MaxShipAssemblyBlocks)) {
                 logger.info("Stopped ship assembly due too many blocks")
                 return false
             }
         }
-        if (ModConfig.SERVER.MAX_SHIP_BLOCKS > 0) {
-            logger.info("Assembled ship with ${blocks.size} blocks, out of ${ModConfig.SERVER.MAX_SHIP_BLOCKS} allowed")
+        if (ModConfig.SERVER.MaxShipAssemblyBlocks > 0) {
+            logger.info("Assembled ship with ${blocks.size} blocks, out of ${ModConfig.SERVER.MaxShipAssemblyBlocks} allowed")
         }
         return true
     }

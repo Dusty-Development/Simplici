@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
@@ -143,7 +142,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
         // Constraint vars
         val massAverage = abs((shipReference?.inertiaData?.mass ?: constrainedShipReference?.inertiaData?.mass!!) + (constrainedShipReference?.inertiaData?.mass ?: shipReference?.inertiaData?.mass!!)) * 0.5
-        val constraintCompliance = (1e-7 / ModConfig.SERVER.HINGE_COMPLIANCE / massAverage)
+        val constraintCompliance = (1e-7 / ModConfig.SERVER.HingeCompliance / massAverage)
         val constraintMaxForce = 1e150 * massAverage
 
         if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)

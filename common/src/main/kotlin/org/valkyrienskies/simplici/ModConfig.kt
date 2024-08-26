@@ -20,32 +20,21 @@ object ModConfig {
     class Server {
 
         @JsonSchema(description = "Do rotators have a oposite and equal reaction")
-        val NEWTONIAN_MOTORS = true
-
-        @JsonSchema(description = "Do hinges drop their constraint when the block they are connected to is broken")
-        val REJECT_FLOATING_HINGES = true
+        val NewtonianMotors = true
 
         @JsonSchema(description = "You can increse this if you need hinges to be stronger.. however this might cause jittering and / or flinging")
-        val HINGE_COMPLIANCE = 1
+        val HingeCompliance = 1
 
-        @JsonSchema(description = "You can increse this if you need hinges to be stronger.. however this might cause jittering and / or flinging")
-        val MAX_SHIP_BLOCKS = 25000
+        @JsonSchema(description = "") val MaxShipAssemblyBlocks = 25000
 
-        @JsonSchema(description = "")
-        val SIMPLE_PROPELLER_FORCE = 100000.0
+        @JsonSchema(description = "") val SimplePropellerForce = 100000.0
+        @JsonSchema(description = "") val BlastPropellerForce = 1000000.0
+        @JsonSchema(description = "") val FireworkThrusterForce = 5000000.0
 
-        @JsonSchema(description = "")
-        val BLAST_PROPELLER_FORCE = 1000000.0
+        @JsonSchema(description = "") val RotatorRPM = 128.0
+        @JsonSchema(description = "") val RotatorTorque = 50000.0
+        @JsonSchema(description = "") val RotatorFalloff = 8.0
 
-        @JsonSchema(description = "")
-        val FIREWORK_THRUSTER_FORCE = 5000000.0
-
-        @JsonSchema(description = "")
-        val ROTATOR_RPM = 128.0
-        @JsonSchema(description = "")
-        val ROTATOR_TORQUE = 50000.0
-        @JsonSchema(description = "")
-        val ROTATOR_FALLOFF = 8.0
-
+        @JsonSchema(description = "") val SteeringAngle = 45.0
     }
 }

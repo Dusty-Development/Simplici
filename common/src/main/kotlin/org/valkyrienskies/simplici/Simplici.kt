@@ -10,6 +10,7 @@ import org.valkyrienskies.simplici.content.entity.ModEntities
 import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.gui.ModClientScreens
 import org.valkyrienskies.simplici.content.gui.ModScreens
+import org.valkyrienskies.simplici.content.network.ModNetworking
 
 object Simplici {
     const val MOD_ID = "simplici"
@@ -22,6 +23,8 @@ object Simplici {
         ModScreens.register()
         ModEntities.register()
 
+        ModNetworking.registerServer()
+
         VSConfigClass.registerConfig(MOD_ID, ModConfig::class.java)
     }
 
@@ -29,6 +32,7 @@ object Simplici {
     fun initClient() {
         ModClientScreens.register()
         ModEntities.registerRenderers()
+        ModNetworking.registerClient()
     }
 
 
