@@ -44,7 +44,6 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
 
             val rpm = omega.mul(rotationAxis, Vector3d()).length() * 10
             val powerAtRpm = calculateTorqueFromRpm(rpm)
-            println(powerAtRpm)
 
             if (!powerAtRpm.isNaN() && !inversionMultiplier.isNaN()){
                 physShip.applyInvariantTorque(torqueGlobal.mul(powerAtRpm * inversionMultiplier)) // replace with curve

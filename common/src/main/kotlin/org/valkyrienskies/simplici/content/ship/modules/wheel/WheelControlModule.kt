@@ -17,6 +17,7 @@ import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 
 class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
@@ -68,16 +69,18 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
         val direction = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
+        val leanDirection = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
         val steeringControl = (shipControl.currentControlData?.leftImpulse?.toDouble() ?: 0.0) * ModConfig.SERVER.SteeringAngle
-        val steeringAngle = when (wheelData.steeringType) {
+        val targetSteeringAngle = when (wheelData.steeringType) {
             NONE -> 0.0
             CLOCKWISE -> steeringControl
             COUNTER_CLOCKWISE -> -steeringControl
             LEAN_CLOCKWISE -> -steeringControl * 0.25
             LEAN_COUNTER_CLOCKWISE -> steeringControl  * 0.25
         }
-        wheelData.steeringAngle = steeringAngle
-        val dirWithSteering = direction.rotateY(Math.toRadians(steeringAngle), Vector3d())
+        wheelData.steeringAngle = targetSteeringAngle //org.joml.Math.lerp(wheelData.steeringAngle, targetSteeringAngle, 0.75)
+        val dirWithSteering = direction.rotateY(Math.toRadians(wheelData.steeringAngle), Vector3d())
+        val globalLeanDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(leanDirection, Vector3d()).normalize()
         val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(dirWithSteering, Vector3d()).normalize()
 
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
@@ -86,14 +89,18 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val slidingVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
 
-        val force = -slidingVelocity * 1.0
+        var frictionForce = ModConfig.SERVER.WheelGripForce
+        if(slidingVelocity.absoluteValue >= ModConfig.SERVER.WheelSlideThreshold) frictionForce = ModConfig.SERVER.WheelSlideForce
+        if(wheelData.steeringType != NONE && ModConfig.SERVER.SteeringWheelsAwaysGrippy) ModConfig.SERVER.WheelGripForce
+
+        val force = -slidingVelocity * frictionForce
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
     private fun calculateDriving(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
         if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
-        val direction = wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
+        val direction = shipControl.currentControlData?.seatInDirection?.normal?.toJOMLD() ?: wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
         val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(direction, Vector3d()).normalize()
 
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
@@ -102,7 +109,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         var throttle = (shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0) // Will be negative for reverse
         if(throttle < 0) throttle *= 0.5 // Half speed in reverse
 
-        val force:Double = -getBestTorqueForSpeed(abs(forwardVelocity)) * throttle
+        val force:Double = getBestTorqueForSpeed(abs(forwardVelocity)) * throttle
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).div(wheels.size.toDouble()), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 

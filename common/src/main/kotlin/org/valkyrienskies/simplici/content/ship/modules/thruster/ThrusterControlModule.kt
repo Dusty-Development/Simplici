@@ -36,7 +36,6 @@ class ThrusterControlModule(override val shipControl: SimpliciShipControl) : ISh
             // Applies the force to the position
             val pos = it.key.toJOMLD().add(0.5, 0.5, 0.5).sub(physShip.transform.positionInShip)
             if(forceGlobal.mul(thrusterMaxForce, Vector3d()).isFinite) {
-                println(it.value.second)
                 when (it.value.second) {
                     ThrusterMode.STATIC -> physShip.applyRotDependentForceToPos(forceGlobal.mul(thrusterMaxForce), pos)
                     ThrusterMode.DYNAMIC -> physShip.applyInvariantForceToPos(forceGlobal.mul(thrusterMaxForce), pos)

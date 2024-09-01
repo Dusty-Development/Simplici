@@ -35,6 +35,11 @@ object ModConfig {
         @JsonSchema(description = "") val RotatorTorque = 50000.0
         @JsonSchema(description = "") val RotatorFalloff = 8.0
 
-        @JsonSchema(description = "") val SteeringAngle = 45.0
+        @JsonSchema(description = "") val SteeringAngle = 35.0
+
+        @JsonSchema(description = "") val SteeringWheelsAwaysGrippy = true
+        @JsonSchema(description = "") val WheelSlideThreshold = 10.0
+        @JsonSchema(description = "") val WheelGripForce = 3.0
+        @JsonSchema(description = "") val WheelSlideForce = 1.0
     }
 }

@@ -44,11 +44,14 @@ class SimplePropellerBlock : BaseEntityBlock(
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(BlockStateProperties.POWER)
-        builder.add(BlockStateProperties.FACING)
+        builder.add(FACING)
         super.createBlockStateDefinition(builder)
     }
 
-    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterPlaced(state, level, pos)
+    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+        ThrusterBlockHelper.onThrusterPlaced(state, level, pos)
+        updateRestone(state, level, pos)
+    }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
@@ -72,11 +75,7 @@ class SimplePropellerBlock : BaseEntityBlock(
             isMoving: Boolean
     ) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving)
-
-        if (level as? ServerLevel == null) return
-
-        val signal = level.getBestNeighborSignal(pos)
-        level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
+        updateRestone(state,level,pos)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
@@ -84,7 +83,18 @@ class SimplePropellerBlock : BaseEntityBlock(
         if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
             dir = dir.opposite
         return defaultBlockState()
-                .setValue(BlockStateProperties.FACING, dir)
+                .setValue(FACING, dir)
+    }
+
+    fun updateRestone(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos
+    ) {
+        if (level as? ServerLevel == null) return
+
+        val signal = level.getBestNeighborSignal(pos)
+        level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
     }
 
     override fun <T : BlockEntity> getTicker(

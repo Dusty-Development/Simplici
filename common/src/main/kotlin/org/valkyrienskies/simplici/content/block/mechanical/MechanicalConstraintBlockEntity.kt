@@ -178,7 +178,10 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         breakConstraints()
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
     }
-    open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) = if (player.isCrouching) breakConstraints() else resetHingeHead()
+    open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) {
+        println("USE")
+        if (player.isCrouching) breakConstraints() else resetHingeHead()
+    }
 
     open fun tick() {
         if(level!!.isClientSide) return

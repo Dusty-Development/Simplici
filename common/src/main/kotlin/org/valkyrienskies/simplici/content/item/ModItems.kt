@@ -15,7 +15,7 @@ object ModItems {
     val TAB: ResourceKey<CreativeModeTab> =
         ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation(Simplici.MOD_ID, "simplici_tab"))
 
-//    val HAMMER = ITEMS.register("hammer", ::GyroRotator)
+//    val HAMMER: RegistrySupplier<GyroRotator> = ITEMS.register("hammer", ::GyroRotator)
 
     fun register() {
         ModBlocks.registerItems(ITEMS)

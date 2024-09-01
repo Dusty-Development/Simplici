@@ -1,9 +1,14 @@
 package org.valkyrienskies.simplici.content.block.mechanical.wheel
 
+import dev.architectury.networking.NetworkManager
+import io.netty.buffer.Unpooled
+import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
@@ -22,8 +27,10 @@ import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
+import org.valkyrienskies.simplici.content.network.ModNetworking
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelForcesData
+
 
 abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(blockEntityType, pos, state)
 {
@@ -43,6 +50,17 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         lastDist = currentDist
 
         steeringAngle = wheelData.steeringAngle
+
+        if(level?.isClientSide == false) {
+            // Send packet
+            for (player in level?.players()!!) {
+                val buf = FriendlyByteBuf(Unpooled.buffer())
+                buf.writeBlockPos(blockPos);
+                buf.writeDouble(steeringAngle)
+                buf.writeDouble(0.0)
+//                NetworkManager.sendToPlayer(player as ServerPlayer?, ModNetworking.WHEEL_DATA_S2C, buf)
+            }
+        }
 
         wheelData = WheelForcesData()
 
@@ -101,7 +119,6 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     // EVENTS \\
 
     open fun tick() {
-        println(steeringAngle)
         val data = generateWheelForcesData()
 
         if (level!!.isClientSide) return
