@@ -1,14 +1,11 @@
 package org.valkyrienskies.simplici.content.block.mechanical.wheel
 
-import dev.architectury.networking.NetworkManager
 import io.netty.buffer.Unpooled
-import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
@@ -26,10 +23,12 @@ import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
+import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
-import org.valkyrienskies.simplici.content.network.ModNetworking
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelForcesData
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 
 abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BlockEntity(blockEntityType, pos, state)
@@ -76,34 +75,39 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
         val ship = level.getShipObjectManagingPos(blockPos)
 
-        val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5)
-        val endPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(Vector3d(0.0, -(wheelDistanceLimit + wheelRadius), 0.0))
+        for (i in -ModConfig.SERVER.WheelCastsResolution..ModConfig.SERVER.WheelCastsResolution) {
 
-        val startPos = ship?.shipToWorld?.transformPosition(startPosShip, Vector3d()) ?: startPosShip
-        val endPos = ship?.shipToWorld?.transformPosition(endPosShip, Vector3d()) ?: endPosShip
+            val totalOffset = (i.toDouble()/ModConfig.SERVER.WheelCastsResolution) * wheelRadius
+            val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(blockState.getValue(FACING).normal.toJOMLD().mul(totalOffset))
 
-        val clipContext = ClipContext(
-            startPos.toMinecraft(),
-            endPos.toMinecraft(),
-            ClipContext.Block.COLLIDER,
-            ClipContext.Fluid.NONE,
-            null
-        )
-        var clipResult = level!!.clipIncludeShips(clipContext, false)
-        if (ship != null) {
-            clipResult = level!!.clipIncludeShips(clipContext, false, ship.id)
-        }
+            val wheelBottomModifier:Double = sqrt(1 - (((totalOffset/wheelRadius).pow(2)) * wheelRadius)) - wheelRadius
+            val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelDistanceLimit + wheelBottomModifier), 0.0), Vector3d())
 
-        if (clipResult.type == HitResult.Type.BLOCK) {
-            val hitShip = level.getShipObjectManagingPos(clipResult.blockPos)
-            val worldHit = hitShip?.shipToWorld?.transformPosition(clipResult.location.toJOML()) ?: clipResult.location.toJOML()
+            val startPos = ship?.shipToWorld?.transformPosition(startPosShip, Vector3d()) ?: startPosShip
+            val endPos = ship?.shipToWorld?.transformPosition(endPosShip, Vector3d()) ?: endPosShip
 
-            wheelData.floorCastDistance = startPos.distance(worldHit) - wheelRadius
-            wheelData.colliding = true
+            val clipContext = ClipContext(
+                startPos.toMinecraft(),
+                endPos.toMinecraft(),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                null
+            )
+            var clipResult = level!!.clipIncludeShips(clipContext, false)
+            if (ship != null) clipResult = level!!.clipIncludeShips(clipContext, false, ship.id)
 
-            if(hitShip != null) {
-                val floorVelocity = pointVelocity(hitShip, worldHit)
-                wheelData.floorVel = Vector3d(floorVelocity) // Sets the id of the floor to the ship
+            if (clipResult.type == HitResult.Type.BLOCK) {
+                val hitShip = level.getShipObjectManagingPos(clipResult.blockPos)
+                val worldHit = hitShip?.shipToWorld?.transformPosition(clipResult.location.toJOML()) ?: clipResult.location.toJOML()
+
+                val castDistance = startPos.distance(worldHit) - wheelBottomModifier
+                if(wheelData.floorCastDistance > castDistance || !wheelData.colliding) wheelData.floorCastDistance = castDistance
+                wheelData.colliding = true
+
+                if(hitShip != null) {
+                    val floorVelocity = pointVelocity(hitShip, worldHit)
+                    wheelData.floorVel = Vector3d(floorVelocity) // Sets the id of the floor to the ship
+                }
             }
         }
 

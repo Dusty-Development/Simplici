@@ -20,7 +20,7 @@ import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propelle
 import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
-import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
@@ -40,8 +40,8 @@ object ModBlockEntities {
     val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer { BlastPropellerBlockEntityRenderer( ModModels.PROPELLER ) }
     val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
-    val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { SmallWheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
-    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel")
+    val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
+    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
 //    val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::WheelLargeBlockEntity).byName("large_wheel")
 
     val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")

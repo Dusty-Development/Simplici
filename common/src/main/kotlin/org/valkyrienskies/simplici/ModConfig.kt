@@ -41,5 +41,8 @@ object ModConfig {
         @JsonSchema(description = "") val WheelSlideThreshold = 10.0
         @JsonSchema(description = "") val WheelGripForce = 3.0
         @JsonSchema(description = "") val WheelSlideForce = 1.0
+        @JsonSchema(description = "") val WheelCastsResolution = 10
+        @JsonSchema(description = "") val WheelSuspensionStiffness = 35.0
+        @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
     }
 }
