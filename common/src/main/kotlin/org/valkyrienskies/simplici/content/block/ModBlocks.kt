@@ -38,7 +38,7 @@ object ModBlocks {
     val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
     val RACE_ENGINE = BLOCKS.register("race_engine", ::RaceEngineBlock)
 
-    val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
+/**/val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
 
