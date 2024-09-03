@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "OFO"
+  ],
+  "key": {
+    "#": {
+      "item": "simplici:rotor"
+    },
+    "O": {
+      "tag": "minecraft:planks"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "simplici:propeller",
+    "count": 1
+  }
+}

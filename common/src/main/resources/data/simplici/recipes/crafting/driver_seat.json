@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I",
+    "PB"
+  ],
+  "key": {
+    "P": {
+      "item": "simplici:passenger_seat"
+    },
+    "B": {
+      "tag": "minecraft:stone_buttons"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "simplici:driver_seat",
+    "count": 1
+  }
+}
