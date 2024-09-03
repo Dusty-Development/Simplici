@@ -2,7 +2,11 @@ package org.valkyrienskies.simplici.content.block.logic.sensor
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -18,6 +22,7 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.BlockHitResult
 
 class SensorBlock : BaseEntityBlock(
     Properties.of().mapColor(MapColor.METAL).strength(2.5F).sound(
@@ -82,6 +87,19 @@ class SensorBlock : BaseEntityBlock(
                 t
             )
         }
+    }
+
+    override fun use(
+        blockState: BlockState,
+        level: Level,
+        blockPos: BlockPos,
+        player: Player,
+        interactionHand: InteractionHand,
+        blockHitResult: BlockHitResult
+    ): InteractionResult {
+        val mode = (level.getBlockEntity(blockPos) as SensorBlockEntity).getMode(level, blockPos, blockState)
+        player.sendSystemMessage(Component.literal("${mode.entity}, ${mode.color}, ${mode.dist}, ${mode.lensCount}"))
+        return InteractionResult.CONSUME
     }
 
 }
