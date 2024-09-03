@@ -112,9 +112,12 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         var throttle = (shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0) // Will be negative for reverse
         if(throttle < 0) throttle *= 0.5 // Half speed in reverse
 
+
         val force:Double = getBestTorqueForSpeed(abs(forwardVelocity)) * throttle
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).div(wheels.size.toDouble()), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(wheelData.colliding && throttle < 0.1 && throttle > -0.1) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelFreespinFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
+
 
     private fun pointVelocity(physShip: PhysShipImpl, worldPointPosition: Vector3dc): Vector3dc {
         val centerOfMassPos = worldPointPosition.sub(physShip.transform.positionInWorld, Vector3d())

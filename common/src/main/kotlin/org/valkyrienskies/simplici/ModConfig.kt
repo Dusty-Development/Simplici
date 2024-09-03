@@ -19,10 +19,10 @@ object ModConfig {
 
     class Server {
 
-        @JsonSchema(description = "Do rotators have a oposite and equal reaction")
+        @JsonSchema(description = "Do rotators have a opposite and equal reaction")
         val NewtonianMotors = true
 
-        @JsonSchema(description = "You can increse this if you need hinges to be stronger.. however this might cause jittering and / or flinging")
+        @JsonSchema(description = "You can increase this if you need hinges to be stronger.. however this might cause jittering and / or flinging")
         val HingeCompliance = 1
 
         @JsonSchema(description = "") val MaxShipAssemblyBlocks = 25000
@@ -44,5 +44,6 @@ object ModConfig {
         @JsonSchema(description = "") val WheelCastsResolution = 10
         @JsonSchema(description = "") val WheelSuspensionStiffness = 35.0
         @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
+        @JsonSchema(description = "") val WheelFreespinFriction = 0.3
     }
 }
