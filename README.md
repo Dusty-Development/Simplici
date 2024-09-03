@@ -11,9 +11,11 @@ Simplici is a minecraft mod that aims to add vanilla style vehicle and doohickey
 
 ## FAQ
 
-#### Will this be ported to older versions
+#### Will this be ported to other versions
 
-No.
+1.21 / 1.22 - I will try to keep the mod up to date on the latest version
+1.19.2 - if its requested enough I will consider porting the initial release ONLY
+1.18.2 - Needs consideration, but it most likely will happen
 
 ## Contributing
 
@@ -53,6 +55,8 @@ after gradle builds run the "runClient" gradle task for the desired launcher
 ## Authors
 
 - [@Dustley](https://github.com/Dustley)
+- [@BlueMoonJune](https://github.com/BlueMoonJune)
+- [@Kipti](https://github.com/ShitFlinger)
 - [@Triode](https://github.com/StewStrong)
 - [Dusty-Development Team](https://github.com/Dusty-Development/people)
 
