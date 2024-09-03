@@ -62,7 +62,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, ModConfig.SERVER.WheelSuspensionStiffness, ModConfig.SERVER.WheelSuspensionDamping))
 
         val force = Vector3d(0.0, spring, 0.0).mul(physShip.inertia.shipMass / wheels.size)
-        if(wheelData.colliding) physShip.applyInvariantForceToPos(force, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(wheelData.colliding) if(ModConfig.SERVER.SuspensionPullsToFloor || spring > 0.0) physShip.applyInvariantForceToPos(force, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
     private fun calculateSteering(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {

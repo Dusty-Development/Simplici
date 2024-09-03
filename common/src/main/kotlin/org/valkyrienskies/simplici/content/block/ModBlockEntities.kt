@@ -24,6 +24,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEnti
 import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 import org.valkyrienskies.simplici.registry.DeferredRegister
@@ -41,8 +42,8 @@ object ModBlockEntities {
     val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
     val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
-    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
-//    val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::WheelLargeBlockEntity).byName("large_wheel")
+    val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.MEDIUM_WHEEL ) }
+    val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::LargeWheelBlockEntity).byName("large_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.LARGE_WHEEL ) }
 
     val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")
     val RACE_ENGINE = ModBlocks.RACE_ENGINE.withBE(::RaceEngineBlockEntity).byName("race_engine")

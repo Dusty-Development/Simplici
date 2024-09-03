@@ -77,11 +77,11 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
         for (i in -ModConfig.SERVER.WheelCastsResolution..ModConfig.SERVER.WheelCastsResolution) {
 
-            val totalOffset = (i.toDouble()/ModConfig.SERVER.WheelCastsResolution) * wheelRadius
-            val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(blockState.getValue(FACING).normal.toJOMLD().mul(totalOffset))
+            val offset = (i.toDouble()/ModConfig.SERVER.WheelCastsResolution) * wheelRadius
+            val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(blockState.getValue(FACING).normal.toJOMLD().mul(offset))
 
-            val wheelBottomModifier:Double = sqrt(1 - (((totalOffset/wheelRadius).pow(2)) * wheelRadius)) - wheelRadius
-            val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelDistanceLimit + wheelBottomModifier), 0.0), Vector3d())
+            val wheelBottomDistance:Double = sqrt(1 - (((offset/wheelRadius).pow(2)))) * wheelRadius
+            val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelDistanceLimit + wheelBottomDistance), 0.0), Vector3d())
 
             val startPos = ship?.shipToWorld?.transformPosition(startPosShip, Vector3d()) ?: startPosShip
             val endPos = ship?.shipToWorld?.transformPosition(endPosShip, Vector3d()) ?: endPosShip
@@ -100,7 +100,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
                 val hitShip = level.getShipObjectManagingPos(clipResult.blockPos)
                 val worldHit = hitShip?.shipToWorld?.transformPosition(clipResult.location.toJOML()) ?: clipResult.location.toJOML()
 
-                val castDistance = startPos.distance(worldHit) - wheelBottomModifier
+                val castDistance = startPos.distance(worldHit) - wheelBottomDistance
                 if(wheelData.floorCastDistance > castDistance || !wheelData.colliding) wheelData.floorCastDistance = castDistance
                 wheelData.colliding = true
 

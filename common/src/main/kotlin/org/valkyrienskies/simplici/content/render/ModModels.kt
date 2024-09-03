@@ -16,6 +16,8 @@ object ModModels {
     val PROPELLER = model("block/engine/propeller")
     val MECHANICAL_BEAM = model("block/mechanical/mechanical_beam")
     val SMALL_WHEEL = model("block/mechanical/wheel/small_tyre")
+    val MEDIUM_WHEEL = model("block/mechanical/wheel/medium_tyre")
+    val LARGE_WHEEL = model("block/mechanical/wheel/large_tyre")
 
     private fun getModel(rl: ResourceLocation): BakedModel {
         val model = ModPlatformHelper

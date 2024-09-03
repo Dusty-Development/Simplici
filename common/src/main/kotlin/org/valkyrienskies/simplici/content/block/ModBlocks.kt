@@ -15,6 +15,7 @@ import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
@@ -32,7 +33,7 @@ object ModBlocks {
 
     val SMALL_WHEEL = BLOCKS.register("small_wheel", ::SmallWheelBlock)
     val MEDIUM_WHEEL = BLOCKS.register("medium_wheel", ::MediumWheelBlock)
-//    val LARGE_WHEEL = BLOCKS.register("large_wheel", ::FireworkThrusterBlock)
+    val LARGE_WHEEL = BLOCKS.register("large_wheel", ::LargeWheelBlock)
 
     val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
     val RACE_ENGINE = BLOCKS.register("race_engine", ::RaceEngineBlock)
