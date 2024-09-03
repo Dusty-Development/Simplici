@@ -25,6 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
+import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
 import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
@@ -75,15 +76,12 @@ class SimplePropellerBlock : BaseEntityBlock(
             isMoving: Boolean
     ) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving)
-        updateRestone(state,level,pos)
+        updateRestone(state, level, pos)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        var dir = ctx.clickedFace.opposite
-        if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
-            dir = dir.opposite
-        return defaultBlockState()
-                .setValue(FACING, dir)
+        val dir = ctx.nearestLookingDirection.opposite
+        return defaultBlockState().setValue(FACING, dir)
     }
 
     fun updateRestone(
@@ -93,8 +91,13 @@ class SimplePropellerBlock : BaseEntityBlock(
     ) {
         if (level as? ServerLevel == null) return
 
+        var blockEntity = level.getBlockEntity(pos) as SimplePropellerBlockEntity
+        val type = blockEntity.type
         val signal = level.getBestNeighborSignal(pos)
         level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
+
+        blockEntity = level.getBlockEntity(pos) as SimplePropellerBlockEntity
+        blockEntity.type = type
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -104,7 +107,7 @@ class SimplePropellerBlock : BaseEntityBlock(
     ): BlockEntityTicker<T> {
         return BlockEntityTicker {
                 levelB: Level, posB: BlockPos, stateB: BlockState, be: T ->
-            ThrusterBlockHelper.tickThruster(levelB, posB, stateB)
+            ThrusterBlockHelper.tickThruster(levelB, posB, stateB, (be as SimplePropellerBlockEntity).type)
         }
     }
 

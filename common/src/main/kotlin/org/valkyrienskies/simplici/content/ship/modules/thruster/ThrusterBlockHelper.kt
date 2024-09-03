@@ -39,13 +39,13 @@ object ThrusterBlockHelper {
         ThrusterControlModule.getOrCreate(ship).addThruster(pos, state, mode)
     }
 
-    fun tickThruster(level: Level, pos: BlockPos, state: BlockState) {
+    fun tickThruster(level: Level, pos: BlockPos, state: BlockState, mode: ThrusterMode) {
         if (level.isClientSide) return
         level as ServerLevel
 
         val ship: LoadedServerShip = level.getShipObjectManagingPos(pos) ?: return
         val module = ThrusterControlModule.getOrCreate(ship)
-        if (!module.thrusters.containsKey(pos)) module.addThruster(pos, state)
+        module.addThruster(pos, state, mode)
     }
 
 }
