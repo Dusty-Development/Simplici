@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplici:block/control/driver_seat",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "simplici:block/control/driver_seat",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplici:block/control/driver_seat",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplici:block/control/driver_seat",
+      "y": 270
+    }
+  }
+}

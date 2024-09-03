@@ -1,25 +1,22 @@
-package org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel
+package org.valkyrienskies.simplici.content.block.mechanical.wheel
 
 import com.mojang.blaze3d.vertex.PoseStack
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.world.level.block.DirectionalBlock
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.AxisAngle4f
 import org.joml.Math
 import org.joml.Quaternionf
-import org.joml.Vector3f
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.extension.pose
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 
-class SmallWheelBlockEntityRenderer (
+class WheelBlockEntityRenderer (
     val model: ModModels.Model
-): BlockEntityRenderer<SmallWheelBlockEntity> {
+): BlockEntityRenderer<WheelBlockEntity> {
 
     override fun render(
-        be: SmallWheelBlockEntity,
+        be: WheelBlockEntity,
         partial: Float,
         pose: PoseStack,
         bufferSource: MultiBufferSource,

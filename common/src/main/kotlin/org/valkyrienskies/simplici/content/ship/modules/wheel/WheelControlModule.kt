@@ -59,7 +59,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         val localVelocity = -velocity.y() //-velocity.mul(shipUpVector, Vector3d()).length() // <---- GOIN WRONG HERE THIS IS WRONG
 
         val offset = wheelData.floorCastDistance - wheelData.restDistance
-        val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, 25.0, 10.0))
+        val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, ModConfig.SERVER.WheelSuspensionStiffness, ModConfig.SERVER.WheelSuspensionDamping))
 
         val force = Vector3d(0.0, spring, 0.0).mul(physShip.inertia.shipMass / wheels.size)
         if(wheelData.colliding) physShip.applyInvariantForceToPos(force, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
@@ -69,14 +69,14 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
         val direction = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
-        val leanDirection = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
+        val leanDirection = wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
         val steeringControl = (shipControl.currentControlData?.leftImpulse?.toDouble() ?: 0.0) * ModConfig.SERVER.SteeringAngle
         val targetSteeringAngle = when (wheelData.steeringType) {
             NONE -> 0.0
             CLOCKWISE -> steeringControl
             COUNTER_CLOCKWISE -> -steeringControl
-            LEAN_CLOCKWISE -> -steeringControl * 0.25
-            LEAN_COUNTER_CLOCKWISE -> steeringControl  * 0.25
+            LEAN_CLOCKWISE -> -steeringControl // Lean multi goes here
+            LEAN_COUNTER_CLOCKWISE -> steeringControl // Lean multi goes here
         }
         wheelData.steeringAngle = targetSteeringAngle //org.joml.Math.lerp(wheelData.steeringAngle, targetSteeringAngle, 0.75)
         val dirWithSteering = direction.rotateY(Math.toRadians(wheelData.steeringAngle), Vector3d())
@@ -95,6 +95,9 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val force = -slidingVelocity * frictionForce
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(wheelData.colliding && (wheelData.steeringType == LEAN_CLOCKWISE || wheelData.steeringType == LEAN_COUNTER_CLOCKWISE)) {
+
+        }
     }
 
     private fun calculateDriving(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {

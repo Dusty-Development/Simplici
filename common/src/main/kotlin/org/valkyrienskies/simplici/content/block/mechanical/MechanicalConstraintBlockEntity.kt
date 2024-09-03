@@ -34,6 +34,8 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     : BlockEntity(blockEntityType, pos, state)
 {
 
+    var wasStatic = false
+    var wasStaticSaved = false
     var staticTicks = 0
     val staticMaxTicks = 1
 
@@ -92,6 +94,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         (level as ServerLevel).setBlock(centerPos, newBlockState, 1 or 2)
         mechanicalHeadBlockPos = centerPos
 
+        wasStaticSaved = false
         serverShip.isStatic = true
 
         // Only if we are on a ship.
@@ -148,10 +151,13 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)
 
         if(staticTicks == 0) {
-            shipReference?.isStatic = false
+            shipReference?.isStatic = wasStatic
             constrainedShipReference?.isStatic = false
+            wasStatic = false
         }
         if(staticTicks > 0) {
+            wasStatic = shipReference?.isStatic == true
+            wasStaticSaved = true
             shipReference?.isStatic = true
             constrainedShipReference?.isStatic = true
         }
