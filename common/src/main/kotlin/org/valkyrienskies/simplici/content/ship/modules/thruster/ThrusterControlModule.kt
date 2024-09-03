@@ -48,8 +48,8 @@ class ThrusterControlModule(override val shipControl: SimpliciShipControl) : ISh
 
     override fun onTick() { }
 
-    fun addThruster(pos: BlockPos, state: BlockState) { thrusters.putIfAbsent(pos, Pair(state, ThrusterMode.STATIC)) }
-    fun addThruster(pos: BlockPos, state: BlockState, mode: ThrusterMode) { thrusters.putIfAbsent(pos, Pair(state, mode)) }
+    fun addThruster(pos: BlockPos, state: BlockState) { thrusters[pos] = Pair(state, ThrusterMode.STATIC) }
+    fun addThruster(pos: BlockPos, state: BlockState, mode: ThrusterMode) { thrusters[pos] = Pair(state, mode) }
     fun removeThruster(pos: BlockPos) { thrusters.remove(pos) }
 
     companion object {

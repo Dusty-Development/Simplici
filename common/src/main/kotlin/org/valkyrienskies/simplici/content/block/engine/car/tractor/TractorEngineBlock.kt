@@ -28,7 +28,7 @@ class TractorEngineBlock : BaseEntityBlock(
     Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f)
 ) {
 
-    private val shape = RotShapes.box(3.0, 12.0, 0.0, 13.0, 16.0, 16.0)
+    private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
     override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.north(shape)[blockState.getValue(

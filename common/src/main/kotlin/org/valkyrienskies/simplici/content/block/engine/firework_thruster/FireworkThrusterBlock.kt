@@ -58,27 +58,37 @@ class FireworkThrusterBlock : BaseEntityBlock(
     }
 
     override fun neighborChanged(
-            state: BlockState,
-            level: Level,
-            pos: BlockPos,
-            block: Block,
-            fromPos: BlockPos,
-            isMoving: Boolean
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        block: Block,
+        fromPos: BlockPos,
+        isMoving: Boolean
     ) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving)
-
-        if (level as? ServerLevel == null) return
-
-        val signal = level.getBestNeighborSignal(pos)
-        level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
+        updateRestone(state,level,pos)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        var dir = ctx.clickedFace.opposite
-        if(ctx.player != null && ctx.player!!.isShiftKeyDown)
-            dir = dir.opposite
-        return defaultBlockState()
-                .setValue(BlockStateProperties.FACING, dir)
+        val dir = ctx.nearestLookingDirection.opposite
+        return defaultBlockState().setValue(FACING, dir)
+    }
+
+    fun updateRestone(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos
+    ) {
+        if (level as? ServerLevel == null) return
+
+        var blockEntity = level.getBlockEntity(pos) as BlastPropellerBlockEntity
+        val type = blockEntity.type
+        val signal = level.getBestNeighborSignal(pos)
+
+        level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
+
+        blockEntity = level.getBlockEntity(pos) as BlastPropellerBlockEntity
+        blockEntity.type = type
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -88,7 +98,7 @@ class FireworkThrusterBlock : BaseEntityBlock(
     ): BlockEntityTicker<T> {
         return BlockEntityTicker {
                 levelB: Level, posB: BlockPos, stateB: BlockState, _: T ->
-            ThrusterBlockHelper.tickThruster(levelB, posB, stateB)
+            ThrusterBlockHelper.tickThruster(levelB, posB, stateB, ThrusterMode.STATIC)
         }
     }
 
