@@ -25,10 +25,10 @@ import org.valkyrienskies.simplici.api.util.RotShapes
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntity
 
 class MediumWheelBlock : BaseEntityBlock(
-    Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f)
+    Properties.of().sound(SoundType.STONE).strength(1.0f, 2.0f).noCollission()
 ) {
 
-    private val shape = RotShapes.box(3.0, 12.0, 0.0, 13.0, 16.0, 16.0)
+    private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
     override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.north(shape)[blockState.getValue( FACING )]

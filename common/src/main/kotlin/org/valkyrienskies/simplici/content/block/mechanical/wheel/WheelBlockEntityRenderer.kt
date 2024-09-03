@@ -24,7 +24,7 @@ class WheelBlockEntityRenderer (
         packedOverlay: Int
     ) {
         pose.pose {
-            var dist = be.currentDist //Math.lerp(be.lastDist, be.currentDist, (Minecraft.getInstance().deltaFrameTime) * 20.0)
+            val dist = be.currentDist //Math.lerp(be.lastDist, be.currentDist, (Minecraft.getInstance().deltaFrameTime) * 20.0)
 
             translate(0.5, 0.5, 0.5)
             translate(0.0, -dist, 0.0)
@@ -32,7 +32,7 @@ class WheelBlockEntityRenderer (
             mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation.rotateY(Math.toRadians(be.steeringAngle).toFloat()))
             pose.mulPose(Quaternionf(AxisAngle4f(0f, 0f, 1f, 0f)))
 
-            translate(-0.5, 0.0, -0.5)
+            translate(-0.5, -0.5, -0.5)
 
             model.renderer.render(
                 pose,

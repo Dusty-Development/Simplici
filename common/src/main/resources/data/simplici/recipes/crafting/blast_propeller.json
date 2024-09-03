@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "OFO"
+  ],
+  "key": {
+    "#": {
+      "item": "simplici:rotor"
+    },
+    "O": {
+      "item": "minecraft:iron_ingot"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    }
+  },
+  "result": {
+    "item": "simplici:blast_propeller",
+    "count": 1
+  }
+}

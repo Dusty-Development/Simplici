@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "/I/",
+    "IOI",
+    "/I/"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "/": {
+      "item": "minecraft:dried_kelp"
+    },
+    "O": {
+      "item": "simplici:small_wheel"
+    }
+  },
+  "result": {
+    "item": "simplici:medium_wheel",
+    "count": 1
+  }
+}

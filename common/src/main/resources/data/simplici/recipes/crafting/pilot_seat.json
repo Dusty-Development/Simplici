@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B",
+    "PI"
+  ],
+  "key": {
+    "P": {
+      "item": "simplici:passenger_seat"
+    },
+    "B": {
+      "item": "minecraft:lever"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "simplici:pilot_seat",
+    "count": 1
+  }
+}

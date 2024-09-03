@@ -27,17 +27,19 @@ object ModConfig {
 
         @JsonSchema(description = "") val MaxShipAssemblyBlocks = 25000
 
-        @JsonSchema(description = "") val SimplePropellerForce = 100000.0
+        @JsonSchema(description = "Propellers") val SimplePropellerForce = 100000.0
         @JsonSchema(description = "") val BlastPropellerForce = 1000000.0
         @JsonSchema(description = "") val FireworkThrusterForce = 5000000.0
 
-        @JsonSchema(description = "") val RotatorRPM = 128.0
+        @JsonSchema(description = "Rotator settings") val RotatorRPM = 128.0
         @JsonSchema(description = "") val RotatorTorque = 50000.0
         @JsonSchema(description = "") val RotatorFalloff = 8.0
 
-        @JsonSchema(description = "") val SteeringAngle = 35.0
+        @JsonSchema(description = "Generic wheel settings")
+        val SteeringAngle = 35.0
 
         @JsonSchema(description = "") val SteeringWheelsAwaysGrippy = true
+        @JsonSchema(description = "") val SuspensionPullsToFloor = true
         @JsonSchema(description = "") val WheelSlideThreshold = 10.0
         @JsonSchema(description = "") val WheelGripForce = 3.0
         @JsonSchema(description = "") val WheelSlideForce = 1.0
@@ -45,5 +47,15 @@ object ModConfig {
         @JsonSchema(description = "") val WheelSuspensionStiffness = 35.0
         @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
         @JsonSchema(description = "") val WheelFreespinFriction = 0.3
+
+        @JsonSchema(description = "specific wheel settings")
+        val SmallWheelRestHeight = 0.75
+        @JsonSchema(description = "") val SmallWheelMaxLength = 1.0
+
+        @JsonSchema(description = "") val MediumWheelRestHeight = 1.0
+        @JsonSchema(description = "") val MediumWheelMaxLength = 2.0
+
+        @JsonSchema(description = "") val LargeWheelRestHeight = 1.5
+        @JsonSchema(description = "") val LargeWheelMaxLength = 2.5
     }
 }
