@@ -35,9 +35,7 @@ object ModConfig {
         @JsonSchema(description = "") val RotatorTorque = 50000.0
         @JsonSchema(description = "") val RotatorFalloff = 8.0
 
-        @JsonSchema(description = "Generic wheel settings")
-        val SteeringAngle = 35.0
-
+        @JsonSchema(description = "Generic wheel settings") val SteeringAngle = 35.0
         @JsonSchema(description = "") val SteeringWheelsAwaysGrippy = true
         @JsonSchema(description = "") val SuspensionPullsToFloor = true
         @JsonSchema(description = "") val WheelSlideThreshold = 10.0
@@ -48,8 +46,7 @@ object ModConfig {
         @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
         @JsonSchema(description = "") val WheelFreespinFriction = 0.3
 
-        @JsonSchema(description = "specific wheel settings")
-        val SmallWheelRestHeight = 0.75
+        @JsonSchema(description = "specific wheel settings") val SmallWheelRestHeight = 0.75
         @JsonSchema(description = "") val SmallWheelMaxLength = 1.0
 
         @JsonSchema(description = "") val MediumWheelRestHeight = 1.0

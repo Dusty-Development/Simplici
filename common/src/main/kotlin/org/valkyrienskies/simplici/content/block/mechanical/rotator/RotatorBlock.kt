@@ -74,11 +74,8 @@ class RotatorBlock : BaseEntityBlock(
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        var dir = ctx.nearestLookingDirection
-        if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
-            dir = dir.opposite
-        return defaultBlockState()
-            .setValue(FACING, dir)
+        val dir = ctx.nearestLookingDirection.opposite
+        return defaultBlockState().setValue(FACING, dir)
     }
 
     override fun <T : BlockEntity> getTicker(

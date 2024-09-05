@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.joml.Vector3d
 import org.joml.Vector3dc
-import org.valkyrienskies.core.api.ships.LoadedShip
+import org.valkyrienskies.core.api.ships.Ship
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
@@ -39,6 +39,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     abstract val wheelDistanceLimit: Double
 
     var steeringAngle = 0.0
+    var drivingAngle = 0.0
     var lastDist = 0.0
     var currentDist = 0.0
 
@@ -69,6 +70,9 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         wheelData.steeringType = steeringType
         wheelData.restDistance = wheelRestHeight
         wheelData.floorCastDistance = wheelRestHeight
+        wheelData.floorFrictionMultiplier = 1.0
+        wheelData.floorVel = null
+        wheelData.floorBlockPos = null
         wheelData.colliding = false
 
         if (level == null) return wheelData
@@ -107,6 +111,8 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
                 if(hitShip != null) {
                     val floorVelocity = pointVelocity(hitShip, worldHit)
                     wheelData.floorVel = Vector3d(floorVelocity) // Sets the id of the floor to the ship
+                    wheelData.floorBlockPos = clipResult.blockPos
+                    wheelData.floorFrictionMultiplier = level!!.getBlockState(clipResult.blockPos).block.friction.toDouble()
                 }
             }
         }
@@ -115,7 +121,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         return wheelData
     }
 
-    private fun pointVelocity(physShip: LoadedShip, worldPointPosition: Vector3dc): Vector3dc {
+    fun pointVelocity(physShip: Ship, worldPointPosition: Vector3dc): Vector3dc {
         val centerOfMassPos = worldPointPosition.sub(physShip.transform.positionInWorld, Vector3d())
         return physShip.velocity.add(physShip.omega.cross(centerOfMassPos, Vector3d()), Vector3d())
     }
@@ -129,6 +135,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
         val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(blockPos)
         if (constrainedShip != null) WheelControlModule.getOrCreate(constrainedShip).addOrUpdateWheel(blockPos, data)
+
 
     }
 

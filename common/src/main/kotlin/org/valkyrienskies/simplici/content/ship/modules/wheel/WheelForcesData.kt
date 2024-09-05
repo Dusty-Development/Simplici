@@ -1,5 +1,6 @@
 package org.valkyrienskies.simplici.content.ship.modules.wheel
 
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
@@ -19,5 +20,6 @@ data class WheelForcesData(
     var state:BlockState = ModBlocks.SMALL_WHEEL.get().defaultBlockState(),
     var colliding:Boolean = false,
     var floorVel: Vector3d? = null,
+    var floorBlockPos: BlockPos? = null,
     var floorFrictionMultiplier: Double = 1.0
 )

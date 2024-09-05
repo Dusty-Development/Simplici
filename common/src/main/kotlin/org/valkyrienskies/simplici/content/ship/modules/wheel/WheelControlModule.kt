@@ -69,7 +69,6 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
         val direction = wheelData.state.getValue(BlockStateProperties.FACING).clockWise.normal.toJOMLD()
-        val leanDirection = wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
         val steeringControl = (shipControl.currentControlData?.leftImpulse?.toDouble() ?: 0.0) * ModConfig.SERVER.SteeringAngle
         val targetSteeringAngle = when (wheelData.steeringType) {
             NONE -> 0.0
@@ -80,7 +79,6 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         }
         wheelData.steeringAngle = targetSteeringAngle //org.joml.Math.lerp(wheelData.steeringAngle, targetSteeringAngle, 0.75)
         val dirWithSteering = direction.rotateY(Math.toRadians(wheelData.steeringAngle), Vector3d())
-        val globalLeanDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(leanDirection, Vector3d()).normalize()
         val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(dirWithSteering, Vector3d()).normalize()
 
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
@@ -93,25 +91,23 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(slidingVelocity.absoluteValue >= ModConfig.SERVER.WheelSlideThreshold) frictionForce = ModConfig.SERVER.WheelSlideForce
         if(wheelData.steeringType != NONE && ModConfig.SERVER.SteeringWheelsAwaysGrippy) ModConfig.SERVER.WheelGripForce
 
-        val force = -slidingVelocity * frictionForce
+        val force = -slidingVelocity * (frictionForce * wheelData.floorFrictionMultiplier)
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
-        if(wheelData.colliding && (wheelData.steeringType == LEAN_CLOCKWISE || wheelData.steeringType == LEAN_COUNTER_CLOCKWISE)) {
-
-        }
     }
 
     private fun calculateDriving(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
         if(!wheelData.colliding) return
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
         val direction = shipControl.currentControlData?.seatInDirection?.normal?.toJOMLD() ?: wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
-        val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(direction, Vector3d()).normalize()
+        val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(direction.rotateY(Math.toRadians(wheelData.steeringAngle)), Vector3d()).normalize()
 
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
         val forwardVelocity = velocity.dot(globalDir)
 
+        val a = "test"
+
         var throttle = (shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0) // Will be negative for reverse
         if(throttle < 0) throttle *= 0.5 // Half speed in reverse
-
 
         val force:Double = getBestTorqueForSpeed(abs(forwardVelocity)) * throttle
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).div(wheels.size.toDouble()), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))

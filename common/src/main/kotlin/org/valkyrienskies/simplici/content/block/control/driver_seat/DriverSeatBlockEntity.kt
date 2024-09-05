@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.Half
 import org.joml.Vector3d
@@ -29,7 +30,7 @@ class DriverSeatBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(ModB
 
     // Needs to get called server-side
     fun spawnSeat(blockPos: BlockPos, state: BlockState, level: ServerLevel): ShipMountingEntity {
-        val newPos = blockPos.relative(state.getValue(HorizontalDirectionalBlock.FACING))
+        val newPos = blockPos.relative(state.getValue(FACING))
         val newState = level.getBlockState(newPos)
         val newShape = newState.getShape(level, newPos)
         val newBlock = newState.block
@@ -49,7 +50,7 @@ class DriverSeatBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(ModB
 
             lookAt(
                 EntityAnchorArgument.Anchor.EYES,
-                state.getValue(HORIZONTAL_FACING).normal.toDoubles().add(position())
+                state.getValue(FACING).normal.toDoubles().add(position())
             )
 
             isController = true
