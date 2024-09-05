@@ -9,7 +9,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEnti
 
 class RaceEngineBlockEntity(pos: BlockPos, state: BlockState) : EngineBlockEntity(ModBlockEntities.RACE_ENGINE.get(), pos, state) {
     override val maxPower: Double = 150000.0
-    override val maxSpeed: Double = 100.0
+    override val maxSpeed: Double = 75.0
     override val powerCurve: InterpolationCurve = InterpolationCurve()
 
     init {
