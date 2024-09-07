@@ -61,8 +61,14 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         val offset = wheelData.floorCastDistance - wheelData.restDistance
         val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, ModConfig.SERVER.WheelSuspensionStiffness, ModConfig.SERVER.WheelSuspensionDamping))
 
-        val force = Vector3d(0.0, spring, 0.0).mul(physShip.inertia.shipMass / wheels.size)
-        if(wheelData.colliding) if(ModConfig.SERVER.SuspensionPullsToFloor || spring > 0.0) physShip.applyInvariantForceToPos(force, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        val rollingDir = wheelData.state.getValue(BlockStateProperties.FACING).normal.toJOMLD()
+        val globalRollingDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(rollingDir, Vector3d()).normalize()
+
+        val suspensionForce = shipUpVector.mul(spring, Vector3d()).mul(physShip.inertia.shipMass / wheels.size)
+        val rollingForce = -suspensionForce.dot(globalRollingDir)
+        val totalForce = suspensionForce.mul(0.0, 1.0 ,0.0, Vector3d()).add(globalRollingDir.mul(rollingForce))
+        
+        if(wheelData.colliding) if(ModConfig.SERVER.SuspensionPullsToFloor || spring > 0.0) physShip.applyInvariantForceToPos(totalForce, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
     private fun calculateSteering(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
@@ -105,8 +111,6 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val velocity = pointVelocity(physShip, worldBlockPos) // Global velocity
         val forwardVelocity = velocity.dot(globalDir)
-
-        val a = "test"
 
         var throttle = (shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0) // Will be negative for reverse
         if(throttle < 0) throttle *= 0.5 // Half speed in reverse

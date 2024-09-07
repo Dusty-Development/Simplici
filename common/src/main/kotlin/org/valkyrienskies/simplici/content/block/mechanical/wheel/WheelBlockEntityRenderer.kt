@@ -28,8 +28,8 @@ class WheelBlockEntityRenderer (
         packedOverlay: Int
     ) {
         pose.pose {
-            val dist = be.currentDist //Math.lerp(be.lastDist, be.currentDist, (Minecraft.getInstance().deltaFrameTime) * 20.0)
             val dt = (Minecraft.getInstance().deltaFrameTime)
+            val dist = Math.lerp(be.lastDist, be.currentDist, dt * 10.0)
 
             translate(0.5, 0.5, 0.5)
             translate(0.0, -dist, 0.0)
