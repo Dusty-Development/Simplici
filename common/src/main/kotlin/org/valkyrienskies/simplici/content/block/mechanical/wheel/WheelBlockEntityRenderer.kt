@@ -44,7 +44,9 @@ class WheelBlockEntityRenderer (
                 val velocity = be.pointVelocity(ship, worldBlockPos).dot(globalDir)
 
                 val rotationAngle = (velocity / (2 * Math.PI * be.wheelRadius)) / Math.PI
-                be.drivingAngle += rotationAngle * dt
+                if(be.wheelData.colliding) be.drivingAngle += rotationAngle * dt
+
+
                 if(be.drivingAngle >= 360) be.drivingAngle -= 360
             }
 
