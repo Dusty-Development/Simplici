@@ -54,5 +54,15 @@ object ModConfig {
 
         @JsonSchema(description = "") val LargeWheelRestHeight = 1.5
         @JsonSchema(description = "") val LargeWheelMaxLength = 2.5
+
+        @JsonSchema(description = "") val RaceEngineTorque = 250000.0
+        @JsonSchema(description = "") val RaceEngineSpeed = 75.0
+
+        @JsonSchema(description = "") val TractorEngineTorque = 500000.0
+        @JsonSchema(description = "") val TractorEngineSpeed = 12.0
+
+
+
+
     }
 }
