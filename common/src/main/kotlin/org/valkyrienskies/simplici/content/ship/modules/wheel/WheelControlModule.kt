@@ -119,6 +119,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).div(wheels.size.toDouble()), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
         if(wheelData.colliding && throttle < 0.1 && throttle > -0.1 && shipControl.isControlled) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelFreespinFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
         if(!shipControl.isControlled && shipControl.controlSeatCount > 0) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelLockedFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * 0.2, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
 
