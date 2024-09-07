@@ -92,7 +92,9 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
         if(wheelData.steeringType != NONE && ModConfig.SERVER.SteeringWheelsAwaysGrippy) ModConfig.SERVER.WheelGripForce
 
         val force = -slidingVelocity * (frictionForce * wheelData.floorFrictionMultiplier)
-        if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        var forcePoint = wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip)
+        if(ModConfig.SERVER.ShouldFrictionApplyAtFloor) forcePoint = wheelBlockPos.center.toJOML().sub(0.0, wheelData.floorCastDistance + wheelData.wheelRadius, 0.0).sub(physShip.transform.positionInShip)
+        if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), forcePoint)
     }
 
     private fun calculateDriving(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
