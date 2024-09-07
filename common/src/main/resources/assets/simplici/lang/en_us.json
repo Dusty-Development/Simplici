@@ -17,7 +17,10 @@
   "block.simplici.small_wheel": "Small Wheel",
   "block.simplici.medium_wheel": "Medium Wheel",
   "block.simplici.large_wheel": "Large Wheel",
-  "block.simplici.bike_wheel": "Bike Wheel",
+
+  "block.simplici.race_engine": "Race Engine",
+  "block.simplici.tractor_engine": "Tractor Engine",
+  "block.simplici.steam_engine": "Steam Engine",
 
 
   "block.simplici.sensor": "Sensor"

@@ -29,7 +29,7 @@ class WheelBlockEntityRenderer (
     ) {
         pose.pose {
             val dt = (Minecraft.getInstance().deltaFrameTime)
-            val dist = Math.lerp(be.lastDist, be.currentDist, dt * 10.0)
+            val dist = be.currentDist //Math.lerp(be.lastDist, be.currentDist, dt * 20.0)
 
             translate(0.5, 0.5, 0.5)
             translate(0.0, -dist, 0.0)

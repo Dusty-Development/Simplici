@@ -70,7 +70,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         wheelData.steeringType = steeringType
         wheelData.restDistance = wheelRestHeight
         wheelData.floorCastDistance = wheelRestHeight
-        wheelData.floorFrictionMultiplier = 1.0
+        wheelData.floorFrictionMultiplier = 0.6
         wheelData.floorVel = null
         wheelData.floorBlockPos = null
         wheelData.colliding = false
@@ -107,12 +107,12 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
                 val castDistance = startPos.distance(worldHit) - wheelBottomDistance
                 if(wheelData.floorCastDistance > castDistance || !wheelData.colliding) wheelData.floorCastDistance = castDistance
                 wheelData.colliding = true
+                wheelData.floorFrictionMultiplier = (1.0 - (level!!.getBlockState(clipResult.blockPos).block.friction - 0.6f))
 
                 if(hitShip != null) {
                     val floorVelocity = pointVelocity(hitShip, worldHit)
                     wheelData.floorVel = Vector3d(floorVelocity) // Sets the id of the floor to the ship
                     wheelData.floorBlockPos = clipResult.blockPos
-                    wheelData.floorFrictionMultiplier = level!!.getBlockState(clipResult.blockPos).block.friction.toDouble()
                 }
             }
         }

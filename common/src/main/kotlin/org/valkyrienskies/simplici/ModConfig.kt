@@ -46,6 +46,7 @@ object ModConfig {
         @JsonSchema(description = "") val WheelSuspensionStiffness = 35.0
         @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
         @JsonSchema(description = "") val WheelFreespinFriction = 0.3
+        @JsonSchema(description = "") val WheelLockedFriction = 1.0
 
         @JsonSchema(description = "specific wheel settings") val SmallWheelRestHeight = 0.75
         @JsonSchema(description = "") val SmallWheelMaxLength = 1.0

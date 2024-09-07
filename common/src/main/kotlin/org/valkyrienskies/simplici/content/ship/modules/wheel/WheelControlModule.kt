@@ -66,8 +66,8 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val suspensionForce = shipUpVector.mul(spring, Vector3d()).mul(physShip.inertia.shipMass / wheels.size)
         val rollingForce = -suspensionForce.dot(globalRollingDir)
-        val totalForce = suspensionForce.mul(0.0, 1.0 ,0.0, Vector3d()).add(globalRollingDir.mul(rollingForce))
-        
+        val totalForce = suspensionForce.mul(0.0, 1.0 ,0.0, Vector3d())
+        //if(shipControl.isControlled) { totalForce.add(globalRollingDir.mul(rollingForce)) }
         if(wheelData.colliding) if(ModConfig.SERVER.SuspensionPullsToFloor || spring > 0.0) physShip.applyInvariantForceToPos(totalForce, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
@@ -83,7 +83,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
             LEAN_CLOCKWISE -> -steeringControl // Lean multi goes here
             LEAN_COUNTER_CLOCKWISE -> steeringControl // Lean multi goes here
         }
-        wheelData.steeringAngle = targetSteeringAngle //org.joml.Math.lerp(wheelData.steeringAngle, targetSteeringAngle, 0.75)
+        wheelData.steeringAngle = org.joml.Math.lerp(wheelData.steeringAngle, targetSteeringAngle, 0.75)
         val dirWithSteering = direction.rotateY(Math.toRadians(wheelData.steeringAngle), Vector3d())
         val globalDir = physShip.transform.transformDirectionNoScalingFromShipToWorld(dirWithSteering, Vector3d()).normalize()
 
@@ -117,7 +117,8 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
         val force:Double = getBestTorqueForSpeed(abs(forwardVelocity)) * throttle
         if(wheelData.colliding) physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).div(wheels.size.toDouble()), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
-        if(wheelData.colliding && throttle < 0.1 && throttle > -0.1) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelFreespinFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(wheelData.colliding && throttle < 0.1 && throttle > -0.1 && shipControl.isControlled) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelFreespinFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(!shipControl.isControlled && shipControl.controlSeatCount > 0) physShip.applyInvariantForceToPos(globalDir.mul(-forwardVelocity * ModConfig.SERVER.WheelLockedFriction, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
 

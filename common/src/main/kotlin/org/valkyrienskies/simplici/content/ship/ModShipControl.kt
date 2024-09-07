@@ -29,6 +29,7 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
     @JsonIgnore var seatedPlayer: Player? = null
     @JsonIgnore var controlSeat: ShipMountingEntity? = null
     @JsonIgnore var currentControlData:ShipControlData? = null
+    var controlSeatCount = 0
     @JsonIgnore var isControlled = true
 
     // Damping
@@ -69,10 +70,12 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
         if (controllingPlayer != null) {
             val player = controllingPlayer!!
 
+            isControlled = true
             currentControlData = ShipControlData.create(player)
             return currentControlData
         }
 
+        isControlled = false
         currentControlData = null
         return null
     }

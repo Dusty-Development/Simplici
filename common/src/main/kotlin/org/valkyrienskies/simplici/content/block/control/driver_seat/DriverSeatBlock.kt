@@ -52,7 +52,8 @@ class DriverSeatBlock() : BaseEntityBlock(
         level as ServerLevel
 
         val ship = level.getShipObjectManagingPos(pos) ?: level.getShipManagingPos(pos) ?: return
-        SimpliciShipControl.getOrCreate(ship)
+        val shipControl = SimpliciShipControl.getOrCreate(ship)
+        shipControl.controlSeatCount += 1
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
@@ -61,7 +62,9 @@ class DriverSeatBlock() : BaseEntityBlock(
         if (level.isClientSide) return
         level as ServerLevel
 
-        level.getShipManagingPos(pos)?.getAttachment<SimpliciShipControl>()?.let { control -> {control.ship}}
+        val ship = level.getShipObjectManagingPos(pos) ?: level.getShipManagingPos(pos) ?: return
+        val shipControl = SimpliciShipControl.getOrCreate(ship)
+        shipControl.controlSeatCount -= 1
     }
 
     override fun use(
