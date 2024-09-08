@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.firework_thruster
+package org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

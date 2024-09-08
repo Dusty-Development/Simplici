@@ -20,13 +20,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
-import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
-import org.valkyrienskies.core.api.ships.getAttachment
-import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
+import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.mod.common.getShipManagingPos
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.simplici.api.util.DirectionalShape
@@ -52,7 +50,7 @@ class DriverSeatBlock() : BaseEntityBlock(
         level as ServerLevel
 
         val ship = level.getShipObjectManagingPos(pos) ?: level.getShipManagingPos(pos) ?: return
-        val shipControl = SimpliciShipControl.getOrCreate(ship)
+        val shipControl = ModShipControl.getOrCreate(ship)
         shipControl.controlSeatCount += 1
     }
 
@@ -63,7 +61,7 @@ class DriverSeatBlock() : BaseEntityBlock(
         level as ServerLevel
 
         val ship = level.getShipObjectManagingPos(pos) ?: level.getShipManagingPos(pos) ?: return
-        val shipControl = SimpliciShipControl.getOrCreate(ship)
+        val shipControl = ModShipControl.getOrCreate(ship)
         shipControl.controlSeatCount -= 1
     }
 

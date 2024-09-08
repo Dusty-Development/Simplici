@@ -7,9 +7,9 @@ import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlock
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlock
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlock
-import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlock
-import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlock
-import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlock
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlock
+import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlock
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
 import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock

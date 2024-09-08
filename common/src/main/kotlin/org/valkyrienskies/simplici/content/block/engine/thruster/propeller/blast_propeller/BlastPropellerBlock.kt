@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.firework_thruster
+package org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -25,15 +25,12 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
-import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
-import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterMode
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
-class FireworkThrusterBlock : BaseEntityBlock(
-    Properties.of().mapColor(MapColor.WOOL).strength(1.0F).sound(
-        SoundType.SWEET_BERRY_BUSH).noOcclusion()), IThrusterBlock
+class BlastPropellerBlock : BaseEntityBlock(
+    Properties.of().mapColor(MapColor.METAL).strength(2.5F).sound(
+        SoundType.NETHERITE_BLOCK).noOcclusion()), IThrusterBlock
 {
 
     private val shape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0)
@@ -44,17 +41,25 @@ class FireworkThrusterBlock : BaseEntityBlock(
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(BlockStateProperties.POWER)
-        builder.add(BlockStateProperties.FACING)
+        builder.add(FACING)
         super.createBlockStateDefinition(builder)
     }
 
-    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterPlaced(state, level, pos)
-
+    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+        ThrusterBlockHelper.onThrusterPlaced(state, level, pos)
+        updateRestone(state, level, pos)
+    }
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) = ThrusterBlockHelper.onThrusterRemoved(level, pos)
 
     override fun use(state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        ThrusterBlockHelper.onThrusterUse(state, level, pos, ThrusterMode.STATIC, player)
-        return super.use(state, level, pos, player, hand, hit)
+        if(level.isClientSide) return InteractionResult.CONSUME
+        val be = level.getBlockEntity(pos) as BlastPropellerBlockEntity
+        be.type = when (be.type) {
+            ThrusterMode.STATIC -> ThrusterMode.DYNAMIC
+            ThrusterMode.DYNAMIC -> ThrusterMode.STATIC
+        }
+        ThrusterBlockHelper.onThrusterUse(state, level, pos, be.type, player)
+        return InteractionResult.CONSUME
     }
 
     override fun neighborChanged(
@@ -66,7 +71,7 @@ class FireworkThrusterBlock : BaseEntityBlock(
         isMoving: Boolean
     ) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving)
-        updateRestone(state,level,pos)
+        updateRestone(state, level, pos)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
@@ -81,14 +86,8 @@ class FireworkThrusterBlock : BaseEntityBlock(
     ) {
         if (level as? ServerLevel == null) return
 
-        var blockEntity = level.getBlockEntity(pos) as BlastPropellerBlockEntity
-        val type = blockEntity.type
         val signal = level.getBestNeighborSignal(pos)
-
         level.setBlock(pos, state.setValue(BlockStateProperties.POWER, signal), 2)
-
-        blockEntity = level.getBlockEntity(pos) as BlastPropellerBlockEntity
-        blockEntity.type = type
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -97,11 +96,11 @@ class FireworkThrusterBlock : BaseEntityBlock(
         blockEntityType: BlockEntityType<T>
     ): BlockEntityTicker<T> {
         return BlockEntityTicker {
-                levelB: Level, posB: BlockPos, stateB: BlockState, _: T ->
-            ThrusterBlockHelper.tickThruster(levelB, posB, stateB, ThrusterMode.STATIC)
+                levelB: Level, posB: BlockPos, stateB: BlockState, be: T ->
+            ThrusterBlockHelper.tickThruster(levelB, posB, stateB, (be as BlastPropellerBlockEntity).type)
         }
     }
 
-    override val thrusterType: ThrusterType get() = ThrusterType.FIREWORK_THRUSTER
+    override val thrusterType: ThrusterType get() = ThrusterType.BLAST_PROPELLER
 
 }

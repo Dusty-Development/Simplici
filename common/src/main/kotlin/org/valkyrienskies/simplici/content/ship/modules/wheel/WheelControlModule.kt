@@ -14,13 +14,13 @@ import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.math.SpringHelper
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
-import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
+import org.valkyrienskies.simplici.content.ship.ModShipControl
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 
-class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
+class WheelControlModule(override val shipControl: ModShipControl) : IShipControlModule {
 
     private val wheels = ConcurrentHashMap<BlockPos, WheelForcesData>()
     private val engines = ConcurrentHashMap<BlockPos, EngineData>()
@@ -150,7 +150,7 @@ class WheelControlModule(override val shipControl: SimpliciShipControl) : IShipC
 
     companion object {
         fun getOrCreate(ship: ServerShip): WheelControlModule {
-            val control: SimpliciShipControl = ship.getAttachment<SimpliciShipControl>() ?: SimpliciShipControl().also { ship.saveAttachment(it) }
+            val control: ModShipControl = ship.getAttachment<ModShipControl>() ?: ModShipControl().also { ship.saveAttachment(it) }
             control.loadedModules.forEach { if(it is WheelControlModule) return it }
             val module = WheelControlModule(control)
             control.loadedModules.add(module)
