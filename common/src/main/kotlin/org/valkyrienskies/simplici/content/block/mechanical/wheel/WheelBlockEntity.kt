@@ -40,15 +40,12 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
     var steeringAngle = 0.0
     var drivingAngle = 0.0
-    var lastDist = 0.0
     var currentDist = 0.0
 
     var steeringType: WheelSteeringType = NONE
     var wheelData: WheelForcesData = WheelForcesData()
 
     fun generateWheelForcesData(): WheelForcesData {
-        lastDist = currentDist
-
         steeringAngle = wheelData.steeringAngle
 
         if(level?.isClientSide == false) {

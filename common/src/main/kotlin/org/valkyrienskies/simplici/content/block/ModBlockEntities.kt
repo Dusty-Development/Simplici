@@ -14,11 +14,10 @@ import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.firework_thruster.FireworkThrusterBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntityRenderer
-import org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller.SimplePropellerBlockEntityRenderer
+import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.PropellerBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlockEntity
@@ -37,8 +36,8 @@ object ModBlockEntities {
 
     val DRIVER_SEAT = ModBlocks.DRIVER_SEAT.withBE(::DriverSeatBlockEntity).byName("driver_seat")
 
-    val SIMPLE_PROPELLER  = ModBlocks.SIMPLE_PROPELLER.withBE(::SimplePropellerBlockEntity).byName("simple_propeller").withRenderer { SimplePropellerBlockEntityRenderer( ModModels.PROPELLER ) }
-    val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer { BlastPropellerBlockEntityRenderer( ModModels.PROPELLER ) }
+    val SIMPLE_PROPELLER  = ModBlocks.SIMPLE_PROPELLER.withBE(::SimplePropellerBlockEntity).byName("simple_propeller").withRenderer { PropellerBlockEntityRenderer( ModModels.PROPELLER ) }
+    val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer {PropellerBlockEntityRenderer( ModModels.PROPELLER ) }
     val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
     val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }

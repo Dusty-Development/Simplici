@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList
     setterVisibility = JsonAutoDetect.Visibility.NONE
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
-class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
+class ModShipControl : ShipForcesInducer, ServerTickListener {
 
     // Control
     @JsonIgnore var seatedPlayer: Player? = null
@@ -81,9 +81,9 @@ class SimpliciShipControl : ShipForcesInducer, ServerTickListener {
     }
 
     companion object {
-        fun getOrCreate(ship: ServerShip): SimpliciShipControl {
-            return ship.getAttachment<SimpliciShipControl>()
-                ?: SimpliciShipControl().also { ship.saveAttachment(it) }
+        fun getOrCreate(ship: ServerShip): ModShipControl {
+            return ship.getAttachment<ModShipControl>()
+                ?: ModShipControl().also { ship.saveAttachment(it) }
         }
 
         private val DEFAULT_GRAVITY = Vector3d(0.0, -10.0, 0.0)

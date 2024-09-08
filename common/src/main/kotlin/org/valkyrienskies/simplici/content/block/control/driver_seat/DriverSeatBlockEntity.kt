@@ -5,18 +5,16 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction.Axis
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
-import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.Half
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
-import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
+import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
@@ -25,7 +23,7 @@ import org.valkyrienskies.mod.common.util.toDoubles
 class DriverSeatBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(ModBlockEntities.DRIVER_SEAT.get(), pos, state) {
 
     private val ship: ServerShip? get() = (level as ServerLevel).getShipObjectManagingPos(this.blockPos)
-    private val control: SimpliciShipControl? get() = ship?.getAttachment(SimpliciShipControl::class.java)
+    private val control: ModShipControl? get() = ship?.getAttachment(ModShipControl::class.java)
     private val seats = mutableListOf<ShipMountingEntity>()
 
     // Needs to get called server-side

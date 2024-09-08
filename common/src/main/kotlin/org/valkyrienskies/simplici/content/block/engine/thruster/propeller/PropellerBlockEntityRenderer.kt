@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller
+package org.valkyrienskies.simplici.content.block.engine.thruster.propeller
 
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -8,17 +8,18 @@ import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.AxisAngle4f
 import org.joml.Quaternionf
-import org.joml.Vector3f
 import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.extension.pose
+import org.valkyrienskies.simplici.content.block.engine.thruster.ThrusterBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 
-class SimplePropellerBlockEntityRenderer (
+class PropellerBlockEntityRenderer (
     val model: ModModels.Model
-): BlockEntityRenderer<SimplePropellerBlockEntity> {
+): BlockEntityRenderer<ThrusterBlockEntity> {
 
     override fun render(
-        be: SimplePropellerBlockEntity,
+        be: ThrusterBlockEntity,
         partial: Float,
         pose: PoseStack,
         bufferSource: MultiBufferSource,

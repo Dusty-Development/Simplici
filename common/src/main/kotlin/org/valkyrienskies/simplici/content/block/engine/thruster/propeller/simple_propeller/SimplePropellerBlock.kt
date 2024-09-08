@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.engine.propeller.simple_propeller
+package org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -25,11 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
-import org.valkyrienskies.simplici.content.block.engine.propeller.blast_propeller.BlastPropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterBlockHelper
-import org.valkyrienskies.simplici.content.ship.modules.thruster.IThrusterBlock
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterMode
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterType
 
 class SimplePropellerBlock : BaseEntityBlock(

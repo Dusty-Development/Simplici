@@ -10,14 +10,14 @@ import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
-import org.valkyrienskies.simplici.content.ship.SimpliciShipControl
+import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.simplici.ModConfig
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.pow
 
-class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShipControlModule {
+class RotatorControlModule(override val shipControl: ModShipControl) : IShipControlModule {
 
     private val spinners = ConcurrentHashMap<BlockPos, Pair<BlockState, Boolean>>()
 
@@ -59,7 +59,7 @@ class RotatorControlModule(override val shipControl: SimpliciShipControl) : IShi
 
     companion object {
         fun getOrCreate(ship: ServerShip): RotatorControlModule {
-            val control: SimpliciShipControl = ship.getAttachment<SimpliciShipControl>() ?: SimpliciShipControl().also { ship.saveAttachment(it) }
+            val control: ModShipControl = ship.getAttachment<ModShipControl>() ?: ModShipControl().also { ship.saveAttachment(it) }
             control.loadedModules.forEach { if(it is RotatorControlModule) return it }
             val module = RotatorControlModule(control)
             control.loadedModules.add(module)
