@@ -2,6 +2,8 @@
   "itemGroup.simplici.simplici_tab": "Simplici",
   "itemGroup.simplici": "Simplici",
 
+
+
   "block.simplici.driver_seat": "Steering Wheel",
   "block.simplici.pilot_seat": "Flight Yoke",
   "block.simplici.passenger_seat": "Passenger Seat",
@@ -22,6 +24,18 @@
   "block.simplici.tractor_engine": "Tractor Engine",
   "block.simplici.steam_engine": "Steam Engine",
 
+  "block.simplici.fuel_tank": "Fuel tank",
+  "block.simplici.sensor": "Sensor",
 
-  "block.simplici.sensor": "Sensor"
+
+
+  "gui.simplici.simple_propeller": "Propeller",
+  "gui.simplici.blast_propeller": "Blast Propeller",
+  "gui.simplici.firework_thruster": "Firework Thruster",
+  "gui.simplici.helicopter_propeller": "Helicopter Propeller",
+
+  "gui.simplici.race_engine": "Race Engine",
+  "gui.simplici.tractor_engine": "Tractor Engine",
+
+  "gui.simplici.fuel_tank": "Fuel Tank"
 }

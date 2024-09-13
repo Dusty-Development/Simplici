@@ -7,16 +7,17 @@ import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlock
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlock
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlock
-import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlock
 import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlock
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlock
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlock
-import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
-import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlock
-import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
+import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlock
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
+import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlock
+import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
 @Suppress("unused")
@@ -38,10 +39,11 @@ object ModBlocks {
     val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
     val RACE_ENGINE = BLOCKS.register("race_engine", ::RaceEngineBlock)
 
-/**/val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
+    val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
 
+    val FUEL_TANK = BLOCKS.register("fuel_tank", ::FuelTankBlock)
     val SENSOR = BLOCKS.register("sensor", ::SensorBlock)
 
     fun register() {

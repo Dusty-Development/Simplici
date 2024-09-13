@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.logic.sensor
+package org.valkyrienskies.simplici.content.block.tool.sensor
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

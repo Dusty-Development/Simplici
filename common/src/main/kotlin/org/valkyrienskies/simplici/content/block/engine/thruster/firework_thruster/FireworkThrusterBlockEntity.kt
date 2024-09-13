@@ -1,17 +1,19 @@
 package org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster
 
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.BlockHitResult
-import org.valkyrienskies.core.api.ships.LoadedServerShip
+import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
-import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterControlModule
-import org.valkyrienskies.mod.common.getShipObjectManagingPos
+import org.valkyrienskies.simplici.content.block.engine.thruster.ThrusterBlockEntity
 
 class FireworkThrusterBlockEntity(pos: BlockPos, state: BlockState)
-    : BlockEntity(ModBlockEntities.FIREWORK_THRUSTER.get(), pos, state)
+    : ThrusterBlockEntity(ModBlockEntities.FIREWORK_THRUSTER.get(), pos, state)
+{
+
+    override val thrusterForce: Double = ModConfig.SERVER.FireworkThrusterForce
+    override val thrusterMaxSpeed: Double = 256.0
+    override val thrusterSoftMaxSpeed: Double = 128.0
+
+    override val fuelDefaultName: String = "blast_propeller"
+
+}

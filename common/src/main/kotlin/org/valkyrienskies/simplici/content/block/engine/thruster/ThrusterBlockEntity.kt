@@ -1,108 +1,87 @@
 package org.valkyrienskies.simplici.content.block.engine.thruster
 
-import dev.architectury.registry.fuel.FuelRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.inventory.StackedContentsCompatible
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import org.valkyrienskies.core.api.ships.LoadedShip
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
-import org.valkyrienskies.simplici.api.util.KtContainerData
-import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
-import org.valkyrienskies.simplici.content.ship.ModShipControl
+import org.valkyrienskies.simplici.content.block.FuelConsumerBlockEntity
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterControlModule
 import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterForcesData
-import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 
-abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(blockEntityType, pos, state), StackedContentsCompatible, WorldlyContainer
+abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FuelConsumerBlockEntity(blockEntityType, pos, state)
 {
     abstract val thrusterForce:Double
-    abstract val thrusterSpeed:Double
-
-    // Fuel
-    val data = KtContainerData()
-    var fuelStack:ItemStack = ItemStack.EMPTY
-    var fuelPoweredTicks = 0
-    var shouldRefuel = false
-    var hasFuel = false
+    abstract val thrusterMaxSpeed:Double
+    abstract val thrusterSoftMaxSpeed:Double
 
     // State
-    var rotation = 0.0
+    var animationAngle = 0.0 // Really only used for propellers but maybe a future thruster fan
     var isReversed = false
-
-    fun tickFuelConsumption() {
-        // If the fuel amount is zero we want to grab another item
-        if(fuelPoweredTicks <= 0 && shouldRefuel) {
-            if(fuelStack.isEmpty) {
-                // We are out of fuel with no items to get more from
-                hasFuel = false
-                return
-            } else {
-                // Add fuel amount to powered ticks
-                val fuelValue = FuelRegistry.get(fuelStack)
-                fuelPoweredTicks += fuelValue
-                fuelStack.shrink(1)
-            }
-        }
-
-        // We know we have fuel at this point
-        fuelPoweredTicks -= 1
-    }
+    var gimbalAngle = 0.0
 
     fun getThrusterData(ship: LoadedShip):ThrusterForcesData {
         val data = ThrusterForcesData(state = blockState)
 
         val bestNeighborSignal = level!!.getBestNeighborSignal(blockPos)
         shouldRefuel = bestNeighborSignal > 0
+        data.throttle = bestNeighborSignal / 15.0
+        data.force = thrusterForce
+        data.maxSpeed = thrusterMaxSpeed
+        data.softMaxSpeed = thrusterSoftMaxSpeed
+        data.isReversed = isReversed
+        data.gimbalAngle = gimbalAngle
+        data.isFueled = hasFuel && shouldRefuel
 
         return data
     }
 
     // EVENTS \\
 
-    open fun tick() {
+    override fun tick() {
+        super.tick()
         val ship = level.getShipObjectManagingPos(blockPos)
         val data = ship?.let { getThrusterData(it) }
-        tickFuelConsumption()
 
         if (level!!.isClientSide) return
         if (ship != null) data?.let { ThrusterControlModule.getOrCreate(ship as ServerShip).addThruster(blockPos, it) }
     }
 
-    open fun onPlaced() { } // Dont worry about it. forces should be assigned first tick
-
-    open fun onRemoved() {
+    override fun onRemoved() {
+        super.onRemoved()
         if (level!!.isClientSide) return
         val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(blockPos)
         if (constrainedShip != null) ThrusterControlModule.getOrCreate(constrainedShip).removeThruster(blockPos)
     }
 
-    open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) {
-        isReversed = !isReversed
-        if(level?.isClientSide == false) player.sendSystemMessage(Component.literal("Is reversed: ${if(isReversed) "yes" else "no"}."))
+    override fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) : InteractionResult {
+        if(player.isShiftKeyDown) {
+            isReversed = !isReversed
+            if(level?.isClientSide == false)player.sendSystemMessage(Component.literal("Is reversed: ${if (isReversed) "yes" else "no"}."))
+            return InteractionResult.SUCCESS
+        }
+
+        return super.onUse(player, hand, hit)
     }
 
 
     // SAVE DATA \\
 
     override fun load(tag: CompoundTag) {
+        isReversed = tag.getBoolean("IsReversed")
         super.load(tag)
     }
 
     override fun saveAdditional(tag: CompoundTag) {
+        tag.putBoolean("IsReversed", isReversed)
         super.saveAdditional(tag)
     }
 }

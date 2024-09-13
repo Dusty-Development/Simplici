@@ -15,16 +15,17 @@ import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatB
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
-import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.PropellerBlockEntityRenderer
-import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
-import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
-import org.valkyrienskies.simplici.content.block.logic.sensor.SensorBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
+import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlockEntity
+import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 import org.valkyrienskies.simplici.registry.DeferredRegister
 import org.valkyrienskies.simplici.registry.RegistrySupplier
@@ -51,6 +52,7 @@ object ModBlockEntities {
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
 
     val SENSOR = ModBlocks.SENSOR.withBE(::SensorBlockEntity).byName("sensor")
+    val FUEL_TANK = ModBlocks.FUEL_TANK.withBE(::FuelTankBlockEntity).byName("fuel_tank")
 
     fun register() = BLOCKENTITIES.applyAll()
 
