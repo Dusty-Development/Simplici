@@ -132,7 +132,7 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
         var bestTorque = 0.0
         engines.forEach {
             val torqueAtSpeed = it.value.getTorqueAtSpeed(speed)
-            if(torqueAtSpeed >= bestTorque && it.value.isFueled) {
+            if(torqueAtSpeed >= bestTorque) { // && it.value.isFueled
                 bestTorque = torqueAtSpeed
             }
         }

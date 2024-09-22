@@ -36,6 +36,8 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
     var hasFuel = false
 
     fun tickFuelConsumption() {
+        if(level?.isClientSide == true) return
+
         // If the fuel amount is zero we want to grab another item
         if(fuelPoweredTicks <= 0 && shouldRefuel) {
             if(fuelStack.isEmpty) {
@@ -47,6 +49,8 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
                 val fuelValue = ItemHelper.getFuelTime(fuelStack)
                 fuelPoweredTicks += fuelValue
                 fuelStack.shrink(1)
+                setChanged()
+                println("")
             }
         }
 
@@ -64,7 +68,6 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
             // Drop inventory
             if (!fuelStack.isEmpty) level!!.addFreshEntity(ItemEntity(level, blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), fuelStack))
         }
-        clearContent()
     }
     open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) : InteractionResult {
         if (level?.isClientSide == true) return InteractionResult.SUCCESS

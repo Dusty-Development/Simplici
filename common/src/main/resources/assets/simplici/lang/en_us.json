@@ -14,6 +14,7 @@
 
   "block.simplici.hinge": "Hinge",
   "block.simplici.rotator": "Rotator",
+  "block.simplici.ball_hinge": "Ball Hinge",
   "block.simplici.mechanical_head": "Mechanical Head",
 
   "block.simplici.small_wheel": "Small Wheel",
@@ -26,7 +27,6 @@
 
   "block.simplici.fuel_tank": "Fuel tank",
   "block.simplici.sensor": "Sensor",
-
 
 
   "gui.simplici.simple_propeller": "Propeller",

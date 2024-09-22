@@ -21,7 +21,7 @@ import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
-import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeHelper
+import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
 
 
 // THIS WAS ALL TAKEN FROM BUGGY REWRITE WHEN AVAILABLE
@@ -46,8 +46,8 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstrain
         val facing = blockState.getValue(FACING)
         val headFacing = level!!.getBlockState(mechanicalHeadBlockPos!!).getValue(FACING)
 
-        val hingeOrientation = HingeHelper.getRotationQuaternionFromDirection(facing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
-        val headOrientation = HingeHelper.getRotationQuaternionFromDirection(headFacing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
+        val hingeOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(facing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
+        val headOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(headFacing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
 
         // Hinge constraint
         val hingeConstraint = VSHingeOrientationConstraint(

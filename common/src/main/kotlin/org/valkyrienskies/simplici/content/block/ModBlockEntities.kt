@@ -18,6 +18,7 @@ import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thrust
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.PropellerBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.ball_hinge.BallHingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
@@ -38,7 +39,7 @@ object ModBlockEntities {
     val DRIVER_SEAT = ModBlocks.DRIVER_SEAT.withBE(::DriverSeatBlockEntity).byName("driver_seat")
 
     val SIMPLE_PROPELLER  = ModBlocks.SIMPLE_PROPELLER.withBE(::SimplePropellerBlockEntity).byName("simple_propeller").withRenderer { PropellerBlockEntityRenderer( ModModels.PROPELLER ) }
-    val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer {PropellerBlockEntityRenderer( ModModels.PROPELLER ) }
+    val BLAST_PROPELLER  = ModBlocks.BLAST_PROPELLER.withBE(::BlastPropellerBlockEntity).byName("blast_propeller").withRenderer { PropellerBlockEntityRenderer( ModModels.PROPELLER ) }
     val FIREWORK_THRUSTER = ModBlocks.FIREWORK_THRUSTER.withBE(::FireworkThrusterBlockEntity).byName("firework_thruster")
 
     val SMALL_WHEEL = ModBlocks.SMALL_WHEEL.withBE(::SmallWheelBlockEntity).byName("small_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.SMALL_WHEEL ) }
@@ -50,6 +51,7 @@ object ModBlockEntities {
 
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
+    val BALL_HINGE = ModBlocks.BALL_HINGE.withBE(::BallHingeBlockEntity).byName("ball_hinge")
 
     val SENSOR = ModBlocks.SENSOR.withBE(::SensorBlockEntity).byName("sensor")
     val FUEL_TANK = ModBlocks.FUEL_TANK.withBE(::FuelTankBlockEntity).byName("fuel_tank")

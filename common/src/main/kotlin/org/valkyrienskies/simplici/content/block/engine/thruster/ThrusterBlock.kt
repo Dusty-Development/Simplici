@@ -39,7 +39,10 @@ abstract class ThrusterBlock(properties: Properties) : BaseEntityBlock(propertie
     }
 
     override fun onPlace(blockState: BlockState, level: Level, pos: BlockPos, blockState2: BlockState, bl: Boolean) { (level.getBlockEntity(pos) as ThrusterBlockEntity).onPlaced() }
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) { (level.getBlockEntity(pos) as ThrusterBlockEntity).onRemoved() }
+    override fun playerWillDestroy(level: Level, blockPos: BlockPos, blockState: BlockState, player: Player) {
+        if(!level.isClientSide) { (level.getBlockEntity(blockPos) as ThrusterBlockEntity).onRemoved() }
+        super.playerWillDestroy(level, blockPos, blockState, player)
+    }
     override fun use(blockState: BlockState, level: Level, pos: BlockPos, player: Player, interactionHand: InteractionHand, blockHitResult: BlockHitResult): InteractionResult = (level.getBlockEntity(pos) as ThrusterBlockEntity).onUse(player, interactionHand, blockHitResult)
 
     override fun neighborChanged(
