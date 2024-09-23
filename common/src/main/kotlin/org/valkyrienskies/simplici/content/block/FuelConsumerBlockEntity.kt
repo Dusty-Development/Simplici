@@ -73,7 +73,7 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
         if (level?.isClientSide == true) return InteractionResult.SUCCESS
         val blockEntity = level!!.getBlockEntity(blockPos) as FuelConsumerBlockEntity
 
-        player.openMenu(blockEntity)
+        //TODO: add this when menu fix: player.openMenu(blockEntity)
 
         return InteractionResult.CONSUME
     }

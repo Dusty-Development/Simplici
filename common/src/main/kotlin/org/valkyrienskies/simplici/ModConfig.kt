@@ -22,9 +22,6 @@ object ModConfig {
         @JsonSchema(description = "Do rotators have a opposite and equal reaction")
         val NewtonianMotors = true
 
-        @JsonSchema(description = "You can increase this if you need hinges to be stronger.. however this might cause jittering and / or flinging")
-        val HingeCompliance = 1
-
         @JsonSchema(description = "") val MaxShipAssemblyBlocks = 25000
 
         @JsonSchema(description = "Propellers") val SimplePropellerForce = 100000.0

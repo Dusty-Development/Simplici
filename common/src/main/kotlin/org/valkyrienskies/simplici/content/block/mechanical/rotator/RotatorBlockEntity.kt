@@ -24,8 +24,6 @@ import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraint
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
 
 
-// THIS WAS ALL TAKEN FROM BUGGY REWRITE WHEN AVAILABLE
-
 class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.ROTATOR.get(), pos, state)
 {
     private var isFlipped = false
@@ -86,7 +84,7 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstrain
     }
 
     override fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult ) {
-        if(player.isHolding(Items.LEVER) && !level!!.isClientSide() && hand == InteractionHand.MAIN_HAND) isFlipped = isFlipped.not() else super.onUse(player, hand, hit)
+        if(!level!!.isClientSide() && hand == InteractionHand.MAIN_HAND) isFlipped = isFlipped.not() else super.onUse(player, hand, hit)
     }
 
     override fun tick() {

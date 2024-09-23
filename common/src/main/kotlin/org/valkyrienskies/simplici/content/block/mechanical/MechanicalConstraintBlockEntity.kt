@@ -145,7 +145,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
         // Constraint vars
         val massAverage = abs((shipReference?.inertiaData?.mass ?: constrainedShipReference?.inertiaData?.mass!!) + (constrainedShipReference?.inertiaData?.mass ?: shipReference?.inertiaData?.mass!!)) * 0.5
-        val constraintCompliance = (1e-7 / ModConfig.SERVER.HingeCompliance / massAverage)
+        val constraintCompliance = (1e-7 / massAverage)
         val constraintMaxForce = 1e150 * massAverage
 
         if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)
@@ -184,10 +184,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         breakConstraints()
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
     }
-    open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) {
-        println("USE")
-        if (player.isCrouching) breakConstraints() else resetHingeHead()
-    }
+    open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) { }
 
     open fun tick() {
         if(level!!.isClientSide) return

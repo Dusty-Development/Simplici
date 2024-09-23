@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
+import org.valkyrienskies.simplici.content.block.ModBlocks.BLOCKS
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
@@ -20,6 +21,8 @@ import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.ball_hinge.BallHingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlockEntity
@@ -49,6 +52,7 @@ object ModBlockEntities {
     val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")
     val RACE_ENGINE = ModBlocks.RACE_ENGINE.withBE(::RaceEngineBlockEntity).byName("race_engine")
 
+    val HYDRAULIC = ModBlocks.HYDRAULIC.withBE(::HydraulicBlockEntity).byName("hydraulic").withRenderer { HydraulicBlockEntityRenderer( ModModels.MECHANICAL_BEAM ) }
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
     val BALL_HINGE = ModBlocks.BALL_HINGE.withBE(::BallHingeBlockEntity).byName("ball_hinge")

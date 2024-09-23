@@ -13,6 +13,7 @@ import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simpl
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.ball_hinge.BallHingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
+import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlock
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlock
@@ -41,6 +42,8 @@ object ModBlocks {
     val RACE_ENGINE = BLOCKS.register("race_engine", ::RaceEngineBlock)
 
     val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
+
+    val HYDRAULIC = BLOCKS.register("hydraulic", ::HydraulicBlock)
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
     val BALL_HINGE = BLOCKS.register("ball_hinge", ::BallHingeBlock)

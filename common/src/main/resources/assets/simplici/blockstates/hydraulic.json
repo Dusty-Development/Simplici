@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 90,
+      "y": 0
+    },
+    "facing=east": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 0
+    },
+    "facing=down": {
+      "model": "simplici:block/mechanical/hydraulic/hydraulic",
+      "x": 180
+    }
+  }
+}
