@@ -2,6 +2,7 @@ package org.valkyrienskies.simplici.content.block.mechanical.wheel
 
 import io.netty.buffer.Unpooled
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -9,15 +10,19 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
+import org.joml.Math
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.Ship
+import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import org.valkyrienskies.mod.common.getShipManagingPos
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
@@ -27,6 +32,7 @@ import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelForcesData
+import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -40,6 +46,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
     var steeringAngle = 0.0
     var drivingAngle = 0.0
+    var lastDrivingVel = 0.0
     var currentDist = 0.0
 
     var steeringType: WheelSteeringType = NONE
@@ -123,16 +130,35 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         return physShip.velocity.add(physShip.omega.cross(centerOfMassPos, Vector3d()), Vector3d())
     }
 
+
+    // Handles the funny particles
+    fun spawnWheelEffects() {
+        val ship = level.getShipManagingPos(blockPos)
+        if(ship != null && wheelData.colliding) {
+            val worldBlockPos = ship.transform.shipToWorld.transformPosition(blockPos.center.toJOML())
+            val direction = blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD()
+            val globalDir = ship.transform.transformDirectionNoScalingFromShipToWorld(direction.rotateY(java.lang.Math.toRadians(steeringAngle + 90)), Vector3d()).normalize()
+
+            val velocity = pointVelocity(ship, worldBlockPos)
+            var floorVelocity = wheelData.floorVel
+            if(wheelData.floorVel == null) floorVelocity = Vector3d()
+            val localVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
+
+            if(localVelocity.absoluteValue >= (ModConfig.SERVER.WheelSlideThreshold * 0.9) && wheelData.floorFrictionMultiplier > 0.5)
+                level?.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, worldBlockPos.x, worldBlockPos.y - wheelData.floorCastDistance - wheelRadius, worldBlockPos.z, 0.0,0.025,0.0)
+        }
+    }
+
     // EVENTS \\
 
     open fun tick() {
         val data = generateWheelForcesData()
 
+        spawnWheelEffects()
         if (level!!.isClientSide) return
 
         val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(blockPos)
         if (constrainedShip != null) WheelControlModule.getOrCreate(constrainedShip).addOrUpdateWheel(blockPos, data)
-
 
     }
 
@@ -148,9 +174,10 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         steeringType = when (steeringType) {
             NONE -> CLOCKWISE
             CLOCKWISE -> COUNTER_CLOCKWISE
-            COUNTER_CLOCKWISE -> LEAN_CLOCKWISE
-            LEAN_CLOCKWISE -> LEAN_COUNTER_CLOCKWISE
-            LEAN_COUNTER_CLOCKWISE -> NONE
+            COUNTER_CLOCKWISE -> TANK_CLOCKWISE
+            TANK_CLOCKWISE -> TANK_COUNTER_CLOCKWISE
+            TANK_COUNTER_CLOCKWISE -> SHOPPING_CART
+            SHOPPING_CART -> NONE
         }
         if(level?.isClientSide == false) player.sendSystemMessage(Component.literal("Changed steering type to: $steeringType"))
     }

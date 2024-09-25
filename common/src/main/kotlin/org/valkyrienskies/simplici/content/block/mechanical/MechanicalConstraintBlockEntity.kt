@@ -209,9 +209,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     override fun load(tag: CompoundTag) {
         super.load(tag)
         isLoading = true
-        println(mechanicalHeadBlockPos)
         mechanicalHeadBlockPos = BlockPos.of(tag.getLong("head_pos"))
-        println(mechanicalHeadBlockPos)
     }
 
     fun loadConstraints() {
@@ -223,7 +221,6 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
     override fun saveAdditional(tag: CompoundTag) {
         if (level!!.isClientSide() && isConstrained) return
-        println(mechanicalHeadBlockPos)
         mechanicalHeadBlockPos?.let { tag.putLong("head_pos", it.asLong()) }
         super.saveAdditional(tag)
     }
