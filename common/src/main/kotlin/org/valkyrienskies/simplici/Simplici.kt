@@ -7,9 +7,9 @@ import org.valkyrienskies.core.impl.config.VSConfigClass
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.ModBlocks
 import org.valkyrienskies.simplici.content.entity.ModEntities
-import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.gui.ModClientScreens
 import org.valkyrienskies.simplici.content.gui.ModScreens
+import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.network.ModNetworking
 
 object Simplici {
@@ -26,6 +26,7 @@ object Simplici {
         ModNetworking.registerServer()
 
         VSConfigClass.registerConfig(MOD_ID, ModConfig::class.java)
+
     }
 
     @JvmStatic
@@ -43,4 +44,5 @@ object Simplici {
     fun initClientRenderers(clientRenderers: ClientRenderers) {
         ModBlockEntities.initClientRenderers(clientRenderers)
     }
+
 }
