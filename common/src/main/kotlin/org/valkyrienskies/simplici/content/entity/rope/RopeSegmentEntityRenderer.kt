@@ -30,7 +30,8 @@ class RopeSegmentEntityRenderer(context: EntityRendererProvider.Context) : Entit
         val vertexConsumer = multiBufferSource.getBuffer(RenderType.lines())
         val positionMatrix = poseStack.last().pose()
 
-        drawLineInDir(Vector3d(1.0,0.0,0.0), RopeSegmentEntity.length + RopeSegmentEntity.radius, Color.RED, entity, vertexConsumer, positionMatrix)
+//        drawLineInDir(Vector3d(1.0,0.0,0.0), RopeSegmentEntity.length + RopeSegmentEntity.radius, Color.RED, entity, vertexConsumer, positionMatrix)
+        drawLineInDir(Vector3d(1.0,0.0,0.0), RopeSegmentEntity.halfLength, Color.RED, entity, vertexConsumer, positionMatrix)
         drawLineInDir(Vector3d(0.0,1.0,0.0), RopeSegmentEntity.radius, Color.GREEN, entity, vertexConsumer, positionMatrix)
         drawLineInDir(Vector3d(0.0,0.0,1.0), RopeSegmentEntity.radius, Color.BLUE, entity, vertexConsumer, positionMatrix)
 

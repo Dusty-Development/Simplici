@@ -9,24 +9,28 @@ import org.joml.*
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.api.ships.properties.ShipInertiaData
 import org.valkyrienskies.core.api.ships.properties.ShipTransform
+import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.apigame.physics.VSCapsuleCollisionShapeData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
+import org.valkyrienskies.mod.common.getShipManaging
 import org.valkyrienskies.mod.common.shipObjectWorld
+import org.valkyrienskies.mod.common.util.toJOMLD
+import org.valkyrienskies.physics_api.ConstraintId
 import org.valkyrienskies.simplici.content.entity.ModEntities
 import kotlin.math.PI
 import kotlin.math.roundToInt
 
 class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSPhysicsEntity(type as EntityType<VSPhysicsEntity>, level) {
 
-
+    var shipId:ShipId? = null
 
     var parentRope:RopeSegmentEntity? = null
     val childrenRopes:ArrayList<RopeSegmentEntity> = ArrayList()
-    val constraints:ArrayList<RopeSegmentEntity> = ArrayList()
+    val constraints:ArrayList<ConstraintId> = ArrayList()
 
     fun setNeedsUpdating(enabled: Boolean) { this.physicsEntityServer!!.needsUpdating = enabled }
 
@@ -35,23 +39,45 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
     companion object {
 
         val radius: Double get() = 0.25
-        val length: Double get() = 0.5
-        val mass:   Double get() = 15.0
+        val halfLength: Double get() = 0.5
+        val mass:   Double get() = 100.0
 
-        fun createEntity(level: ServerLevel, pos: Vector3dc, rotation: Quaterniond, spawnStatic: Boolean = false, parentEntity: RopeSegmentEntity? = null): RopeSegmentEntity {
+        fun createSegmentEntity(level: ServerLevel, pos: Vector3dc, rotation: Quaterniond, spawnStatic: Boolean = false, parentEntity: RopeSegmentEntity? = null): RopeSegmentEntity {
             val entity = ModEntities.ROPE_SEGMENT.get().create(level)!!
             val shipId = level.shipObjectWorld.allocateShipId(level.dimensionId)
 
             val transform = ShipTransformImpl.create(pos, Vector3d(), rotation)
-            val physEntityData = createShapeData(shipId, transform, radius, length, mass, spawnStatic)
+            val physEntityData = createShapeData(shipId, transform, radius, halfLength, mass, spawnStatic)
 
             entity.setPhysicsEntityData(physEntityData)
+            entity.shipId = shipId
             entity.parentRope = parentEntity
             entity.setPos(pos.x(), pos.y(), pos.z())
             //entity.setNeedsUpdating(true)
             level.addFreshEntity(entity)
 
+            parentEntity?.childrenRopes?.add(entity)
             return entity
+        }
+
+        fun createSegmentConstrants(level: ServerLevel, parent:RopeSegmentEntity, first:RopeSegmentEntity, second:RopeSegmentEntity) {
+            val shipA = first.shipId
+            val shipB = second.shipId
+
+            if(shipA == null || shipB == null) return
+
+            // Attach constraint
+            val attachConstraint = VSAttachmentConstraint(
+                shipA,
+                shipB,
+                1e-12,
+                Vector3d(halfLength,0.0,0.0),
+                Vector3d(-halfLength,0.0,0.0),
+                1e150,
+                0.0
+            )
+            level.shipObjectWorld.createNewConstraint(attachConstraint)?.let { parent.constraints.add(it) }
+            level.shipObjectWorld.disableCollisionBetweenBodies(shipA, shipB)
         }
 
         // Creates a full rope and returns the (start rope, end rope)
@@ -59,26 +85,37 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
 
             val ropeTotalLength = start.distance(end)
             val ropeTotalNormal = end.sub(start, Vector3d()).normalize()
-            val segmentLength = length + radius
 
-            val segmentCount = Math.ceil(ropeTotalLength / (segmentLength * 2)).roundToInt()
+            val length = halfLength * 2
+            val tolerance = 0.1 // The margin to decide whether an extra segment is needed
+            val segmentDivisions = (ropeTotalLength / length).toInt() // this dosent include any overlap with the last point
+            val remainder = ropeTotalLength % length
+            val segmentCount = if (remainder > tolerance) segmentDivisions + 1 else segmentDivisions
 
             val rotation = Quaterniond().rotationTo(Vector3d(1.0,0.0,0.0), ropeTotalNormal)
 
-            println("distance of: $ropeTotalLength created #${segmentCount + 1}")
-            var startEntity:RopeSegmentEntity? = null
-            var lastEntity:RopeSegmentEntity? = null
-            for (i in 0..segmentCount) {
-                val position = start.add(ropeTotalNormal.mul(i * segmentLength, Vector3d()), Vector3d())
-                val entity = createEntity(level, position, rotation, spawnStatic, startEntity)
-                entity.childrenRopes.add(entity)
+            println("distance of: $ropeTotalLength created #${segmentCount}")
+            var previousSegment: RopeSegmentEntity? = null
+            var parentSegment: RopeSegmentEntity? = null
 
-                lastEntity = entity
-                if(startEntity == null) startEntity = entity
+            val halfLengthOffset = ropeTotalNormal.mul(halfLength, Vector3d())
+            val startSegmentPosition = start.add(halfLengthOffset, Vector3d())
+
+            for (i in 0 until segmentCount) {
+                val segmentPos = startSegmentPosition.add(ropeTotalNormal.mul(i * length, Vector3d()), Vector3d())
+                val segment = createSegmentEntity(level, segmentPos, rotation, spawnStatic, parentSegment)
+
+                // Create constraints
+                if (previousSegment != null) { parentSegment?.let { createSegmentConstrants(level, it, previousSegment!!, segment) } }
+
+                if (i == 0) { parentSegment = segment }
+
+                previousSegment = segment
             }
 
-            return Pair(startEntity!!,lastEntity!!)
+            return Pair(parentSegment!!, previousSegment!!)
         }
+
 
 
         //https://www.gamedev.net/tutorials/programming/math-and-physics/capsule-inertia-tensor-r3856/
