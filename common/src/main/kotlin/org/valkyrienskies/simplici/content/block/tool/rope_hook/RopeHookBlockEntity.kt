@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.tool.handle
+package org.valkyrienskies.simplici.content.block.tool.rope_hook
 
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
@@ -24,18 +24,13 @@ abstract class RopeHookBlockEntity(blockEntityType: BlockEntityType<*>, pos: Blo
         return InteractionResult.CONSUME
     }
 
-
     // SAVE DATA \\
 
     override fun load(tag: CompoundTag) {
-//        fuelStack = ItemStack.of(tag.getCompound("FuelSlot"))
-//        fuelPoweredTicks = tag.getInt("FuelPoweredTicks")
         super.load(tag)
     }
 
     override fun saveAdditional(tag: CompoundTag) {
-//        tag.put("FuelSlot", fuelStack.save(CompoundTag()))
-//        tag.putInt("FuelPoweredTicks", fuelPoweredTicks)
         super.saveAdditional(tag)
     }
 

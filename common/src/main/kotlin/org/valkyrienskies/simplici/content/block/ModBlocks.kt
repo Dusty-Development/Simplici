@@ -19,6 +19,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.La
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
 import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlock
+import org.valkyrienskies.simplici.content.block.tool.rope_hook.handle.HandleBlock
 import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
@@ -47,6 +48,8 @@ object ModBlocks {
     val HINGE = BLOCKS.register("hinge", ::HingeBlock)
     val ROTATOR = BLOCKS.register("rotator", ::RotatorBlock)
     val BALL_HINGE = BLOCKS.register("ball_hinge", ::BallHingeBlock)
+
+    val HANDLE = BLOCKS.register("handle", ::HandleBlock)
 
     val FUEL_TANK = BLOCKS.register("fuel_tank", ::FuelTankBlock)
     val SENSOR = BLOCKS.register("sensor", ::SensorBlock)

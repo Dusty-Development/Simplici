@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
-import org.valkyrienskies.simplici.content.block.ModBlocks.BLOCKS
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
@@ -29,6 +28,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.La
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlockEntity
+import org.valkyrienskies.simplici.content.block.tool.rope_hook.handle.HandleBlockEntity
 import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 import org.valkyrienskies.simplici.registry.DeferredRegister
@@ -56,6 +56,8 @@ object ModBlockEntities {
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
     val BALL_HINGE = ModBlocks.BALL_HINGE.withBE(::BallHingeBlockEntity).byName("ball_hinge")
+
+    val HANDLE = ModBlocks.HANDLE.withBE(::HandleBlockEntity).byName("handle") // TODO: add a rope knot renderer
 
     val SENSOR = ModBlocks.SENSOR.withBE(::SensorBlockEntity).byName("sensor")
     val FUEL_TANK = ModBlocks.FUEL_TANK.withBE(::FuelTankBlockEntity).byName("fuel_tank")

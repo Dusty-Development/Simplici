@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.tool.handle
+package org.valkyrienskies.simplici.content.block.tool.rope_hook
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
@@ -57,11 +57,8 @@ abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(propertie
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        var dir = ctx.horizontalDirection
-        if(ctx.player != null && !ctx.player!!.isShiftKeyDown)
-            dir = dir.opposite
-        return defaultBlockState()
-            .setValue(FACING, dir)
+        val dir = ctx.nearestLookingDirection.opposite
+        return defaultBlockState().setValue(FACING, dir)
     }
 
     override fun <T : BlockEntity> getTicker(
