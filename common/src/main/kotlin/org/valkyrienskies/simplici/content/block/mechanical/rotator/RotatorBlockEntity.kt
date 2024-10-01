@@ -39,7 +39,13 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstrain
         super.saveAdditional(tag)
     }
 
-    override fun createConstraints(shipId: ShipId, constrainedShipId: ShipId, compliance: Double, maxForce: Double) {
+    override fun createConstraints(
+        shipId: ShipId,
+        constrainedShipId: ShipId,
+        compliance: Double,
+        maxForce: Double,
+        massAverage: Double
+    ) {
         // The facing rotations
         val facing = blockState.getValue(FACING)
         val headFacing = level!!.getBlockState(mechanicalHeadBlockPos!!).getValue(FACING)

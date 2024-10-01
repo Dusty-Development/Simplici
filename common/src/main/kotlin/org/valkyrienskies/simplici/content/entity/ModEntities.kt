@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.level.Level
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity
@@ -40,7 +41,7 @@ object ModEntities {
                 entityConstructor,
                 MobCategory.MISC
             )
-                .sized(.25f, .25f)
+                .sized(.5f, .5f)
                 .updateInterval(1)
                 .fireImmune()
                 .build(ResourceLocation(Simplici.MOD_ID, this).toString())

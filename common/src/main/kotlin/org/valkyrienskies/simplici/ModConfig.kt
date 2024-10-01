@@ -61,5 +61,6 @@ object ModConfig {
         @JsonSchema(description = "") val TractorEngineSpeed = 12.0
 
         @JsonSchema(description = "") val BallHingeMaxAngle = 75.0
+        @JsonSchema(description = "") val RopeMaxTwist = 90.0
     }
 }

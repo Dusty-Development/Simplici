@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.item
+package org.valkyrienskies.simplici.content.item.tool
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -13,7 +13,6 @@ import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
-import org.valkyrienskies.core.apigame.constraints.VSHingeOrientationConstraint
 import org.valkyrienskies.core.apigame.constraints.VSSphericalTwistLimitsConstraint
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
@@ -25,8 +24,8 @@ import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelpe
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity.Companion.halfLength
 
-class TesterItem : Item(
-    Properties().stacksTo(1)
+class RopeItem : Item(
+    Properties().stacksTo(8)
 ){
 
 
@@ -68,7 +67,9 @@ class TesterItem : Item(
             val endPos = secondShip?.shipToWorld?.transformPosition(blockLocation, Vector3d()) ?: blockLocation
 
             val direction = endPos.sub(startPos, Vector3d()).normalize()
-            val Orrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(Direction.getNearest(direction.x, direction.y, direction.z)).mul(Quaterniond( AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0) ), Quaterniond()).normalize()
+            val Orrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(Direction.getNearest(direction.x, direction.y, direction.z)).mul(
+                Quaterniond( AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0) ), Quaterniond()
+            ).normalize()
 
             println("s: $startPos, e:$endPos")
 

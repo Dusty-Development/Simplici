@@ -148,7 +148,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         val constraintCompliance = (1e-7 / massAverage)
         val constraintMaxForce = 1e150 * massAverage
 
-        if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce)
+        if(level?.isLoaded(mechanicalHeadBlockPos!!) == true) createConstraints(shipId, constrainedShipId, constraintCompliance, constraintMaxForce, massAverage)
 
         if(staticTicks == 0) {
             shipReference?.isStatic = wasStatic
@@ -169,7 +169,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     //  val shipReference:ServerShip? = level.shipObjectWorld.allShips.getById(shipId) as ServerShip?
     //  val constrainedShipReference:ServerShip? = level.shipObjectWorld.allShips.getById(constrainedShipId) as ServerShip?
 
-    abstract fun createConstraints(shipId: ShipId, constrainedShipId: ShipId, compliance:Double, maxForce:Double)
+    abstract fun createConstraints(shipId: ShipId, constrainedShipId: ShipId, compliance:Double, maxForce:Double, massAverage:Double = 1.0)
 
     open fun breakConstraints() {
         if (level!!.isClientSide()) return

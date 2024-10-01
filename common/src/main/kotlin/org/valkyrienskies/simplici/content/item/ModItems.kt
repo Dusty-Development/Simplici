@@ -7,6 +7,7 @@ import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.ModBlocks
+import org.valkyrienskies.simplici.content.item.tool.RopeItem
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
 @Suppress("unused")
@@ -16,6 +17,8 @@ object ModItems {
         ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation(Simplici.MOD_ID, "simplici_tab"))
 
     val TESTER = ITEMS.register("tester", ::TesterItem)
+    val ROPE = ITEMS.register("rope", ::RopeItem)
+
 
     fun register() {
         ModBlocks.registerItems(ITEMS)

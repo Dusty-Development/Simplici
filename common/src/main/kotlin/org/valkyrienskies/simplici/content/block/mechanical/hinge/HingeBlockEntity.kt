@@ -18,7 +18,13 @@ import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraint
 class HingeBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.HINGE.get(), pos, state)
 {
 
-    override fun createConstraints(shipId: ShipId, constrainedShipId: ShipId, compliance:Double, maxForce:Double) {
+    override fun createConstraints(
+        shipId: ShipId,
+        constrainedShipId: ShipId,
+        compliance: Double,
+        maxForce: Double,
+        massAverage: Double
+    ) {
 //        // The ship References
 //        val shipReference:ServerShip? = level.shipObjectWorld.allShips.getById(shipId) as ServerShip?
 //        val constrainedShipReference:ServerShip? = level.shipObjectWorld.allShips.getById(constrainedShipId) as ServerShip?
