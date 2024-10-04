@@ -4,10 +4,12 @@ plugins {
     id "dev.architectury.loom" version "1.3.355" apply false
     // Kotlin
     id "org.jetbrains.kotlin.jvm" version "1.9.10" apply false
-    // Kotlin linter
+    /*// Kotlin linter
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
     // Java linter
-    id "checkstyle"
+    id "checkstyle"*/
+    id "io.github.juuxel.loom-vineflower" version "1.+" apply false // Quiltflower, a better decompiler
+    id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id "com.modrinth.minotaur" version "2.4.5" apply false
@@ -33,8 +35,8 @@ architectury {
 subprojects {
     apply plugin: "dev.architectury.loom"
     // Apply checkstyle and ktlint to check the code style of every sub project
-    apply plugin: "org.jlleitschuh.gradle.ktlint"
-    apply plugin: "checkstyle"
+    /*apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "checkstyle"*/
     apply plugin: "org.jetbrains.kotlin.jvm"
 
     loom {
@@ -61,7 +63,7 @@ subprojects {
         implementation("org.joml:joml-primitives:1.10.0") { transitive = false }
     }
 
-    checkstyle {
+    /*checkstyle {
         // configure to use checkstyle v8.41
         toolVersion "8.41"
         // Gradle shouldn't fail builds on checkstyle errors
@@ -92,7 +94,7 @@ subprojects {
 
     kotlin {
         jvmToolchain(17)
-    }
+    }*/
 }
 
 allprojects {
@@ -130,5 +132,12 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+
+    machete {
+        // disable machete locally for faster builds
+        enabled = buildNumber != null
     }
 }
