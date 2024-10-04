@@ -106,7 +106,7 @@ publishing {
             println "Publishing to Github Packages"
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/ValkyrienSkies/Simplici")
+                url = uri("https://maven.pkg.github.com/Dusty-Development/Simplici")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
