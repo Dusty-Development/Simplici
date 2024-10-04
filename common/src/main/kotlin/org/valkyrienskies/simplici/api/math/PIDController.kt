@@ -1,7 +1,6 @@
 package org.valkyrienskies.simplici.api.math
 
 import net.minecraft.util.Mth
-import org.joml.Quaterniond
 
 class PIDController {
     enum class DerivativeMeasurement {
@@ -25,11 +24,11 @@ class PIDController {
     var velocity: Double = 0.0 //only used for the info display
     var derivativeInitialized: Boolean? = null
 
-    fun Reset() {
+    fun reset() {
         derivativeInitialized = false
     }
 
-    fun Update(dt: Double, currentValue: Double, targetValue: Double): Double {
+    fun update(dt: Double, currentValue: Double, targetValue: Double): Double {
         val error = targetValue - currentValue
 
         //calculate P term
@@ -67,12 +66,12 @@ class PIDController {
         return Mth.clamp(result, outputMin, outputMax)
     }
 
-    fun AngleDifference(a: Double, b: Double): Double {
+    fun angleDifference(a: Double, b: Double): Double {
         return (a - b + 540) % 360 - 180 //calculate modular difference, and remap to [-180, 180]
     }
 
-    fun UpdateAngle(dt: Double, currentAngle: Double, targetAngle: Double): Double {
-        val error = AngleDifference(targetAngle, currentAngle)
+    fun updateAngle(dt: Double, currentAngle: Double, targetAngle: Double): Double {
+        val error = angleDifference(targetAngle, currentAngle)
 
         //calculate P term
         val P = proportionalGain * error
@@ -82,10 +81,10 @@ class PIDController {
         val I = integralGain * integrationStored
 
         //calculate both D terms
-        val errorRateOfChange = AngleDifference(error, errorLast) / dt
+        val errorRateOfChange = angleDifference(error, errorLast) / dt
         errorLast = error
 
-        val valueRateOfChange = AngleDifference(currentAngle, valueLast) / dt
+        val valueRateOfChange = angleDifference(currentAngle, valueLast) / dt
         valueLast = currentAngle
         velocity = valueRateOfChange
 

@@ -17,7 +17,11 @@ import kotlin.math.pow
 
 class HandleControlModule(override val shipControl: ModShipControl) : IShipControlModule {
 
-    override fun onPhysTick(physShip: PhysShipImpl) { }
+    override fun onPhysTick(physShip: PhysShipImpl) {
+
+
+
+    }
 
     override fun onTick() { }
 

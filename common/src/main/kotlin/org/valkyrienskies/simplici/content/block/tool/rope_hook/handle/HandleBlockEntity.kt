@@ -6,4 +6,7 @@ import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.tool.rope_hook.RopeHookBlockEntity
 
 class HandleBlockEntity(pos: BlockPos, state: BlockState) : RopeHookBlockEntity(ModBlockEntities.HANDLE.get(), pos, state) {
+
+
+
 }
