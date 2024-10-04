@@ -6,6 +6,8 @@
 
 Simplici is a minecraft mod that aims to add vanilla style vehicle and doohickeys to VS2.
 
+[![Build](https://github.com/Dusty-Development/Simplici/actions/workflows/build.yml/badge.svg)](https://github.com/Dusty-Development/Simplici/actions/workflows/build.yml)
+
 <img alt="fabric" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg">
 <img alt="forge" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg">
 
