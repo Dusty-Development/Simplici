@@ -13,8 +13,6 @@ class PIDController {
     var integralGain: Double = 0.0
     var derivativeGain: Double = 0.0
 
-    var outputMin: Double = -1.0
-    var outputMax: Double = 1.0
     var integralSaturation: Double = 0.0
     var derivativeMeasurement: DerivativeMeasurement? = null
 
@@ -63,7 +61,7 @@ class PIDController {
 
         val result = P + I + D
 
-        return Mth.clamp(result, outputMin, outputMax)
+        return result
     }
 
     fun angleDifference(a: Double, b: Double): Double {
@@ -105,7 +103,7 @@ class PIDController {
 
         val result = P + I + D
 
-        return Mth.clamp(result, outputMin, outputMax)
+        return result
     }
 
     fun setPID(p:Double, i:Double, d:Double) {
