@@ -40,16 +40,16 @@ class Vector3dPID : Vector3d {
         this.z = v.z()
     }
 
-    fun updatePID(dt: Double, currentValue: Double, targetValue: Double) {
-        xPID.update(dt, currentValue, targetValue)
-        yPID.update(dt, currentValue, targetValue)
-        zPID.update(dt, currentValue, targetValue)
+    fun updatePID(dt: Double, currentValue: Vector3d, targetValue: Vector3d) {
+        this.x = xPID.update(dt, currentValue.x, targetValue.x)
+        this.y = yPID.update(dt, currentValue.y, targetValue.y)
+        this.z = zPID.update(dt, currentValue.z, targetValue.z)
     }
 
-    fun updateAnglePID(dt: Double, currentAngle: Double, targetAngle: Double) {
-        xPID.updateAngle(dt, currentAngle, targetAngle)
-        yPID.updateAngle(dt, currentAngle, targetAngle)
-        zPID.updateAngle(dt, currentAngle, targetAngle)
+    fun updateAnglePID(dt: Double, currentAngle: Vector3d, targetAngle: Vector3d) {
+        this.x = xPID.updateAngle(dt, currentAngle.x, targetAngle.x)
+        this.y = yPID.updateAngle(dt, currentAngle.y, targetAngle.y)
+        this.z = zPID.updateAngle(dt, currentAngle.z, targetAngle.z)
     }
 
     fun setPID(proportionalGain: Double, integralGain: Double, derivativeGain: Double) {

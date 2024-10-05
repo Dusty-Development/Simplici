@@ -11,7 +11,7 @@ import org.valkyrienskies.simplici.content.block.tool.rope_hook.RopeHookBlock
 
 class HandleBlock : RopeHookBlock(Properties.of().mapColor(MapColor.METAL).strength(2.5F).sound(SoundType.METAL).noOcclusion()) {
 
-    override val SHAPE: RotShape = RotShapes.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0)
+    override val SHAPE: RotShape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = HandleBlockEntity(blockPos, blockState)
 
 }

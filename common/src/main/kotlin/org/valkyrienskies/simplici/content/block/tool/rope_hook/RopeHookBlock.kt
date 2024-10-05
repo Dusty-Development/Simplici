@@ -57,7 +57,7 @@ abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(propertie
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        val dir = ctx.nearestLookingDirection.opposite
+        val dir = ctx.clickedFace.opposite
         return defaultBlockState().setValue(FACING, dir)
     }
 
