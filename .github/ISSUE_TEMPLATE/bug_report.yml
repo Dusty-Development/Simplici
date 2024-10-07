@@ -15,8 +15,9 @@ body:
     label: Minecraft Version
     description: What Minecraft version does this issue occur on?
     options:
-      - 1.18.2
+      - Any
       - 1.20​.1
+      - 1.18.2
   validations:
     required: true
 - type: input
@@ -30,6 +31,7 @@ body:
     label: Mod Loader
     description: What mod loader does this issue occur on?
     options:
+      - All
       - Forge
       - Fabric
       - Quilt
