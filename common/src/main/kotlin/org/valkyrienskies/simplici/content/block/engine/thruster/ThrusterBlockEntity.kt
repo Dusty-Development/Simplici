@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
@@ -19,7 +20,7 @@ import org.valkyrienskies.simplici.content.ship.modules.thruster.ThrusterForcesD
 
 abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : FuelConsumerBlockEntity(blockEntityType, pos, state)
 {
-    abstract val thrusterForce:Double
+    abstract val thrusterForceKey: GameRules.Key<GameRules.IntegerValue>
     abstract val thrusterMaxSpeed:Double
     abstract val thrusterSoftMaxSpeed:Double
 
@@ -34,7 +35,7 @@ abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: Blo
         val bestNeighborSignal = level!!.getBestNeighborSignal(blockPos)
         shouldRefuel = bestNeighborSignal > 0
         data.throttle = bestNeighborSignal / 15.0
-        data.force = thrusterForce
+        data.force = level!!.gameRules.getInt(thrusterForceKey).toDouble()
         data.maxSpeed = thrusterMaxSpeed
         data.softMaxSpeed = thrusterSoftMaxSpeed
         data.isReversed = isReversed

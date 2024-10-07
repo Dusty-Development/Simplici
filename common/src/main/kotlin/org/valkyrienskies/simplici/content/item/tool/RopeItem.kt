@@ -23,6 +23,7 @@ import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity.Companion.halfLength
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 class RopeItem : Item(
     Properties().stacksTo(8)
@@ -95,8 +96,8 @@ class RopeItem : Item(
                 Orrientation,
                 Quaterniond(),
                 1e150,
-                -Math.toRadians(ModConfig.SERVER.RopeMaxTwist),
-                Math.toRadians(ModConfig.SERVER.RopeMaxTwist)
+                -Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble()),
+                Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble())
             )
             level.shipObjectWorld.createNewConstraint(startTwistConstraint)
             level.shipObjectWorld.disableCollisionBetweenBodies(firstShipId, rope.first.getID()!!)
@@ -109,8 +110,8 @@ class RopeItem : Item(
                 Orrientation,
                 Quaterniond(),
                 1e150,
-                -Math.toRadians(ModConfig.SERVER.RopeMaxTwist),
-                Math.toRadians(ModConfig.SERVER.RopeMaxTwist)
+                -Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble()),
+                Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble())
             )
             level.shipObjectWorld.createNewConstraint(endTwistConstraint)
             level.shipObjectWorld.disableCollisionBetweenBodies(secondShipId, rope.second.getID()!!)

@@ -13,15 +13,17 @@ import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlockEntity
+import org.valkyrienskies.simplici.content.block.engine.car.steam.SteamEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.PropellerBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.ball_hinge.BallHingeBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlockEntity
-import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.rotator.RotatorBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntityRenderer
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.LargeWheelBlockEntity
@@ -49,10 +51,14 @@ object ModBlockEntities {
     val MEDIUM_WHEEL = ModBlocks.MEDIUM_WHEEL.withBE(::MediumWheelBlockEntity).byName("medium_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.MEDIUM_WHEEL ) }
     val LARGE_WHEEL = ModBlocks.LARGE_WHEEL.withBE(::LargeWheelBlockEntity).byName("large_wheel").withRenderer { WheelBlockEntityRenderer( ModModels.LARGE_WHEEL ) }
 
-    val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")
+//    val ELECTRIC_ENGINE = ModBlocks.ELECTRIC_ENGINE.withBE(::ElectricEngineBlockEntity).byName("electric_engine")
     val RACE_ENGINE = ModBlocks.RACE_ENGINE.withBE(::RaceEngineBlockEntity).byName("race_engine")
+    val STEAM_ENGINE = ModBlocks.STEAM_ENGINE.withBE(::SteamEngineBlockEntity).byName("steam_engine")
+    val TRACTOR_ENGINE = ModBlocks.TRACTOR_ENGINE.withBE(::TractorEngineBlockEntity).byName("tractor_engine")
+//    val TRUCK_ENGINE = ModBlocks.TRUCK_ENGINE.withBE(::TruckEngineBlockEntity).byName("truck_engine")
 
-    val HYDRAULIC = ModBlocks.HYDRAULIC.withBE(::HydraulicBlockEntity).byName("hydraulic").withRenderer { HydraulicBlockEntityRenderer( ModModels.MECHANICAL_BEAM ) }
+    val MECHANICAL_HEAD = ModBlocks.MECHANICAL_HEAD.withBE(::MechanicalHeadBlockEntity).byName("mechanical_head").withRenderer { MechanicalHeadBlockEntityRenderer( ModModels.MECHANICAL_BEAM ) }
+    val HYDRAULIC = ModBlocks.HYDRAULIC.withBE(::HydraulicBlockEntity).byName("hydraulic")
     val HINGE = ModBlocks.HINGE.withBE(::HingeBlockEntity).byName("hinge")
     val ROTATOR = ModBlocks.ROTATOR.withBE(::RotatorBlockEntity).byName("rotator")
     val BALL_HINGE = ModBlocks.BALL_HINGE.withBE(::BallHingeBlockEntity).byName("ball_hinge")

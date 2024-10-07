@@ -5,7 +5,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.phys.BlockHitResult
@@ -14,7 +13,6 @@ import org.joml.Quaterniond
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
 import org.valkyrienskies.core.apigame.constraints.VSHingeOrientationConstraint
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.ship.modules.motor.RotatorControlModule
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
@@ -22,6 +20,7 @@ import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 
 class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.ROTATOR.get(), pos, state)
@@ -98,12 +97,21 @@ class RotatorBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstrain
 
         if(!level?.isClientSide!!) {
             val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(mechanicalHeadBlockPos!!)
-            if (constrainedShip != null) RotatorControlModule.getOrCreate(constrainedShip).addSpinner(mechanicalHeadBlockPos!!, blockState, isFlipped)
+            if (constrainedShip != null) {
+                val module = RotatorControlModule.getOrCreate(constrainedShip)
+                module.shipControl.setRules(level!!.gameRules)
+                module.addSpinner(mechanicalHeadBlockPos!!, blockState, isFlipped)
+            }
 
-            if(ModConfig.SERVER.NewtonianMotors) {
+            if(level!!.gameRules.getBoolean(ModGamerules.NEWTONIAN_ROTATORS)) {
                 val ship = (level as ServerLevel).getShipObjectManagingPos(blockPos)
-                if (ship != null) RotatorControlModule.getOrCreate(ship).addSpinner(blockPos, blockState, !isFlipped)
+                if (ship != null) {
+                    val module = RotatorControlModule.getOrCreate(ship)
+                    module.shipControl.setRules(level!!.gameRules)
+                    module.addSpinner(blockPos, blockState, !isFlipped)
+                }
             }
         }
+
     }
 }

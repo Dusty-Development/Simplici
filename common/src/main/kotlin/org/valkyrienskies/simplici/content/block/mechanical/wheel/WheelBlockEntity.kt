@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -17,19 +18,17 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
-import org.joml.Math
 import org.joml.Vector3d
 import org.joml.Vector3dc
 import org.valkyrienskies.core.api.ships.Ship
-import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.common.getShipManagingPos
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelForcesData
 import kotlin.math.absoluteValue
@@ -41,8 +40,8 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 {
 
     abstract val wheelRadius: Double
-    abstract val wheelRestHeight: Double // From center of block to center of wheel in rest
-    abstract val wheelDistanceLimit: Double
+    abstract val wheelRestHeight: GameRules.Key<GameRules.IntegerValue> // From center of block to center of wheel in rest
+    abstract val wheelDistanceLimit: GameRules.Key<GameRules.IntegerValue>
 
     var steeringAngle = 0.0
     var drivingAngle = 0.0
@@ -53,6 +52,8 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     var wheelData: WheelForcesData = WheelForcesData()
 
     fun generateWheelForcesData(): WheelForcesData {
+
+
         steeringAngle = wheelData.steeringAngle
 
         if(level?.isClientSide == false) {
@@ -66,14 +67,16 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
             }
         }
 
+        val gameRules = level!!.gameRules
+
         wheelData = WheelForcesData()
 
         wheelData.state = blockState
         wheelData.wheelLocalDirection = blockState.getValue(FACING)
         wheelData.wheelRadius = wheelRadius
         wheelData.steeringType = steeringType
-        wheelData.restDistance = wheelRestHeight
-        wheelData.floorCastDistance = wheelRestHeight
+        wheelData.restDistance = gameRules.getInt(wheelDistanceLimit).toDouble() * 0.01
+        wheelData.floorCastDistance = gameRules.getInt(wheelRestHeight).toDouble() * 0.01
         wheelData.floorFrictionMultiplier = 0.6
         wheelData.floorVel = null
         wheelData.floorBlockPos = null
@@ -83,13 +86,13 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 
         val ship = level.getShipObjectManagingPos(blockPos)
 
-        for (i in -ModConfig.SERVER.WheelCastsResolution..ModConfig.SERVER.WheelCastsResolution) {
+        for (i in -gameRules.getInt(ModGamerules.WHEEL_CAST_RESOLUTION)..gameRules.getInt(ModGamerules.WHEEL_CAST_RESOLUTION)) {
 
-            val offset = (i.toDouble()/ModConfig.SERVER.WheelCastsResolution) * wheelRadius
+            val offset = (i.toDouble()/gameRules.getInt(ModGamerules.WHEEL_CAST_RESOLUTION)) * wheelRadius
             val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(blockState.getValue(FACING).normal.toJOMLD().mul(offset))
 
             val wheelBottomDistance:Double = sqrt(1 - (((offset/wheelRadius).pow(2)))) * wheelRadius
-            val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelDistanceLimit + wheelBottomDistance), 0.0), Vector3d())
+            val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelData.restDistance + wheelBottomDistance), 0.0), Vector3d())
 
             val startPos = ship?.shipToWorld?.transformPosition(startPosShip, Vector3d()) ?: startPosShip
             val endPos = ship?.shipToWorld?.transformPosition(endPosShip, Vector3d()) ?: endPosShip
@@ -144,7 +147,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
             if(wheelData.floorVel == null) floorVelocity = Vector3d()
             val localVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
 
-            if(localVelocity.absoluteValue >= (ModConfig.SERVER.WheelSlideThreshold * 0.9) && wheelData.floorFrictionMultiplier > 0.5)
+            if(localVelocity.absoluteValue >= ((level!!.gameRules.getInt(ModGamerules.WHEEL_SLIDE_THRESHOLD) * 0.01) * 0.9) && wheelData.floorFrictionMultiplier > 0.5)
                 level?.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, worldBlockPos.x, worldBlockPos.y - wheelData.floorCastDistance - wheelRadius, worldBlockPos.z, 0.0,0.025,0.0)
         }
     }
@@ -157,8 +160,10 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         spawnWheelEffects()
         if (level!!.isClientSide) return
 
-        val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(blockPos)
-        if (constrainedShip != null) WheelControlModule.getOrCreate(constrainedShip).addOrUpdateWheel(blockPos, data)
+        val constrainedShip = (level as ServerLevel).getShipObjectManagingPos(blockPos) ?: return
+        val module = WheelControlModule.getOrCreate(constrainedShip)
+        module.shipControl.setRules(level!!.gameRules)
+        module.addOrUpdateWheel(blockPos, data)
 
     }
 

@@ -18,49 +18,5 @@ object ModConfig {
     }
 
     class Server {
-
-        @JsonSchema(description = "Do rotators have a opposite and equal reaction")
-        val NewtonianMotors = true
-
-        @JsonSchema(description = "") val MaxShipAssemblyBlocks = 25000
-
-        @JsonSchema(description = "Propellers") val SimplePropellerForce = 100000.0
-        @JsonSchema(description = "") val BlastPropellerForce = 1000000.0
-        @JsonSchema(description = "") val FireworkThrusterForce = 5000000.0
-
-        @JsonSchema(description = "Rotator settings") val RotatorRPM = 128.0
-        @JsonSchema(description = "") val RotatorTorque = 50000.0
-        @JsonSchema(description = "") val RotatorFalloff = 8.0
-
-        @JsonSchema(description = "Generic wheel settings") val SteeringAngle = 30.0
-        @JsonSchema(description = "") val ShouldFrictionApplyAtFloor = false
-        @JsonSchema(description = "") val SteeringWheelsAwaysGrippy = false
-        @JsonSchema(description = "") val SuspensionPullsToFloor = false
-        @JsonSchema(description = "") val WheelSlideThreshold = 10.0
-        @JsonSchema(description = "") val WheelGripForce = 3.0
-        @JsonSchema(description = "") val WheelSlideForce = 2.5
-        @JsonSchema(description = "") val WheelCastsResolution = 10
-        @JsonSchema(description = "") val WheelSuspensionStiffness = 35.0
-        @JsonSchema(description = "") val WheelSuspensionDamping = 10.0
-        @JsonSchema(description = "") val WheelFreespinFriction = 0.3
-        @JsonSchema(description = "") val WheelLockedFriction = 1.0
-
-        @JsonSchema(description = "specific wheel settings") val SmallWheelRestHeight = 0.75
-        @JsonSchema(description = "") val SmallWheelMaxLength = 1.0
-
-        @JsonSchema(description = "") val MediumWheelRestHeight = 1.0
-        @JsonSchema(description = "") val MediumWheelMaxLength = 2.0
-
-        @JsonSchema(description = "") val LargeWheelRestHeight = 1.5
-        @JsonSchema(description = "") val LargeWheelMaxLength = 2.5
-
-        @JsonSchema(description = "") val RaceEngineTorque = 250000.0
-        @JsonSchema(description = "") val RaceEngineSpeed = 75.0
-
-        @JsonSchema(description = "") val TractorEngineTorque = 500000.0
-        @JsonSchema(description = "") val TractorEngineSpeed = 12.0
-
-        @JsonSchema(description = "") val BallHingeMaxAngle = 75.0
-        @JsonSchema(description = "") val RopeMaxTwist = 90.0
     }
 }

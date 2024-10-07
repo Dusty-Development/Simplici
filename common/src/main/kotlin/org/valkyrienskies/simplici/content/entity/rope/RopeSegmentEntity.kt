@@ -35,6 +35,7 @@ import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.physics_api.ConstraintId
 import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.entity.ModEntities
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.simplici.content.ship.util.PulseForceInducer
@@ -161,8 +162,8 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
                 Quaterniond(),
                 Quaterniond(),
                 1e150,
-                -Math.toRadians(ModConfig.SERVER.RopeMaxTwist),
-                Math.toRadians(ModConfig.SERVER.RopeMaxTwist)
+                -Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble()),
+                Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble())
             )
             level.shipObjectWorld.createNewConstraint(twistLimitsConstraint)?.let { parent.constraints.add(it) }
             level.shipObjectWorld.disableCollisionBetweenBodies(shipA, shipB)

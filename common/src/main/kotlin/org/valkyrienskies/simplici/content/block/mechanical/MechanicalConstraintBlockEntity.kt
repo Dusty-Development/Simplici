@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.FAC
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.valkyrienskies.core.api.ships.LoadedShip
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.impl.game.ships.ShipDataCommon
@@ -22,12 +21,16 @@ import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
-import org.valkyrienskies.mod.common.util.*
+import org.valkyrienskies.mod.common.util.toBlockPos
+import org.valkyrienskies.mod.common.util.toJOML
+import org.valkyrienskies.mod.common.util.toJOMLD
+import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.mod.common.yRange
 import org.valkyrienskies.physics_api.ConstraintId
 import org.valkyrienskies.simplici.api.extension.intPos
 import org.valkyrienskies.simplici.content.block.ModBlocks
+import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlockEntity
 import kotlin.math.abs
 
 abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState)
@@ -93,6 +96,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         val newBlockState = ModBlocks.MECHANICAL_HEAD.get().defaultBlockState().setValue(FACING, blockState.getValue(FACING))
         (level as ServerLevel).setBlock(centerPos, newBlockState, 1 or 2)
         mechanicalHeadBlockPos = centerPos
+        (level!!.getBlockEntity(centerPos) as MechanicalHeadBlockEntity).parentBlockPos = blockPos
 
         wasStaticSaved = false
         serverShip.isStatic = true
@@ -120,6 +124,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         val newBlockState = ModBlocks.MECHANICAL_HEAD.get().defaultBlockState().setValue(FACING, clipResult.direction.opposite)
         (level as ServerLevel).setBlock(centerPos, newBlockState, 1 or 2)
         mechanicalHeadBlockPos = centerPos
+        (level!!.getBlockEntity(centerPos) as MechanicalHeadBlockEntity).parentBlockPos = blockPos
     }
 
     // CONSTRAINTS \\

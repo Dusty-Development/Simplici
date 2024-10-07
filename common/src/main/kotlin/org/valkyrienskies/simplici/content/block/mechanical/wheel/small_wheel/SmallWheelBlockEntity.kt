@@ -5,9 +5,10 @@ import net.minecraft.world.level.block.state.BlockState
 import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelBlockEntity
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 class SmallWheelBlockEntity(pos: BlockPos, state: BlockState) : WheelBlockEntity(ModBlockEntities.SMALL_WHEEL.get(), pos, state) {
     override val wheelRadius = 0.5
-    override val wheelRestHeight = ModConfig.SERVER.SmallWheelRestHeight // From center of block to center of wheel in rest
-    override val wheelDistanceLimit = ModConfig.SERVER.SmallWheelMaxLength
+    override val wheelRestHeight = ModGamerules.SMALL_WHEEL_REST_HEIGHT // From center of block to center of wheel in rest
+    override val wheelDistanceLimit = ModGamerules.SMALL_WHEEL_MAX_LENGTH
 }

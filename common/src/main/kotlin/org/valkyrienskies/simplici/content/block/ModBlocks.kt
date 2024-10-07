@@ -6,11 +6,12 @@ import net.minecraft.world.item.Item
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.control.driver_seat.DriverSeatBlock
 import org.valkyrienskies.simplici.content.block.engine.car.race.RaceEngineBlock
+import org.valkyrienskies.simplici.content.block.engine.car.steam.SteamEngineBlock
 import org.valkyrienskies.simplici.content.block.engine.car.tractor.TractorEngineBlock
 import org.valkyrienskies.simplici.content.block.engine.thruster.firework_thruster.FireworkThrusterBlock
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.blast_propeller.BlastPropellerBlock
 import org.valkyrienskies.simplici.content.block.engine.thruster.propeller.simple_propeller.SimplePropellerBlock
-import org.valkyrienskies.simplici.content.block.mechanical.MechanicalHeadBlock
+import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlock
 import org.valkyrienskies.simplici.content.block.mechanical.ball_hinge.BallHingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hinge.HingeBlock
 import org.valkyrienskies.simplici.content.block.mechanical.hydraulic.HydraulicBlock
@@ -39,8 +40,11 @@ object ModBlocks {
     val MEDIUM_WHEEL = BLOCKS.register("medium_wheel", ::MediumWheelBlock)
     val LARGE_WHEEL = BLOCKS.register("large_wheel", ::LargeWheelBlock)
 
-    val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
+//    val ELECTRIC_ENGINE = BLOCKS.register("electric_engine", ::ElectricEngineBlock)
     val RACE_ENGINE = BLOCKS.register("race_engine", ::RaceEngineBlock)
+    val STEAM_ENGINE = BLOCKS.register("steam_engine", ::SteamEngineBlock)
+    val TRACTOR_ENGINE = BLOCKS.register("tractor_engine", ::TractorEngineBlock)
+//    val TRUCK_ENGINE = BLOCKS.register("truck_engine", ::TruckEngineBlock)
 
     val MECHANICAL_HEAD = BLOCKS.register("mechanical_head", ::MechanicalHeadBlock)
 

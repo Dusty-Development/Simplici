@@ -14,6 +14,7 @@ import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.simplici.ModConfig
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.pow
 
@@ -52,7 +53,7 @@ class RotatorControlModule(override val shipControl: ModShipControl) : IShipCont
     }
 
     private fun calculateTorqueFromRpm(rpm:Double) : Double {
-        return Math.clamp(0.0, ModConfig.SERVER.RotatorTorque, ((1 - ((rpm / ModConfig.SERVER.RotatorRPM).pow(ModConfig.SERVER.RotatorFalloff))) * ModConfig.SERVER.RotatorTorque))
+        return Math.clamp(0.0, shipControl.gameRules!!.getInt(ModGamerules.ROTATOR_TORQUE).toDouble(), ((1 - ((rpm / shipControl.gameRules!!.getInt(ModGamerules.ROTATOR_RPM).toDouble()).pow(shipControl.gameRules!!.getInt(ModGamerules.ROTATOR_FALL_OFF).toDouble() * 0.01))) * shipControl.gameRules!!.getInt(ModGamerules.ROTATOR_TORQUE).toDouble()))
     }
 
     override fun onTick() { }

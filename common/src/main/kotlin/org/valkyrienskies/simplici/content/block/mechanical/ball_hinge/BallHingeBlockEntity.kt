@@ -15,6 +15,7 @@ import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 class BallHingeBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.BALL_HINGE.get(), pos, state)
 {
@@ -45,8 +46,8 @@ class BallHingeBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
             hingeOrientation,
             headOrientation,
             maxForce,
-            -Math.toRadians(ModConfig.SERVER.BallHingeMaxAngle),
-            Math.toRadians(ModConfig.SERVER.BallHingeMaxAngle)
+            -Math.toRadians(level!!.gameRules.getInt(ModGamerules.BALL_HINGE_MAX_ANGLE).toDouble()),
+            Math.toRadians(level!!.gameRules.getInt(ModGamerules.BALL_HINGE_MAX_ANGLE).toDouble())
         )
         (level as ServerLevel).shipObjectWorld.createNewConstraint(hingeConstraint)?.let { constraints.add(it) }
 

@@ -2,6 +2,7 @@ package org.valkyrienskies.simplici.content.ship.modules.wheel
 
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth.lerp
+import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.ServerShip
@@ -14,6 +15,7 @@ import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.extension.getVelAtPos
 import org.valkyrienskies.simplici.api.math.SpringHelper
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.simplici.content.ship.ModShipControl
 import java.util.concurrent.ConcurrentHashMap
@@ -61,11 +63,11 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
         val localVelocity = -velocity.y()
 
         val offset = wheelData.floorCastDistance - wheelData.restDistance
-        val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, ModConfig.SERVER.WheelSuspensionStiffness, ModConfig.SERVER.WheelSuspensionDamping))
+        val spring = (-SpringHelper.calculateSpringForceDouble(offset, localVelocity, shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SUSPENSION_STIFFNESS).toDouble() * 0.01, (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SUSPENSION_DAMPING).toDouble() * 0.01)))
 
         val suspensionForce = shipUpVector.mul(spring, Vector3d()).mul(physShip.inertia.shipMass / wheels.size)
         val totalForce = suspensionForce.mul(0.0, 1.0 ,0.0, Vector3d())
-        if(ModConfig.SERVER.SuspensionPullsToFloor || spring > 0.0) physShip.applyInvariantForceToPos(totalForce, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
+        if(spring > 0.0) physShip.applyInvariantForceToPos(totalForce, wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip))
     }
 
     private fun calculateSteering(physShip: PhysShipImpl, wheelBlockPos:BlockPos, wheelData:WheelForcesData) {
@@ -73,7 +75,7 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
         val worldBlockPos = physShip.transform.shipToWorld.transformPosition(wheelBlockPos.center.toJOML())
 
         // Handle steering angle
-        val steeringControl = (shipControl.currentControlData?.leftImpulse?.toDouble() ?: 0.0) * ModConfig.SERVER.SteeringAngle
+        val steeringControl = (shipControl.currentControlData?.leftImpulse?.toDouble() ?: 0.0) * (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_STEERING_ANGLE).toDouble() * 0.01)
         val targetSteeringAngle = when (wheelData.steeringType) {
             CLOCKWISE -> steeringControl
             COUNTER_CLOCKWISE -> -steeringControl
@@ -91,14 +93,15 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
 
         val slidingVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
 
-        var frictionForce = ModConfig.SERVER.WheelGripForce
-        if(slidingVelocity.absoluteValue >= ModConfig.SERVER.WheelSlideThreshold) frictionForce = ModConfig.SERVER.WheelSlideForce
-        if(wheelData.steeringType != NONE && ModConfig.SERVER.SteeringWheelsAwaysGrippy) ModConfig.SERVER.WheelGripForce
+        var frictionForce = (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_GRIP_FORCE).toDouble() * 0.01)
+        if(slidingVelocity.absoluteValue >= (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SLIDE_THRESHOLD).toDouble() * 0.01)) frictionForce = (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SLIDE_FORCE).toDouble() * 0.01)
+        if(wheelData.steeringType != NONE && (shipControl.gameRules!!.getBoolean(ModGamerules.STEERING_WHEELS_ALWAYS_GRIP))) (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_GRIP_FORCE).toDouble() * 0.01)
 
         val force = -slidingVelocity * (frictionForce * wheelData.floorFrictionMultiplier)
         var forcePoint = wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip)
-        if(ModConfig.SERVER.ShouldFrictionApplyAtFloor) forcePoint = wheelBlockPos.center.toJOML().sub(0.0, wheelData.floorCastDistance + wheelData.wheelRadius, 0.0).sub(physShip.transform.positionInShip)
+        if(shipControl.gameRules!!.getBoolean(ModGamerules.SHOULD_APPLY_FORCES_AT_FLOOR)) forcePoint = wheelBlockPos.center.toJOML().sub(0.0, wheelData.floorCastDistance + wheelData.wheelRadius, 0.0).sub(physShip.transform.positionInShip)
 
+        //(shipControl.gameRules!!.getInt(ModGamerules) * 0.01)
         physShip.applyInvariantForceToPos(globalDir.mul(force, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), forcePoint)
     }
 
@@ -113,7 +116,7 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
 
         // Decide to apply forces at the block or the floor
         var forcePoint = wheelBlockPos.center.toJOML().sub(physShip.transform.positionInShip)
-        if(ModConfig.SERVER.ShouldFrictionApplyAtFloor) forcePoint = wheelBlockPos.center.toJOML().sub(0.0, wheelData.floorCastDistance + wheelData.wheelRadius, 0.0).sub(physShip.transform.positionInShip)
+        if(shipControl.gameRules!!.getBoolean(ModGamerules.SHOULD_APPLY_FORCES_AT_FLOOR)) forcePoint = wheelBlockPos.center.toJOML().sub(0.0, wheelData.floorCastDistance + wheelData.wheelRadius, 0.0).sub(physShip.transform.positionInShip)
 
         // Driving force when pressing W or S
         val throttleForce:Double = getTotalTorqueAtSpeed(abs(forwardVelocity)) * throttle
@@ -122,8 +125,8 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
         // Friction force for all wheels (so they don't just roll forever)
         // Multiply by either the locked or free spin friction
         val frictionMultiplier =
-        if(!shipControl.isControlled && shipControl.controlSeatCount > 0) { ModConfig.SERVER.WheelLockedFriction }
-        else { ModConfig.SERVER.WheelFreespinFriction }
+        if(!shipControl.isControlled && shipControl.controlSeatCount > 0) { (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_LOCKED_FRICTION).toDouble() * 0.01) }
+        else { (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_FREESPIN_FRICTION).toDouble() * 0.01) }
 
         val frictionForce = getFrictionInDir(physShip, wheelBlockPos, wheelData, globalDir, frictionMultiplier)
         physShip.applyInvariantForceToPos(globalDir.mul(frictionForce, Vector3d()).mul(physShip.inertia.shipMass / wheels.size), forcePoint)
@@ -133,9 +136,9 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
         val slidingVelocity = getFloorVelocity(physShip, wheelBlockPos, wheelData).dot(globalDirection)
 
         // We decide to use either "grip" or "slide" friction based on the threshold
-        var frictionForce = ModConfig.SERVER.WheelGripForce
-        if(slidingVelocity.absoluteValue >= ModConfig.SERVER.WheelSlideThreshold) frictionForce = ModConfig.SERVER.WheelSlideForce
-        if(wheelData.steeringType != NONE && ModConfig.SERVER.SteeringWheelsAwaysGrippy) ModConfig.SERVER.WheelGripForce
+        var frictionForce = (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_GRIP_FORCE).toDouble() * 0.01)
+        if(slidingVelocity.absoluteValue >= (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SLIDE_THRESHOLD).toDouble() * 0.01)) frictionForce = (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_SLIDE_FORCE).toDouble() * 0.01)
+        if(wheelData.steeringType != NONE && shipControl.gameRules!!.getBoolean(ModGamerules.STEERING_WHEELS_ALWAYS_GRIP)) (shipControl.gameRules!!.getInt(ModGamerules.WHEEL_GRIP_FORCE).toDouble() * 0.01)
 
         return -slidingVelocity * (frictionForce * multi)
     }

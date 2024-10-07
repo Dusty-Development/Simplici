@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.GameRules
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
@@ -24,6 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ModShipControl : ShipForcesInducer, ServerTickListener {
+
+    // Settings
+    @JsonIgnore var gameRules: GameRules? = null
 
     // Control
     @JsonIgnore var seatedPlayer: Player? = null
@@ -63,6 +67,8 @@ class ModShipControl : ShipForcesInducer, ServerTickListener {
             it.onTick()
         }
     }
+
+    fun setRules(rules: GameRules) { gameRules = rules }
 
     private fun getControlData(): ShipControlData? {
         val controllingPlayer = ship?.getAttachment(SeatedControllingPlayer::class.java)

@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.mechanical.hydraulic
+package org.valkyrienskies.simplici.content.block.mechanical.head
 
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
@@ -7,12 +7,12 @@ import net.minecraft.world.level.block.DirectionalBlock
 import org.valkyrienskies.simplici.api.extension.pose
 import org.valkyrienskies.simplici.content.render.ModModels
 
-class HydraulicBlockEntityRenderer (
+class MechanicalHeadBlockEntityRenderer (
     val model: ModModels.Model
-): BlockEntityRenderer<HydraulicBlockEntity> {
+): BlockEntityRenderer<MechanicalHeadBlockEntity> {
 
     override fun render(
-        be: HydraulicBlockEntity,
+        be: MechanicalHeadBlockEntity,
         partial: Float,
         pose: PoseStack,
         bufferSource: MultiBufferSource,
@@ -22,8 +22,9 @@ class HydraulicBlockEntityRenderer (
         pose.pose {
             translate(0.5, 0.5, 0.5)
             mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation)
-            translate(-0.5, 0.5 - (1.0/16.0), -0.5)
-            if((be.level?.getBestNeighborSignal(be.blockPos) ?: 0) > 0) {
+            translate(-0.5, -0.5, -0.5)
+
+            if(be.shouldDrawBeam) {
                 model.renderer.render(
                     pose,
                     be,

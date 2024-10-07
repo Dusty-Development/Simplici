@@ -1,27 +1,22 @@
 package org.valkyrienskies.simplici.content.block.mechanical.hydraulic
 
 import net.minecraft.core.BlockPos
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.BlockStateProperties.*
-import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import org.joml.AxisAngle4d
 import org.joml.Math.lerp
 import org.joml.Quaterniond
 import org.valkyrienskies.core.api.ships.properties.ShipId
-import org.valkyrienskies.core.apigame.constraints.*
-import org.valkyrienskies.simplici.ModConfig
-import org.valkyrienskies.simplici.content.block.ModBlockEntities
-import org.valkyrienskies.simplici.content.ship.modules.motor.RotatorControlModule
-import org.valkyrienskies.mod.common.getShipObjectManagingPos
+import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
+import org.valkyrienskies.core.apigame.constraints.VSFixedOrientationConstraint
+import org.valkyrienskies.core.apigame.constraints.VSSlideConstraint
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
+import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
+import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
+import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlockEntity
 
 class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstraintBlockEntity(ModBlockEntities.HYDRAULIC.get(), pos, state)
 {
@@ -41,6 +36,8 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
         updateCurrentPower(powered?.toDouble()?.div(15) ?: 0.0)
 
         val headFacing = level!!.getBlockState(mechanicalHeadBlockPos!!).getValue(FACING)
+
+        (level!!.getBlockEntity(mechanicalHeadBlockPos!!) as MechanicalHeadBlockEntity).shouldDrawBeam = powered!! > 0
 
         val hingeOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(facing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
         val headOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(headFacing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
@@ -85,7 +82,7 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
 
 
     fun updateCurrentPower(target:Double) {
-        currentPower = lerp (currentPower, target, 0.025)
+        currentPower = lerp (currentPower, target, 0.25)
         currentPower = currentPower.coerceIn(0.0,1.0)
     }
 }
