@@ -37,7 +37,7 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
 
         val headFacing = level!!.getBlockState(mechanicalHeadBlockPos!!).getValue(FACING)
 
-        (level!!.getBlockEntity(mechanicalHeadBlockPos!!) as MechanicalHeadBlockEntity).shouldDrawBeam = powered!! > 0
+        (level!!.getBlockEntity(mechanicalHeadBlockPos!!) as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
 
         val hingeOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(facing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
         val headOrientation = MechanicalBlockHelper.getRotationQuaternionFromDirection(headFacing).mul(Quaterniond(AxisAngle4d(Math.toRadians(90.0), 0.0, 0.0, 1.0)), Quaterniond()).normalize()
@@ -78,6 +78,11 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
             maxForce
         )
         (level as ServerLevel).shipObjectWorld.createNewConstraint(orientationConstraint)?.let { constraints.add(it) }
+    }
+
+    override fun tick() {
+        (mechanicalHeadBlockPos?.let { level!!.getBlockEntity(it) } as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
+        super.tick()
     }
 
 
