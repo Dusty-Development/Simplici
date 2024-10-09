@@ -9,7 +9,6 @@ import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.simplici.api.extension.getVelAtPos
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.simplici.content.ship.ModShipControl
 import java.util.concurrent.ConcurrentHashMap
@@ -79,8 +78,8 @@ class HandleControlModule(override val shipControl: ModShipControl) : IShipContr
 
     override fun onTick() { }
 
-    fun addHolder(pos: BlockPos, data: HandleForcesData) { holders[pos] = data }
-    fun removeHolder(pos: BlockPos) { holders.remove(pos) }
+    fun addHolder(pos: BlockPos, data: HandleForcesData) { holders[pos] = data; println("Add holder") }
+    fun removeHolder(pos: BlockPos) { holders.remove(pos); println("Remove holder") }
 
     companion object {
         fun getOrCreate(ship: ServerShip): HandleControlModule {

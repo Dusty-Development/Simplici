@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.content.block.ModBlocks
 import org.valkyrienskies.simplici.content.item.tool.RopeItem
+import org.valkyrienskies.simplici.content.item.tool.TesterItem
 import org.valkyrienskies.simplici.registry.DeferredRegister
 
 @Suppress("unused")

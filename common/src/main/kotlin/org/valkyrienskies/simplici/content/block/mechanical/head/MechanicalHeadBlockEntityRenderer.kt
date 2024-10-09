@@ -20,11 +20,12 @@ class MechanicalHeadBlockEntityRenderer (
         packedOverlay: Int
     ) {
         pose.pose {
+
+            // Needs to sync the parentPos from be to the client
             translate(0.5, 0.5, 0.5)
             mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation)
             translate(-0.5, -0.5, -0.5)
-
-            if(be.shouldDrawBeam) {
+            if(((be.level?.getBestNeighborSignal(be.parentBlockPos)) ?: 0) > 0 || be.shouldDrawBeam) {
                 model.renderer.render(
                     pose,
                     be,

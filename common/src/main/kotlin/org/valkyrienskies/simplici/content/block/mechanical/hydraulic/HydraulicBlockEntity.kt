@@ -81,7 +81,7 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
     }
 
     override fun tick() {
-        (mechanicalHeadBlockPos?.let { level!!.getBlockEntity(it) } as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
+//        (mechanicalHeadBlockPos?.let { level?.getBlockEntity(it) } as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
         super.tick()
     }
 

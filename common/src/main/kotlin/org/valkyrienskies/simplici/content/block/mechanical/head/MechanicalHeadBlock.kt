@@ -44,7 +44,6 @@ class MechanicalHeadBlock : BaseEntityBlock( Properties.of().mapColor(MapColor.W
         return signal!!
     }
 
-
     override fun <T : BlockEntity> getTicker(
         level: Level,
         state: BlockState,

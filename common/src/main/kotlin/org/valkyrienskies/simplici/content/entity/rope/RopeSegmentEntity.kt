@@ -1,43 +1,38 @@
 package org.valkyrienskies.simplici.content.entity.rope
 
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.*
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.entity.EntityInLevelCallback
-import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3d
 import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3dc
-import org.valkyrienskies.core.api.ships.ServerShip
-import org.valkyrienskies.core.api.ships.Ship
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.api.ships.properties.ShipInertiaData
 import org.valkyrienskies.core.api.ships.properties.ShipTransform
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
-import org.valkyrienskies.core.apigame.constraints.VSHingeOrientationConstraint
 import org.valkyrienskies.core.apigame.constraints.VSSphericalTwistLimitsConstraint
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.apigame.physics.VSCapsuleCollisionShapeData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
-import org.valkyrienskies.mod.common.allShips
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.physics_api.ConstraintId
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.entity.ModEntities
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.item.ModItems
-import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.simplici.content.ship.util.PulseForceInducer
 import kotlin.math.PI
 
@@ -47,6 +42,7 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
     var parentRope:RopeSegmentEntity? = null
     val childrenRopes:ArrayList<RopeSegmentEntity> = ArrayList()
     val constraints:ArrayList<ConstraintId> = ArrayList()
+    val worldConstraints:ArrayList<ConstraintId> = ArrayList()
 
     fun setNeedsUpdating(enabled: Boolean) { this.physicsEntityServer!!.needsUpdating = enabled }
 
@@ -171,7 +167,6 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
 
         // Creates a full rope and returns the (start rope, end rope)
         fun createRope(level: ServerLevel, start: Vector3dc, end: Vector3dc, spawnStatic: Boolean = false): Pair<RopeSegmentEntity,RopeSegmentEntity> {
-
             val ropeTotalLength = start.distance(end)
             val ropeTotalNormal = end.sub(start, Vector3d()).normalize()
 
@@ -204,6 +199,39 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
 
             return Pair(parentSegment!!, previousSegment!!)
         }
+
+        fun constrainRopeToBlock(level: ServerLevel, ropeSegment: RopeSegmentEntity, ropeSegmentProgress:Double, pos:Vector3dc, shipId: ShipId) {
+            if(ropeSegment.parentRope == null) return
+
+            val ropeID = ropeSegment.physicsEntityData?.shipId ?: return
+
+            // Attach constraint
+            val attachConstraint = VSAttachmentConstraint(
+                shipId,
+                ropeID,
+                1e-12,
+                Vector3d(halfLength,0.0,0.0),
+                Vector3d(-halfLength,0.0,0.0),
+                1e150,
+                0.0
+            )
+            level.shipObjectWorld.createNewConstraint(attachConstraint)?.let { ropeSegment.parentRope!!.worldConstraints.add(it) }
+            level.shipObjectWorld.disableCollisionBetweenBodies(shipId, ropeID)
+
+            // Twist constraint
+            val twistLimitsConstraint = VSSphericalTwistLimitsConstraint(
+                shipId,
+                ropeID,
+                1e-12,
+                Quaterniond(),
+                Quaterniond(),
+                1e150,
+                -Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble()),
+                Math.toRadians(level.gameRules.getInt(ModGamerules.ROPE_MAX_TWIST).toDouble())
+            )
+            level.shipObjectWorld.createNewConstraint(twistLimitsConstraint)?.let { ropeSegment.parentRope!!.worldConstraints.add(it) }
+            level.shipObjectWorld.disableCollisionBetweenBodies(shipId, ropeID)
+       }
 
         //https://www.gamedev.net/tutorials/programming/math-and-physics/capsule-inertia-tensor-r3856/
         fun createShapeData(shipId: ShipId, transform: ShipTransform, radius: Double, length: Double, mass: Double, spawnStatic: Boolean=false): PhysicsEntityData {

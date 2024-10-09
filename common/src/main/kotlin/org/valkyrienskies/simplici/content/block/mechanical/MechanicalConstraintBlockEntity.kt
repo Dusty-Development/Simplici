@@ -50,6 +50,8 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     var isLoading:Boolean = false
 
     open fun resetHingeHead() {
+        setChanged()
+
         // Destroy present head if needed
         staticTicks = staticMaxTicks
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
@@ -229,4 +231,5 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         mechanicalHeadBlockPos?.let { tag.putLong("head_pos", it.asLong()) }
         super.saveAdditional(tag)
     }
+
 }

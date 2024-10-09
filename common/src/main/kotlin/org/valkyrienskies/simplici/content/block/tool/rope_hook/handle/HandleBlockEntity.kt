@@ -14,6 +14,7 @@ import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.tool.rope_hook.RopeHookBlockEntity
+import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.ship.modules.util.HandleControlModule
 import org.valkyrienskies.simplici.content.ship.modules.util.HandleForcesData
 
@@ -32,6 +33,7 @@ class HandleBlockEntity(pos: BlockPos, state: BlockState) : RopeHookBlockEntity(
     }
 
     private fun grab(player: Player, hand: InteractionHand, hit: BlockHitResult) {
+        if(player.isHolding(ModItems.ROPE.get())) return
         val ship = level.getShipObjectManagingPos(blockPos)
         val worldLocation = ship?.transform?.shipToWorld?.transformPosition(hit.location.toJOML())
 
