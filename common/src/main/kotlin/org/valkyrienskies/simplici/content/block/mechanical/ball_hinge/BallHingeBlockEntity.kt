@@ -11,7 +11,6 @@ import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
 import org.valkyrienskies.core.apigame.constraints.VSSphericalSwingLimitsConstraint
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalConstraintBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper

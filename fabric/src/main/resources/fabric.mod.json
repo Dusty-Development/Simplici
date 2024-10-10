@@ -25,9 +25,6 @@
     "preLaunch": [
       "org.valkyrienskies.simplici.fabric.ValkyrienPreLaunch"
     ],
-    "modmenu": [
-      "org.valkyrienskies.simplici.fabric.SimpliciModFabric${'$'}ModMenu"
-    ],
     "fabric-datagen": [
       "org.valkyrienskies.simplici.fabric.SimpliciDataGenerator"
     ]

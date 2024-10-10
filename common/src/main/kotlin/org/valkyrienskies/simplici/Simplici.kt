@@ -3,7 +3,6 @@ package org.valkyrienskies.simplici
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import org.valkyrienskies.core.impl.config.VSConfigClass
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.ModBlocks
 import org.valkyrienskies.simplici.content.entity.ModEntities
@@ -25,8 +24,6 @@ object Simplici {
         ModEntities.register()
 
         ModNetworking.registerServer()
-
-        VSConfigClass.registerConfig(MOD_ID, ModConfig::class.java)
 
         ModGamerules.register()
     }

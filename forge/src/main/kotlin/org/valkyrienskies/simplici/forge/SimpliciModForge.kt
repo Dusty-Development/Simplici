@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.registries.DeferredRegister
 import org.valkyrienskies.core.impl.config.VSConfigClass.Companion.getRegisteredConfig
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.Simplici.init
 import org.valkyrienskies.simplici.Simplici.initClientRenderers

@@ -20,6 +20,7 @@ import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.api.ships.properties.ShipInertiaData
 import org.valkyrienskies.core.api.ships.properties.ShipTransform
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
+import org.valkyrienskies.core.apigame.constraints.VSConstraintId
 import org.valkyrienskies.core.apigame.constraints.VSSphericalTwistLimitsConstraint
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.apigame.physics.VSCapsuleCollisionShapeData
@@ -29,7 +30,6 @@ import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOML
-import org.valkyrienskies.physics_api.ConstraintId
 import org.valkyrienskies.simplici.content.entity.ModEntities
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.item.ModItems
@@ -41,8 +41,8 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
     var setToDestroy = false
     var parentRope:RopeSegmentEntity? = null
     val childrenRopes:ArrayList<RopeSegmentEntity> = ArrayList()
-    val constraints:ArrayList<ConstraintId> = ArrayList()
-    val worldConstraints:ArrayList<ConstraintId> = ArrayList()
+    val constraints:ArrayList<VSConstraintId> = ArrayList()
+    val worldConstraints:ArrayList<VSConstraintId> = ArrayList()
 
     fun setNeedsUpdating(enabled: Boolean) { this.physicsEntityServer!!.needsUpdating = enabled }
 
@@ -91,7 +91,7 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
         super.tick()
     }
 
-    override fun setLevelCallback(callback: EntityInLevelCallback?) {
+    override fun setLevelCallback(callback: EntityInLevelCallback) {
         super.setLevelCallback(callback)
         if(level().isClientSide) return
 
