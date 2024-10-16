@@ -39,7 +39,7 @@ object ModGamerules {
     val TRUCK_ENGINE_MAX_SPEED: GameRules.Key<GameRules.IntegerValue> = GameRules.register("truckEngineMaxSpeed", GameRules.Category.MISC, GameRules.IntegerValue.create(30))
 
     // WHEEL GENERICS \\
-    val SHOULD_APPLY_FORCES_AT_FLOOR: GameRules.Key<GameRules.BooleanValue> = GameRules.register("shouldFrictionApplyAtFloor", GameRules.Category.MISC, GameRules.BooleanValue.create(true))
+    val SHOULD_APPLY_FORCES_AT_FLOOR: GameRules.Key<GameRules.BooleanValue> = GameRules.register("shouldFrictionApplyAtFloor", GameRules.Category.MISC, GameRules.BooleanValue.create(false))
     val STEERING_WHEELS_ALWAYS_GRIP: GameRules.Key<GameRules.BooleanValue> = GameRules.register("steeringWheelsAlwaysGrip", GameRules.Category.MISC, GameRules.BooleanValue.create(false))
 
     val WHEEL_STEERING_ANGLE: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelSteeringAngle", GameRules.Category.MISC, GameRules.IntegerValue.create(30_00)) // this value is 100 bigger
