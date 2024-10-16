@@ -26,7 +26,7 @@ object ModGamerules {
     val ELECTRIC_ENGINE_MAX_POWER: GameRules.Key<GameRules.IntegerValue> = GameRules.register("electricEngineMaxPower", GameRules.Category.MISC, GameRules.IntegerValue.create(400000))
     val ELECTRIC_ENGINE_MAX_SPEED: GameRules.Key<GameRules.IntegerValue> = GameRules.register("electricEngineMaxSpeed", GameRules.Category.MISC, GameRules.IntegerValue.create(50))
 
-    val RACE_ENGINE_MAX_POWER: GameRules.Key<GameRules.IntegerValue> = GameRules.register("raceEngineMaxPower", GameRules.Category.MISC, GameRules.IntegerValue.create(250000))
+    val RACE_ENGINE_MAX_POWER: GameRules.Key<GameRules.IntegerValue> = GameRules.register("raceEngineMaxPower", GameRules.Category.MISC, GameRules.IntegerValue.create(150000))
     val RACE_ENGINE_MAX_SPEED: GameRules.Key<GameRules.IntegerValue> = GameRules.register("raceEngineMaxSpeed", GameRules.Category.MISC, GameRules.IntegerValue.create(75))
 
     val STEAM_ENGINE_MAX_POWER: GameRules.Key<GameRules.IntegerValue> = GameRules.register("steamEngineMaxPower", GameRules.Category.MISC, GameRules.IntegerValue.create(175000))

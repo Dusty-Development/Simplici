@@ -66,6 +66,8 @@ class HandleBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(ModBlock
 
             val worldLocation = ship?.transform?.shipToWorld?.transformPosition(blockPos.toJOMLD().add(holdOffset))
             if(holdingPlayer!!.eyePosition.distanceTo(worldLocation!!.toMinecraft()) > 4.75 && !holdingPlayer!!.isCreative) { drop() }
+
+            if(holdingPlayer!!.swinging) drop()
         }
     }
 
