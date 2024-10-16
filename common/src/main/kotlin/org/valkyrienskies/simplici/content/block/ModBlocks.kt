@@ -20,7 +20,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.La
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlock
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlock
 import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlock
-import org.valkyrienskies.simplici.content.block.tool.rope_hook.handle.HandleBlock
+import org.valkyrienskies.simplici.content.block.tool.handle.HandleBlock
 import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlock
 import org.valkyrienskies.simplici.registry.DeferredRegister
 

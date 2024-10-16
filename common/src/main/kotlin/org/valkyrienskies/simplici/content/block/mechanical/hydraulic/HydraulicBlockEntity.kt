@@ -87,7 +87,7 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
 
 
     fun updateCurrentPower(target:Double) {
-        currentPower = lerp (currentPower, target, 0.25)
+        currentPower = lerp (currentPower, target, 0.5)
         currentPower = currentPower.coerceIn(0.0,1.0)
     }
 }

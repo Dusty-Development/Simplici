@@ -14,8 +14,9 @@ public class ModPlatformHelperFabric implements ModPlatformHelper {
     @Nullable
     @Override
     public BakedModel loadBakedModel(@NotNull ResourceLocation modelLocation) {
-        return Minecraft.getInstance()
-                .getModelManager()
-                .getModel((ModelResourceLocation) modelLocation);
+        return BakedModelManagerHelper.getModel(
+                Minecraft.getInstance().getModelManager(),
+                modelLocation
+        );
     }
 }

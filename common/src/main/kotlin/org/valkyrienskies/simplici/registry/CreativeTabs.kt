@@ -8,7 +8,7 @@ import org.valkyrienskies.simplici.content.item.ModItems
 
 object CreativeTabs {
 
-    private val noTabBlocks = arrayListOf("pilot_seat", "passenger_seat", "mechanical_head", "firework_thruster", "blast_propeller", "simple_propeller")
+    private val noTabBlocks = arrayListOf("pilot_seat", "passenger_seat", "mechanical_head")
 
     fun create(): CreativeModeTab {
         return CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)

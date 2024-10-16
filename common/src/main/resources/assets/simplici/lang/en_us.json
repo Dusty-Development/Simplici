@@ -29,6 +29,8 @@
   "block.simplici.fuel_tank": "Fuel tank",
   "block.simplici.sensor": "Sensor",
 
+  "item.simplici.rope": "Rope",
+
   "gui.simplici.simple_propeller": "Propeller",
   "gui.simplici.blast_propeller": "Blast Propeller",
   "gui.simplici.firework_thruster": "Firework Thruster",

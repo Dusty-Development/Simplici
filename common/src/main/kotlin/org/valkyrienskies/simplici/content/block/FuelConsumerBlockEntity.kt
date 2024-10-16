@@ -66,14 +66,16 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
     open fun onRemoved() {
         if (!level?.isClientSide!!) {
             // Drop inventory
-            if (!fuelStack.isEmpty) level!!.addFreshEntity(ItemEntity(level, blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), fuelStack))
+            if (!fuelStack.isEmpty)
+                level?.let { ItemEntity(it, blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), fuelStack) }
+                ?.let { level!!.addFreshEntity(it) }
         }
     }
     open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) : InteractionResult {
         if (level?.isClientSide == true) return InteractionResult.SUCCESS
         val blockEntity = level!!.getBlockEntity(blockPos) as FuelConsumerBlockEntity
 
-        //TODO: add this when menu fix: player.openMenu(blockEntity)
+        player.openMenu(blockEntity)
 
         return InteractionResult.CONSUME
     }

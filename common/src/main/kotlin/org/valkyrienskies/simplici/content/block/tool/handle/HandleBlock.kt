@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.tool.rope_hook
+package org.valkyrienskies.simplici.content.block.tool.handle
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
@@ -10,22 +10,25 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShape
+import org.valkyrienskies.simplici.api.util.RotShapes
 
-abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(properties)
-{
+class HandleBlock : BaseEntityBlock(Properties.of().mapColor(MapColor.METAL).strength(2.5F).sound(SoundType.METAL).noOcclusion()) {
 
-    abstract val SHAPE: RotShape
+    val SHAPE: RotShape = RotShapes.box(2.0, 2.0, 0.0, 14.0, 14.0, 8.0)
+    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = HandleBlockEntity(blockPos, blockState)
 
     override fun getRenderShape(blockState: BlockState): RenderShape = RenderShape.MODEL
     override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = DirectionalShape.north(SHAPE)[blockState.getValue( FACING )]
@@ -33,16 +36,6 @@ abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(propertie
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
         super.createBlockStateDefinition(builder)
-    }
-
-    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
-        super.onPlace(state, level, pos, oldState, isMoving)
-        (level.getBlockEntity(pos) as RopeHookBlockEntity).onPlaced()
-    }
-
-    override fun playerWillDestroy(level: Level, blockPos: BlockPos, blockState: BlockState, player: Player) {
-        if(!level.isClientSide) { (level.getBlockEntity(blockPos) as RopeHookBlockEntity).onRemoved() }
-        super.playerWillDestroy(level, blockPos, blockState, player)
     }
 
     override fun use(
@@ -53,7 +46,7 @@ abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(propertie
         interactionHand: InteractionHand,
         blockHitResult: BlockHitResult
     ): InteractionResult {
-        return (level.getBlockEntity(blockPos) as RopeHookBlockEntity).onUse(player,interactionHand,blockHitResult)
+        return (level.getBlockEntity(blockPos) as HandleBlockEntity).onUse(player,interactionHand,blockHitResult)
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
@@ -67,7 +60,7 @@ abstract class RopeHookBlock(properties: Properties) : BaseEntityBlock(propertie
         blockEntityType: BlockEntityType<T>
     ): BlockEntityTicker<T> {
         return BlockEntityTicker { _: Level, _: BlockPos, _: BlockState, t: T ->
-            (t as RopeHookBlockEntity).tick()
+            (t as HandleBlockEntity).tick()
         }
     }
 

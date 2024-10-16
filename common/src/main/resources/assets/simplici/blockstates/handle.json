@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 270,
+      "y": 0
+    },
+    "facing=east": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 270,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 270,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 270,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 180
+    },
+    "facing=down": {
+      "model": "simplici:block/tool/handle/handle",
+      "x": 0
+    }
+  }
+}

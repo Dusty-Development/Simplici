@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"5": "simplici:block/tool/fuel_tank"
+		"5": "simplici:block/tool/fuel_tank/fuel_tank"
 	},
 	"elements": [
 		{

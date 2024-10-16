@@ -12,7 +12,6 @@ import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.registries.DeferredRegister
-import org.valkyrienskies.core.impl.config.VSConfigClass.Companion.getRegisteredConfig
 import org.valkyrienskies.simplici.Simplici
 import org.valkyrienskies.simplici.Simplici.init
 import org.valkyrienskies.simplici.Simplici.initClientRenderers
@@ -32,16 +31,7 @@ class SimpliciModForge {
             },
             serverTarget = {}
         )
-        LOADING_CONTEXT.registerExtensionPoint(
-            ConfigScreenHandler.ConfigScreenFactory::class.java
-        ) {
-            ConfigScreenHandler.ConfigScreenFactory { _: Minecraft?, parent: Screen? ->
-                createConfigScreenFor(
-                    parent!!,
-                    getRegisteredConfig(ModConfig::class.java)
-                )
-            }
-        }
+
 
         init()
 
