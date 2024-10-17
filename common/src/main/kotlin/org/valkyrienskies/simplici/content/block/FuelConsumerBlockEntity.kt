@@ -21,7 +21,9 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import org.valkyrienskies.simplici.api.container.ItemHelper
 import org.valkyrienskies.simplici.api.util.KtContainerData
+import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import org.valkyrienskies.simplici.content.gui.fuel.consumer.FuelConsumerMenu
+import kotlin.math.roundToInt
 
 abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(blockEntityType, pos, state), StackedContentsCompatible, WorldlyContainer
 {
@@ -31,12 +33,14 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
     // Fuel
     val data = KtContainerData()
     var fuelStack: ItemStack = ItemStack.EMPTY
-    var fuelPoweredTicks = 0
+    var fuelPoweredTicks = 0.0
     var shouldRefuel = false // set to true if using fuel
     var hasFuel = false
 
     fun tickFuelConsumption() {
         if(level?.isClientSide == true) return
+
+        val rate = (level!!.gameRules.getInt(ModGamerules.FUEL_CONSUMPTION_PERCENTAGE) * 0.01)
 
         // If the fuel amount is zero we want to grab another item
         if(fuelPoweredTicks <= 0 && shouldRefuel) {
@@ -56,7 +60,7 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
 
         // We know we have fuel at this point
         hasFuel = true
-        fuelPoweredTicks -= 1
+        fuelPoweredTicks -= rate
     }
 
     // EVENTS \\
@@ -85,13 +89,13 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
 
     override fun load(tag: CompoundTag) {
         fuelStack = ItemStack.of(tag.getCompound("FuelSlot"))
-        fuelPoweredTicks = tag.getInt("FuelPoweredTicks")
+        fuelPoweredTicks = tag.getDouble("FuelPoweredTicks")
         super.load(tag)
     }
 
     override fun saveAdditional(tag: CompoundTag) {
         tag.put("FuelSlot", fuelStack.save(CompoundTag()))
-        tag.putInt("FuelPoweredTicks", fuelPoweredTicks)
+        tag.putDouble("FuelPoweredTicks", fuelPoweredTicks)
         super.saveAdditional(tag)
     }
 

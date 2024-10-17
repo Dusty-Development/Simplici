@@ -26,6 +26,7 @@ object Simplici {
         ModNetworking.registerServer()
 
         ModGamerules.register()
+        println("EASFGFEWGWEGAWG")
     }
 
     @JvmStatic

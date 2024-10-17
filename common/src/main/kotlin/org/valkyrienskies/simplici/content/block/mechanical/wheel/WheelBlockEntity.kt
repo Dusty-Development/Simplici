@@ -75,8 +75,8 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         wheelData.wheelLocalDirection = blockState.getValue(FACING)
         wheelData.wheelRadius = wheelRadius
         wheelData.steeringType = steeringType
-        wheelData.restDistance = gameRules.getInt(wheelDistanceLimit).toDouble() * 0.01
-        wheelData.floorCastDistance = gameRules.getInt(wheelRestHeight).toDouble() * 0.01
+        wheelData.restDistance = gameRules.getInt(wheelRestHeight).toDouble() * 0.01
+        wheelData.floorCastDistance = gameRules.getInt(wheelDistanceLimit).toDouble() * 0.01
         wheelData.floorFrictionMultiplier = 0.6
         wheelData.floorVel = null
         wheelData.floorBlockPos = null

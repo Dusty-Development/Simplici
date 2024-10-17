@@ -4,6 +4,9 @@ import net.minecraft.world.level.GameRules
 
 object ModGamerules {
 
+    // FUEL \\
+    val FUEL_CONSUMPTION_PERCENTAGE: GameRules.Key<GameRules.IntegerValue> = GameRules.register("fuelConsumptionPercentage", GameRules.Category.MISC, GameRules.IntegerValue.create(100))
+
     // MECHANICAL PARTS \\
     val NEWTONIAN_ROTATORS: GameRules.Key<GameRules.BooleanValue> = GameRules.register("newtonianRotators", GameRules.Category.MISC, GameRules.BooleanValue.create(true))
     val NEWTONIAN_HYDRAULICS: GameRules.Key<GameRules.BooleanValue> = GameRules.register("newtonianHydraulics", GameRules.Category.MISC, GameRules.BooleanValue.create(true))
@@ -55,9 +58,9 @@ object ModGamerules {
     val WHEEL_LOCKED_FRICTION: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelLockedFriction", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
 
     // WHEEL SPECIFICS \\
-    val LARGE_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
-    val MEDIUM_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
-    val SMALL_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
+    val LARGE_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
+    val MEDIUM_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
+    val SMALL_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
 
     val LARGE_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
     val MEDIUM_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
