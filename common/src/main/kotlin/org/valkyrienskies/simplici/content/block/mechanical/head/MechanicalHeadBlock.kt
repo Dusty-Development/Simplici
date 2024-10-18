@@ -21,7 +21,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import org.valkyrienskies.simplici.api.util.DirectionalShape
 import org.valkyrienskies.simplici.api.util.RotShapes
 
-class MechanicalHeadBlock : BaseEntityBlock( Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound( SoundType.WOOD).noOcclusion() )
+class MechanicalHeadBlock : BaseEntityBlock( Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound( SoundType.WOOD).noCollission().noOcclusion() )
 {
 
     val SHAPE = RotShapes.box(0.0, 12.0, 0.0, 16.0, 16.0, 16.0)

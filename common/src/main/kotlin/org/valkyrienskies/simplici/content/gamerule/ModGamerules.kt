@@ -58,13 +58,14 @@ object ModGamerules {
     val WHEEL_LOCKED_FRICTION: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelLockedFriction", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
 
     // WHEEL SPECIFICS \\
-    val LARGE_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
-    val MEDIUM_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
-    val SMALL_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
+    // Flipped because jank
+    val LARGE_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
+    val MEDIUM_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
+    val SMALL_WHEEL_REST_HEIGHT: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(0)) // this value is 100 bigger
 
-    val LARGE_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
-    val MEDIUM_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
-    val SMALL_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelMaxLength", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
+    val LARGE_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("largeWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
+    val MEDIUM_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("mediumWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
+    val SMALL_WHEEL_MAX_LENGTH: GameRules.Key<GameRules.IntegerValue> = GameRules.register("smallWheelRestHeight", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
 
 
     fun register() {

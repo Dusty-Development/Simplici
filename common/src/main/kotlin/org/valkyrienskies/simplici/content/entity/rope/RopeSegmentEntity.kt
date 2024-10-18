@@ -1,6 +1,8 @@
 package org.valkyrienskies.simplici.content.entity.rope
 
 import net.minecraft.core.BlockPos
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -25,6 +27,7 @@ import org.valkyrienskies.core.apigame.constraints.VSSphericalTwistLimitsConstra
 import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
 import org.valkyrienskies.core.apigame.physics.VSCapsuleCollisionShapeData
 import org.valkyrienskies.core.impl.game.ships.ShipInertiaDataImpl
+import org.valkyrienskies.core.impl.game.ships.ShipObjectClientWorld
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
@@ -108,11 +111,19 @@ class RopeSegmentEntity (type: EntityType<RopeSegmentEntity>, level: Level): VSP
 
     override fun getDimensions(pose: Pose): EntityDimensions = EntityDimensions(0.5F,0.5F,false)
 
+    fun getNextRenderTransform(shipObjectClientWorld: ShipObjectClientWorld): ShipTransform? {
+        val shipIdString = entityData.get(SynchedEntityData.defineId(VSPhysicsEntity::class.java, EntityDataSerializers.STRING))
+        if (shipIdString == "") { return null }
+        val shipIdLong = shipIdString.toLong()
+        val physEntityClient = shipObjectClientWorld.physicsEntities[shipIdLong]
+        return physEntityClient?.latestNetworkTransform
+    }
+
     companion object {
 
         val radius: Double get() = 0.125
         val halfLength: Double get() = 0.25
-        val mass:   Double get() = 100.0
+        val mass:   Double get() = 75.0
 
         fun createSegmentEntity(level: ServerLevel, pos: Vector3dc, rotation: Quaterniond, spawnStatic: Boolean = false, parentEntity: RopeSegmentEntity? = null): RopeSegmentEntity {
             val entity = ModEntities.ROPE_SEGMENT.get().create(level)!!

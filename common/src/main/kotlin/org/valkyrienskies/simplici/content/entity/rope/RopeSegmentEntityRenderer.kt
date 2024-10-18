@@ -34,31 +34,45 @@ class RopeSegmentEntityRenderer(context: EntityRendererProvider.Context) : Entit
         val vertexConsumer = multiBufferSource.getBuffer(RenderType.leash())
         val positionMatrix = poseStack.last().pose()
 
-        drawLineInDir(Vector3d(1.0,0.0,0.0), RopeSegmentEntity.halfLength, Vector3f(0.5f, 0.4f, 0.3f), entity, vertexConsumer, positionMatrix)
-        drawLineInDir(Vector3d(1.0,0.0,0.0), -RopeSegmentEntity.halfLength, Vector3f(0.5f,0.4f, 0.3f).mul(0.7f), entity, vertexConsumer, positionMatrix)
+        drawLineInDir(Vector3d(1.0,0.0,0.0), Vector3d(0.0,1.0,0.0), RopeSegmentEntity.radius * 0.75, RopeSegmentEntity.halfLength, Vector3f(0.5f, 0.4f, 0.3f), entity, vertexConsumer, positionMatrix, light)
+        drawLineInDir(Vector3d(1.0,0.0,0.0), Vector3d(0.0,0.0,1.0), RopeSegmentEntity.radius * 0.75, RopeSegmentEntity.halfLength, Vector3f(0.5f, 0.4f, 0.3f), entity, vertexConsumer, positionMatrix, light)
+
+        drawLineInDir(Vector3d(1.0,0.0,0.0), Vector3d(0.0,1.0,0.0), RopeSegmentEntity.radius * 0.75, -RopeSegmentEntity.halfLength, Vector3f(0.5f,0.4f, 0.3f).mul(0.7f), entity, vertexConsumer, positionMatrix, light)
+        drawLineInDir(Vector3d(1.0,0.0,0.0), Vector3d(0.0,0.0,1.0), RopeSegmentEntity.radius * 0.75, -RopeSegmentEntity.halfLength, Vector3f(0.5f,0.4f, 0.3f).mul(0.7f), entity, vertexConsumer, positionMatrix, light)
+
 
         poseStack.popPose()
     }
 
-    fun drawLineInDir(dir:Vector3d, length:Double, color: Vector3f, entity: RopeSegmentEntity, vertexConsumer: VertexConsumer, positionMatrix:Matrix4f) {
-        val renderTransform = entity.getRenderTransform(entity.level().shipObjectWorld as ShipObjectClientWorld)
+    fun drawLineInDir(dir:Vector3d, right:Vector3d, thickness:Double, length:Double, color: Vector3f, entity: RopeSegmentEntity, vertexConsumer: VertexConsumer, positionMatrix:Matrix4f, light: Int) {
+        val renderTransform = entity.getNextRenderTransform(entity.level().shipObjectWorld as ShipObjectClientWorld)
 
         val eyePos = entity.eyePosition.toJOML()
         val blockPos = BlockPos(eyePos.x.toInt(), eyePos.y.toInt(), eyePos.z.toInt())
 
         val blockLight = getBlockLightLevel(entity, blockPos)
         val skyLight = getSkyLightLevel(entity, blockPos)
-        val totalLight = LightTexture.pack(blockLight, skyLight)
+        val totalLight = light //LightTexture.pack(blockLight, skyLight)
 
         var direction = renderTransform?.transformDirectionNoScalingFromShipToWorld(dir, Vector3d())
         if(direction == null) direction = dir
+
+        var rightDirection = renderTransform?.transformDirectionNoScalingFromShipToWorld(right, Vector3d())
+        if(rightDirection == null) rightDirection = dir
 
         val start = direction.mul(length, Vector3d())
         val end = direction.mul(0.0, Vector3d())
         val normal = Vector3d(start.sub(end, Vector3d()).normalize())
 
-        vertexConsumer.vertex(positionMatrix, start.x.toFloat(), start.y.toFloat(), start.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
-        vertexConsumer.vertex(positionMatrix, end.x.toFloat(), end.y.toFloat(), end.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
+        val a = start.add(rightDirection.mul(thickness, Vector3d()), Vector3d())
+        val b = start.add(rightDirection.mul(-thickness, Vector3d()), Vector3d())
+        val c = end.add(rightDirection.mul(thickness, Vector3d()), Vector3d())
+        val d = end.add(rightDirection.mul(-thickness, Vector3d()), Vector3d())
+
+        vertexConsumer.vertex(positionMatrix, a.x.toFloat(), a.y.toFloat(), a.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
+        vertexConsumer.vertex(positionMatrix, b.x.toFloat(), b.y.toFloat(), b.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
+        vertexConsumer.vertex(positionMatrix, c.x.toFloat(), c.y.toFloat(), c.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
+        vertexConsumer.vertex(positionMatrix, d.x.toFloat(), d.y.toFloat(), d.z.toFloat()).color(color.x, color.y, color.z, 1.0f).uv2(totalLight).normal(normal.x.toFloat(), normal.y.toFloat(), normal.z.toFloat()).endVertex()
     }
 
     private fun renderSegment(
@@ -92,5 +106,5 @@ class RopeSegmentEntityRenderer(context: EntityRendererProvider.Context) : Entit
         vertexConsumer.vertex(positionMatrix, localX + o, localY + m - n, localZ - p).color(red, green, blue, 1.0f).uv2(totalLight).endVertex()
     }
 
-    override fun getTextureLocation(entity: RopeSegmentEntity): ResourceLocation = ResourceLocation(Simplici.MOD_ID, "textures/entity/rope_segment/rope_segment.png");
+    override fun getTextureLocation(entity: RopeSegmentEntity): ResourceLocation = ResourceLocation(Simplici.MOD_ID, "textures/entity/rope/rope.png");
 }

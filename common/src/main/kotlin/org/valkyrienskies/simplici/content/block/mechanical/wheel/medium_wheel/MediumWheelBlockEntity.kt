@@ -8,6 +8,6 @@ import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 class MediumWheelBlockEntity(pos: BlockPos, state: BlockState) : WheelBlockEntity(ModBlockEntities.MEDIUM_WHEEL.get(), pos, state) {
     override val wheelRadius = 0.75
-    override val wheelRestHeight = ModGamerules.MEDIUM_WHEEL_REST_HEIGHT // From center of block to center of wheel in restFrom center of block to center of wheel in rest
-    override val wheelDistanceLimit = ModGamerules.MEDIUM_WHEEL_MAX_LENGTH
+    override val wheelMaxDistance = ModGamerules.MEDIUM_WHEEL_MAX_LENGTH // From center of block to center of wheel in restFrom center of block to center of wheel in rest
+    override val wheelRestDistance = ModGamerules.MEDIUM_WHEEL_REST_HEIGHT
 }
