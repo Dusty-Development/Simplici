@@ -45,7 +45,7 @@ class RopeSegmentEntityRenderer(context: EntityRendererProvider.Context) : Entit
     }
 
     fun drawLineInDir(dir:Vector3d, right:Vector3d, thickness:Double, length:Double, color: Vector3f, entity: RopeSegmentEntity, vertexConsumer: VertexConsumer, positionMatrix:Matrix4f, light: Int) {
-        val renderTransform = entity.getNextRenderTransform(entity.level().shipObjectWorld as ShipObjectClientWorld)
+        val renderTransform = entity.getRenderTransform(entity.level().shipObjectWorld as ShipObjectClientWorld)
 
         val eyePos = entity.eyePosition.toJOML()
         val blockPos = BlockPos(eyePos.x.toInt(), eyePos.y.toInt(), eyePos.z.toInt())
