@@ -16,6 +16,7 @@ import net.minecraft.world.phys.HitResult
 import org.valkyrienskies.core.api.ships.LoadedShip
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.properties.ShipId
+import org.valkyrienskies.core.apigame.constraints.VSConstraintId
 import org.valkyrienskies.core.impl.game.ships.ShipDataCommon
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.mod.common.dimensionId
@@ -27,7 +28,6 @@ import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.mod.common.yRange
-import org.valkyrienskies.physics_api.ConstraintId
 import org.valkyrienskies.simplici.api.extension.intPos
 import org.valkyrienskies.simplici.content.block.ModBlocks
 import org.valkyrienskies.simplici.content.block.mechanical.head.MechanicalHeadBlockEntity
@@ -45,11 +45,13 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
     var isConstrained:Boolean = false
     var mechanicalHeadBlockPos: BlockPos? = null
     var constrainedShipId: ShipId? = null
-    @JsonIgnore val constraints:ArrayList<ConstraintId> = ArrayList()
+    @JsonIgnore val constraints:ArrayList<VSConstraintId> = ArrayList()
 
     var isLoading:Boolean = false
 
     open fun resetHingeHead() {
+        setChanged()
+
         // Destroy present head if needed
         staticTicks = staticMaxTicks
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
@@ -229,4 +231,5 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         mechanicalHeadBlockPos?.let { tag.putLong("head_pos", it.asLong()) }
         super.saveAdditional(tag)
     }
+
 }

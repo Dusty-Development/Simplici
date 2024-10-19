@@ -13,7 +13,6 @@ import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.simplici.content.ship.ModShipControl
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.pow
@@ -30,9 +29,9 @@ class RotatorControlModule(override val shipControl: ModShipControl) : IShipCont
     }
 
     override fun onPhysTick(physShip: PhysShipImpl) {
-        val mass = physShip.inertia.shipMass
-        val omega = physShip.poseVel.omega
-        val vel = physShip.poseVel.vel
+        val mass = physShip.mass
+        val omega = physShip.omega
+        val vel = physShip.velocity
 
         spinners.forEach {
             val torque = it.value.first.getValue(FACING).normal.toJOMLD().mul(it.value.first.getValue(BlockStateProperties.POWER).toDouble(), Vector3d())

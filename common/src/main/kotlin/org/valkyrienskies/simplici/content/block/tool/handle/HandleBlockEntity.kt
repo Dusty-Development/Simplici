@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.block.tool.rope_hook.handle
+package org.valkyrienskies.simplici.content.block.tool.handle
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
@@ -12,12 +12,13 @@ import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.mod.common.util.toMinecraft
+import org.valkyrienskies.simplici.api.ModBaseBlockEntity
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
-import org.valkyrienskies.simplici.content.block.tool.rope_hook.RopeHookBlockEntity
+import org.valkyrienskies.simplici.content.item.ModItems
 import org.valkyrienskies.simplici.content.ship.modules.util.HandleControlModule
 import org.valkyrienskies.simplici.content.ship.modules.util.HandleForcesData
 
-class HandleBlockEntity(pos: BlockPos, state: BlockState) : RopeHookBlockEntity(ModBlockEntities.HANDLE.get(), pos, state) {
+class HandleBlockEntity(pos: BlockPos, state: BlockState) : ModBaseBlockEntity(ModBlockEntities.HANDLE.get(), pos, state) {
 
     var holdingPlayer:Player? = null
     var holdOffset = Vector3d()
@@ -32,6 +33,7 @@ class HandleBlockEntity(pos: BlockPos, state: BlockState) : RopeHookBlockEntity(
     }
 
     private fun grab(player: Player, hand: InteractionHand, hit: BlockHitResult) {
+        if(player.isHolding(ModItems.ROPE.get())) return
         val ship = level.getShipObjectManagingPos(blockPos)
         val worldLocation = ship?.transform?.shipToWorld?.transformPosition(hit.location.toJOML())
 
@@ -63,18 +65,16 @@ class HandleBlockEntity(pos: BlockPos, state: BlockState) : RopeHookBlockEntity(
 
             val worldLocation = ship?.transform?.shipToWorld?.transformPosition(blockPos.toJOMLD().add(holdOffset))
             if(holdingPlayer!!.eyePosition.distanceTo(worldLocation!!.toMinecraft()) > 4.75 && !holdingPlayer!!.isCreative) { drop() }
+
+            if(holdingPlayer!!.isCrouching) drop()
         }
-        super.tick()
     }
 
     override fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult): InteractionResult {
-        if(level.getShipObjectManagingPos(blockPos) == null) return super.onUse(player, hand, hit)
+        if(level.getShipObjectManagingPos(blockPos) == null) return if (level?.isClientSide == true) return InteractionResult.SUCCESS else InteractionResult.CONSUME
 
         if(holdingPlayer == null) grab(player, hand, hit) else drop()
-        return super.onUse(player, hand, hit)
-    }
-
-    companion object {
+        return if (level?.isClientSide == true) return InteractionResult.SUCCESS else InteractionResult.CONSUME
     }
 
 }

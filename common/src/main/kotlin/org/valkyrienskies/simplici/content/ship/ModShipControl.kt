@@ -8,6 +8,7 @@ import net.minecraft.world.level.GameRules
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import org.valkyrienskies.core.impl.program.VSCoreImpl
 import org.valkyrienskies.mod.api.SeatedControllingPlayer
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
 import java.util.concurrent.CopyOnWriteArrayList

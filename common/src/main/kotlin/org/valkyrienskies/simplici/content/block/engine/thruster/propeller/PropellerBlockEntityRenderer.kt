@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import org.joml.AxisAngle4f
 import org.joml.Quaternionf
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.api.extension.pose
 import org.valkyrienskies.simplici.content.block.engine.thruster.ThrusterBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
@@ -28,7 +27,7 @@ class PropellerBlockEntityRenderer (
         pose.pose {
             translate(0.5, 0.5, 0.5)
             mulPose(be.blockState.getValue(DirectionalBlock.FACING).rotation)
-            be.animationAngle += be.blockState.getValue(BlockStateProperties.POWER).toDouble()*2 * ModConfig.CLIENT.SIMPLE_PROPELLER_ROT_SPEED * (Minecraft.getInstance().deltaFrameTime)
+            be.animationAngle += be.blockState.getValue(BlockStateProperties.POWER).toDouble() * 20 * (Minecraft.getInstance().deltaFrameTime)
             if(be.animationAngle >= 360.0) be.animationAngle -= 360.0
             pose.mulPose(Quaternionf(AxisAngle4f(Math.toRadians( be.animationAngle ).toFloat(), 0f, 1f, 0f)))
             translate(-0.5, 0.0, -0.5)

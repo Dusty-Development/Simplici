@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 import org.valkyrienskies.simplici.content.render.ModModels;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
-import org.valkyrienskies.simplici.ModConfig;
 import org.valkyrienskies.simplici.content.item.ModItems;
 import org.valkyrienskies.simplici.Simplici;
 import org.valkyrienskies.simplici.registry.CreativeTabs;
@@ -60,13 +59,4 @@ public class SimpliciModFabric implements ModInitializer {
         }
     }
 
-    public static class ModMenu implements ModMenuApi {
-        @Override
-        public ConfigScreenFactory<?> getModConfigScreenFactory() {
-            return (parent) -> VSClothConfig.createConfigScreenFor(
-                    parent,
-                    VSConfigClass.Companion.getRegisteredConfig(ModConfig.class)
-            );
-        }
-    }
 }

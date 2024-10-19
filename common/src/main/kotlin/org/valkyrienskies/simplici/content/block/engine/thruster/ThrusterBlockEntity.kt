@@ -29,7 +29,7 @@ abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: Blo
     var isReversed = false
     var gimbalAngle = 0.0
 
-    fun getThrusterData(ship: LoadedShip):ThrusterForcesData {
+    fun getThrusterData():ThrusterForcesData {
         val data = ThrusterForcesData(state = blockState)
 
         val bestNeighborSignal = level!!.getBestNeighborSignal(blockPos)
@@ -49,10 +49,10 @@ abstract class ThrusterBlockEntity(blockEntityType: BlockEntityType<*>, pos: Blo
 
     override fun tick() {
         super.tick()
-        val ship = level.getShipObjectManagingPos(blockPos)
-        val data = ship?.let { getThrusterData(it) }
+        val data = getThrusterData()
 
         if (level!!.isClientSide) return
+        val ship = level.getShipObjectManagingPos(blockPos)
         if (ship != null) data?.let { ThrusterControlModule.getOrCreate(ship as ServerShip).addThruster(blockPos, it) }
     }
 

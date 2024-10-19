@@ -13,11 +13,11 @@ import org.valkyrienskies.simplici.api.services.ModPlatformHelper
 object ModModels {
     val MODELS = mutableSetOf<ResourceLocation>()
 
-    val PROPELLER = model("block/engine/propeller")
-    val MECHANICAL_BEAM = model("block/mechanical/mechanical_beam")
-    val SMALL_WHEEL = model("block/mechanical/wheel/small_tyre")
-    val MEDIUM_WHEEL = model("block/mechanical/wheel/medium_tyre")
-    val LARGE_WHEEL = model("block/mechanical/wheel/large_tyre")
+    val PROPELLER = model("block/engine/propeller", checkSides = false, useAO = false)
+    val MECHANICAL_BEAM = model("block/mechanical/mechanical_beam", checkSides = false, useAO = false)
+    val SMALL_WHEEL = model("block/mechanical/wheel/small_tyre", checkSides = false, useAO = false)
+    val MEDIUM_WHEEL = model("block/mechanical/wheel/medium_tyre", checkSides = false, useAO = false)
+    val LARGE_WHEEL = model("block/mechanical/wheel/large_tyre", checkSides = false, useAO = false)
 
     private fun getModel(rl: ResourceLocation): BakedModel {
         val model = ModPlatformHelper

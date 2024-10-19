@@ -14,7 +14,7 @@ class SimplePropellerBlock : ThrusterBlock(
         SoundType.STONE).noOcclusion())
 {
 
-    override val SHAPE: RotShape = RotShapes.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0)
+    override val SHAPE: RotShape = RotShapes.box(0.0, 0.0, 8.0, 16.0, 16.0, 16.0)
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = SimplePropellerBlockEntity(blockPos, blockState)
 
 }

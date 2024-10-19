@@ -19,14 +19,13 @@ import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.util.putVector3d
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity.Companion.halfLength
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 
 class RopeItem : Item(
-    Properties().stacksTo(8)
+    Properties().stacksTo(1)
 ){
 
 

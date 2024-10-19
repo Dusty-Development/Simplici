@@ -1,4 +1,4 @@
-package org.valkyrienskies.simplici.content.item
+package org.valkyrienskies.simplici.content.item.tool
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -13,14 +13,12 @@ import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint
-import org.valkyrienskies.core.apigame.constraints.VSHingeOrientationConstraint
 import org.valkyrienskies.core.apigame.constraints.VSSphericalTwistLimitsConstraint
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.getShipObjectManagingPos
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.util.putVector3d
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.mechanical.MechanicalBlockHelper
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity
 import org.valkyrienskies.simplici.content.entity.rope.RopeSegmentEntity.Companion.halfLength
@@ -56,8 +54,6 @@ class TesterItem : Item(
             // Create rope
             val blockPos = BlockPos.of(tag.getLong(BlockNBTString))
             val pos = Vector3d(tag.getDouble("${PosNBTString}x"), tag.getDouble("${PosNBTString}y"), tag.getDouble("${PosNBTString}z"))
-
-
 
             val firstShip = level.getShipObjectManagingPos(blockPos)
             val firstShipId: ShipId = firstShip?.id ?: (level).shipObjectWorld.dimensionToGroundBodyIdImmutable[level.dimensionId]!!.toLong()

@@ -81,13 +81,13 @@ class HydraulicBlockEntity(pos: BlockPos, state: BlockState) : MechanicalConstra
     }
 
     override fun tick() {
-        (mechanicalHeadBlockPos?.let { level!!.getBlockEntity(it) } as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
+//        (mechanicalHeadBlockPos?.let { level?.getBlockEntity(it) } as MechanicalHeadBlockEntity).shouldDrawBeam = level?.getBestNeighborSignal(blockPos)!! > 0
         super.tick()
     }
 
 
     fun updateCurrentPower(target:Double) {
-        currentPower = lerp (currentPower, target, 0.25)
+        currentPower = lerp (currentPower, target, 0.5)
         currentPower = currentPower.coerceIn(0.0,1.0)
     }
 }

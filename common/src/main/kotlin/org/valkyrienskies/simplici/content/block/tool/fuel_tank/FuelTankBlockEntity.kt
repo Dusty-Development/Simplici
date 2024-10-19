@@ -115,4 +115,6 @@ class FuelTankBlockEntity(pos:BlockPos, state: BlockState) : BaseContainerBlockE
     override fun canTakeItemThroughFace(index: Int, stack: ItemStack, direction: Direction): Boolean = direction == Direction.DOWN && !isEmpty()
     override fun canPlaceItem(i: Int, itemStack: ItemStack): Boolean = ItemHelper.getFuelTime(itemStack) > 0
     override fun fillStackedContents(helper: StackedContents) = fuelStacks.forEach { helper.accountStack(it) }
+
+
 }

@@ -30,7 +30,7 @@ import org.valkyrienskies.simplici.content.block.mechanical.wheel.large_wheel.La
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.medium_wheel.MediumWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.small_wheel.SmallWheelBlockEntity
 import org.valkyrienskies.simplici.content.block.tool.fuel_tank.FuelTankBlockEntity
-import org.valkyrienskies.simplici.content.block.tool.rope_hook.handle.HandleBlockEntity
+import org.valkyrienskies.simplici.content.block.tool.handle.HandleBlockEntity
 import org.valkyrienskies.simplici.content.block.tool.sensor.SensorBlockEntity
 import org.valkyrienskies.simplici.content.render.ModModels
 import org.valkyrienskies.simplici.registry.DeferredRegister

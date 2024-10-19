@@ -3,7 +3,6 @@ package org.valkyrienskies.simplici.content.block.engine.thruster.firework_thrus
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.block.state.BlockState
-import org.valkyrienskies.simplici.ModConfig
 import org.valkyrienskies.simplici.content.block.ModBlockEntities
 import org.valkyrienskies.simplici.content.block.engine.thruster.ThrusterBlockEntity
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules

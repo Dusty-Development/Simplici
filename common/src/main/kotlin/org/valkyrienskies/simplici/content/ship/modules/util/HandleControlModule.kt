@@ -9,7 +9,6 @@ import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
-import org.valkyrienskies.simplici.api.extension.getVelAtPos
 import org.valkyrienskies.simplici.content.ship.IShipControlModule
 import org.valkyrienskies.simplici.content.ship.ModShipControl
 import java.util.concurrent.ConcurrentHashMap
@@ -34,7 +33,7 @@ class HandleControlModule(override val shipControl: ModShipControl) : IShipContr
             data.linearPID.setPID(1.0,1.0,0.25)
             data.linearPID.updatePID(dt, worldPos, data.target)
 
-            var forceScalar = physShip.inertia.shipMass * 10000.0
+            var forceScalar = physShip.mass * 10000.0
             if (data.isCreative) forceScalar = forceScalar.coerceAtMost(50000.0)
             val force = data.linearPID.mul(5 * forceScalar, Vector3d())
 
@@ -53,7 +52,7 @@ class HandleControlModule(override val shipControl: ModShipControl) : IShipContr
             data.angularPID.setPID(1.0,1.0,0.25)
             data.angularPID.updateAnglePID(dt, currentAngle, targetAngle)
 
-            var torqueScalar = physShip.inertia.shipMass * 1000.0
+            var torqueScalar = physShip.mass * 1000.0
             if (data.isCreative) torqueScalar = torqueScalar.coerceAtMost(50000.0)
             val torque = data.angularPID.mul(5 * torqueScalar, Vector3d())
 
@@ -79,8 +78,8 @@ class HandleControlModule(override val shipControl: ModShipControl) : IShipContr
 
     override fun onTick() { }
 
-    fun addHolder(pos: BlockPos, data: HandleForcesData) { holders[pos] = data }
-    fun removeHolder(pos: BlockPos) { holders.remove(pos) }
+    fun addHolder(pos: BlockPos, data: HandleForcesData) { holders[pos] = data; println("Add holder") }
+    fun removeHolder(pos: BlockPos) { holders.remove(pos); println("Remove holder") }
 
     companion object {
         fun getOrCreate(ship: ServerShip): HandleControlModule {
