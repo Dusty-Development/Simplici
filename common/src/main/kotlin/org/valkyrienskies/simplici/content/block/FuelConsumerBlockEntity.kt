@@ -33,7 +33,7 @@ abstract class FuelConsumerBlockEntity(blockEntityType: BlockEntityType<*>, pos:
     // Fuel
     val data = KtContainerData()
     var fuelStack: ItemStack = ItemStack.EMPTY
-    var fuelPoweredTicks = 0.0
+    var fuelPoweredTicks = -0.0
     var shouldRefuel = false // set to true if using fuel
     var hasFuel = false
 
