@@ -188,8 +188,8 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
 
     fun onPlaced() = resetHingeHead()
     fun onRemoved() {
-        breakConstraints()
         mechanicalHeadBlockPos?.let { level!!.destroyBlock(it, false) }
+        breakConstraints()
     }
     open fun onUse(player: Player, hand: InteractionHand, hit: BlockHitResult) { }
 
@@ -204,6 +204,7 @@ abstract class MechanicalConstraintBlockEntity(blockEntityType: BlockEntityType<
         if (level!!.isEmptyBlock(mechanicalHeadBlockPos!!)) {
             onRemoved()
             level!!.destroyBlock(blockPos, true) // This doesn't trigger a break event...
+            breakConstraints()
             return
         }
 
