@@ -51,7 +51,7 @@ object ModGamerules {
     val WHEEL_GRIP_FORCE: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelGripForce", GameRules.Category.MISC, GameRules.IntegerValue.create(3_00)) // this value is 100 bigger
     val WHEEL_SLIDE_FORCE: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelSlideForce", GameRules.Category.MISC, GameRules.IntegerValue.create(2_50)) // this value is 100 bigger
 
-    val WHEEL_CAST_RESOLUTION: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelCastsResolution", GameRules.Category.MISC, GameRules.IntegerValue.create(36))
+    val WHEEL_CAST_RESOLUTION: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelCastsResolution", GameRules.Category.MISC, GameRules.IntegerValue.create(10))
     val WHEEL_SUSPENSION_STIFFNESS: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelSuspensionStiffness", GameRules.Category.MISC, GameRules.IntegerValue.create(35_00)) // this value is 100 bigger
     val WHEEL_SUSPENSION_BIAS: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelSuspensionBias", GameRules.Category.MISC, GameRules.IntegerValue.create(1_00)) // this value is 100 bigger
     val WHEEL_SUSPENSION_DAMPING: GameRules.Key<GameRules.IntegerValue> = GameRules.register("wheelSuspensionDamping", GameRules.Category.MISC, GameRules.IntegerValue.create(10_00)) // this value is 100 bigger
