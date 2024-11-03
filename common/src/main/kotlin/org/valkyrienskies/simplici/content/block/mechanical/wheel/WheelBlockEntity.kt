@@ -29,8 +29,10 @@ import org.valkyrienskies.mod.common.util.toMinecraft
 import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType.*
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
+import org.valkyrienskies.simplici.content.ship.modules.wheel.Wheel
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelControlModule
 import org.valkyrienskies.simplici.content.ship.modules.wheel.WheelForcesData
+import java.lang.Math.pow
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -49,10 +51,9 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
     var currentDist = 0.0
 
     var steeringType: WheelSteeringType = NONE
-    var wheelData: WheelForcesData = WheelForcesData()
+    var wheel: Wheel = Wheel()
 
-    fun generateWheelForcesData(): WheelForcesData {
-
+    fun generateWheelForcesData() {
 
         steeringAngle = wheelData.steeringAngle
 
@@ -127,6 +128,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         currentDist = wheelData.floorCastDistance
         return wheelData
     }
+
 
     fun pointVelocity(physShip: Ship, worldPointPosition: Vector3dc): Vector3dc {
         val centerOfMassPos = worldPointPosition.sub(physShip.transform.positionInWorld, Vector3d())
