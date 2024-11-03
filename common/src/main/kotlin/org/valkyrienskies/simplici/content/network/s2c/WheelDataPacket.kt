@@ -27,7 +27,7 @@ class WheelDataPacket(val pos: BlockPos, val wheelSteeringAngle: Double, val whe
         if (level == null) return
 
         val be:WheelBlockEntity = level.getBlockEntity(pos) as WheelBlockEntity
-        be.wheelData.steeringAngle = wheelSteeringAngle
+//        be.wheelData.steeringAngle = wheelSteeringAngle
     }
 
 }

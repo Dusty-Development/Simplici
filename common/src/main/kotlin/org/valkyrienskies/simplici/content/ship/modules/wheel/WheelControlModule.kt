@@ -24,11 +24,11 @@ import kotlin.math.absoluteValue
 
 class WheelControlModule(override val shipControl: ModShipControl) : IShipControlModule {
 
-    private val wheels = ConcurrentHashMap<BlockPos, WheelForcesData>()
+    private val wheels = ConcurrentHashMap<BlockPos, Wheel>()
     private val engines = ConcurrentHashMap<BlockPos, EngineData>()
 
-    fun addOrUpdateWheel(pos: BlockPos, wheelForcesData: WheelForcesData) {
-        wheels[pos] = wheelForcesData
+    fun addOrUpdateWheel(pos: BlockPos, wheelObj: Wheel) {
+        wheels[pos] = wheelObj
     }
     fun removeWheel(pos: BlockPos) {
         wheels.remove(pos)
@@ -47,11 +47,13 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
 
     override fun onPhysTick(physShip: PhysShipImpl) {
         wheels.forEach {
-            if(it.value.colliding) {
-                calculateSuspension(physShip, it.key, it.value)
-                calculateSteering(physShip, it.key, it.value)
-                calculateDriving(physShip, it.key, it.value)
-            }
+            it.value.updateForces()
+            it.value.throttle = shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0
+//            if(it.value.colliding) {
+//                calculateSuspension(physShip, it.key, it.value)
+//                calculateSteering(physShip, it.key, it.value)
+//                calculateDriving(physShip, it.key, it.value)
+//            }
         }
     }
 
