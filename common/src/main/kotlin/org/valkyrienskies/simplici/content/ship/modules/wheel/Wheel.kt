@@ -5,6 +5,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.joml.Vector3d
@@ -19,6 +20,7 @@ import org.valkyrienskies.mod.common.world.clipIncludeShips
 import org.valkyrienskies.simplici.content.block.mechanical.wheel.WheelSteeringType
 import org.valkyrienskies.simplici.content.gamerule.ModGamerules
 import java.lang.Math.pow
+import kotlin.math.pow
 
 class Wheel {
 
@@ -50,6 +52,9 @@ class Wheel {
 
     // Wheel
     var wheelRadius = 0.5
+    var wheelLocalUp = Vector3d() // Wheel forward local to the ship
+    var wheelLocalForward = Vector3d() // Wheel forward local to the ship
+    var wheelLocalRight = Vector3d() // Wheel out local to the ship
     var wheelFrictionRollingSlow = 0.25 // Rolling friction Coefficient of the floor
     var wheelFrictionStatic = 1.0 // Static friction Coefficient of the floor
     var wheelFrictionDynamic = 0.7 // Dynamic friction Coefficient of the floor
@@ -59,7 +64,8 @@ class Wheel {
     var isGrounded = true
 
     // World
-    var blockPos: BlockPos = BlockPos.ZERO
+    var blockPos: BlockPos? = null
+    var blockShip: Ship? = null
     var blockState:BlockState? = null
     var blockLevel: Level? = null
 
@@ -71,6 +77,7 @@ class Wheel {
         wheelForce = Vector3d()
         if(isMarkedForDeletion) return
 
+        updateData()
         updateWheelCollision()
         constrainWheelToBounds()
         calculateSuspensionForces()
@@ -83,10 +90,35 @@ class Wheel {
         if(wheelCurrentOffset < 0.0) wheelCurrentOffset = 0.0
     }
 
+    private fun updateData() {
+        val level = blockLevel
+        val blockState = blockState
+        val blockPos = blockPos
+        if(level == null || blockState == null || blockPos == null) return
+
+        blockShip = level.getShipObjectManagingPos(blockPos)
+
+        // Get local vectors
+        wheelLocalUp = Direction.UP.normal.toJOMLD()
+        wheelLocalForward = blockState.getValue(FACING).normal.toJOMLD()
+        wheelLocalRight = wheelLocalForward.rotateAxis(Math.toRadians(90.0), wheelLocalUp.x, wheelLocalUp.y, wheelLocalUp.z, Vector3d())
+
+        // Apply steering
+        wheelLocalForward.rotateAxis(Math.toRadians(steeringAngle), wheelLocalUp.x, wheelLocalUp.y, wheelLocalUp.z)
+        wheelLocalRight.rotateAxis(Math.toRadians(steeringAngle), wheelLocalUp.x, wheelLocalUp.y, wheelLocalUp.z)
+
+        // Translate to world equivalents
+        attachmentUp = blockShip?.transform?.transformDirectionNoScalingFromShipToWorld(wheelLocalUp, Vector3d())!!
+        attachmentForward = blockShip?.transform?.transformDirectionNoScalingFromShipToWorld(wheelLocalForward, Vector3d())!!
+        attachmentRight = blockShip?.transform?.transformDirectionNoScalingFromShipToWorld(wheelLocalRight, Vector3d())!!
+
+    }
+
     private fun updateWheelCollision() {
         val level = blockLevel
         val blockState = blockState
-        if(level == null || blockState == null) return
+        val blockPos = blockPos
+        if(level == null || blockState == null || blockPos == null) return
 
         val gameRules = level.gameRules
         val castResolution = gameRules.getInt(ModGamerules.WHEEL_CAST_RESOLUTION)
@@ -94,8 +126,7 @@ class Wheel {
         val attachmentShip = level.getShipObjectManagingPos(blockPos)
 
         // Used to snap wheel to floor
-        var closestDistance = suspensionMaximumDistance
-        wheelCurrentOffset += 0.05
+        val closestDistance = suspensionMaximumDistance
 
         // Used to calculate floor vars after casts are done
         var collisionCount = 0
@@ -108,16 +139,13 @@ class Wheel {
 
             // Define some needed vars
             val blockCenterPos = blockPos.center.toJOML()
-            val suspensionDirection = Direction.DOWN.normal.toJOMLD()
-
-            //TODO: MAKE THIS TAKE INTO ACCOUNT STEERING
 
             // Calculate Ray angle
             val totalAngleDegrees = calculateCollisionRayAngle(i, -castResolution, castResolution)
-            val rotatedSuspensionDirection = suspensionDirection.rotateX(Math.toRadians(totalAngleDegrees), Vector3d())
+            val rotatedSuspensionDirection = wheelLocalUp.rotateAxis(Math.toRadians(totalAngleDegrees), wheelLocalRight.x, wheelLocalRight.y, wheelLocalRight.z, Vector3d())
 
             // Ray positions
-            val localStartPos = blockCenterPos.add(suspensionDirection.mul(wheelCurrentOffset, Vector3d()))
+            val localStartPos = blockCenterPos.add(wheelLocalUp.mul(wheelCurrentOffset, Vector3d()))
             val localEndPos = localStartPos.add(rotatedSuspensionDirection.mul(wheelRadius), Vector3d())
 
             val worldStartPos = attachmentShip?.shipToWorld?.transformPosition(localStartPos, Vector3d()) ?: localStartPos
@@ -156,6 +184,7 @@ class Wheel {
         floorNormal = accumulatedFloorNormal.normalize() // TODO: This might be wrong try dividing it like the other two?
         floorVelocity = accumulatedFloorVelocity.div(collisionCount.toDouble(), Vector3d())
 
+
         if(wheelCurrentOffset > closestDistance) wheelCurrentOffset = closestDistance
     }
 
@@ -178,7 +207,7 @@ class Wheel {
         val normalizedIndex = (index - min).toDouble() / totalRays.toDouble()
 
         // Control the density around the bias angle
-        val biasedFactor = pow(normalizedIndex, bias)
+        val biasedFactor = normalizedIndex.pow(bias)
 
         // Map biasedFactor to an angle around biasAngle
         val angle = biasAngle + (biasedFactor - 0.5) * 360.0

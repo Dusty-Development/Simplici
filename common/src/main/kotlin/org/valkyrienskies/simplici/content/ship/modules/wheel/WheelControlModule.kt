@@ -9,6 +9,7 @@ import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.core.api.ships.getAttachment
 import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
 import org.valkyrienskies.simplici.api.extension.getVelAtPos
@@ -47,8 +48,15 @@ class WheelControlModule(override val shipControl: ModShipControl) : IShipContro
 
     override fun onPhysTick(physShip: PhysShipImpl) {
         wheels.forEach {
-            it.value.updateForces()
             it.value.throttle = shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0
+            it.value.steeringAngle =
+                org.joml.Math.lerp(
+                    it.value.steeringAngle,
+                    (shipControl.currentControlData?.forwardImpulse?.toDouble() ?: 0.0) * 35.0,
+                    1.0/60.0
+                )
+
+            it.value.updateForces()
 //            if(it.value.colliding) {
 //                calculateSuspension(physShip, it.key, it.value)
 //                calculateSteering(physShip, it.key, it.value)
