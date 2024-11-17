@@ -54,9 +54,14 @@ class WheelBlockEntityRenderer (
                 val localVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
 
                 val rotationAngle = Math.toDegrees(((localVelocity / (2 * Math.PI * be.wheelRadius)) / Math.PI))
+
+                //commented out the lerping since it was causing issues (i think lmao)
                 be.lastDrivingVel = if(be.wheelData.colliding) rotationAngle else lerp(be.lastDrivingVel, 0.0, Math.clamp(0.0, 1.0, dt * 0.35))
 
                 be.drivingAngle += be.lastDrivingVel * dt
+
+                //using the shitty previous way of doing it as a fallback for now, please feel free to comment this out and revert it lmfao
+                //if(be.wheelData.colliding) be.drivingAngle = rotationAngle * dt
                 if(be.drivingAngle >= 360) be.drivingAngle -= 360
 
             }
