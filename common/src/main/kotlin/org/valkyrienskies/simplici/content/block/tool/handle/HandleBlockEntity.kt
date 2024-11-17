@@ -77,4 +77,9 @@ class HandleBlockEntity(pos: BlockPos, state: BlockState) : ModBaseBlockEntity(M
         return if (level?.isClientSide == true) return InteractionResult.SUCCESS else InteractionResult.CONSUME
     }
 
+    override fun onRemoved() {
+        drop()
+        super.onRemoved()
+    }
+
 }
