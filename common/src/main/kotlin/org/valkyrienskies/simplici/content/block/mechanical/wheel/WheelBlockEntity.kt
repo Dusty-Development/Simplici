@@ -40,6 +40,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 {
 
     abstract val wheelRadius: Double
+    abstract val wheelOffset: Double
     abstract val wheelMaxDistance: GameRules.Key<GameRules.IntegerValue> // From center of block to center of wheel in rest
     abstract val wheelRestDistance: GameRules.Key<GameRules.IntegerValue>
 
@@ -91,8 +92,12 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
             val offset = (i.toDouble()/gameRules.getInt(ModGamerules.WHEEL_CAST_RESOLUTION)) * wheelRadius
             val startPosShip = blockPos.toJOMLD().add(0.5, 0.5, 0.5).add(blockState.getValue(FACING).normal.toJOMLD().mul(offset))
 
+
             val wheelBottomDistance:Double = sqrt(1 - (((offset/wheelRadius).pow(2)))) * wheelRadius
             val endPosShip = startPosShip.add(Vector3d(0.0, -(wheelData.restDistance + wheelBottomDistance), 0.0), Vector3d())
+
+            startPosShip.add(blockState.getValue(FACING).counterClockWise.normal.toJOMLD().mul(wheelOffset))
+            endPosShip.add(blockState.getValue(FACING).counterClockWise.normal.toJOMLD().mul(wheelOffset))
 
             val startPos = ship?.shipToWorld?.transformPosition(startPosShip, Vector3d()) ?: startPosShip
             val endPos = ship?.shipToWorld?.transformPosition(endPosShip, Vector3d()) ?: endPosShip
