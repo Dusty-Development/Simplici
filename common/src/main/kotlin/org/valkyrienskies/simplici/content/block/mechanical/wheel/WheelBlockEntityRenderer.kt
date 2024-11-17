@@ -39,11 +39,13 @@ class WheelBlockEntityRenderer (
             translate(0.5, 0.5, 0.5)
             translate(0.0, -dist, 0.0)
 
+            val direction = be.blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD()
+
             val ship = be.level.getShipManagingPos(be.blockPos)
             if(ship != null) {
                 val worldBlockPos = ship.transform.shipToWorld.transformPosition(be.blockPos.center.toJOML())
 
-                val direction = be.blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD()
+
                 val globalDir = ship.transform.transformDirectionNoScalingFromShipToWorld(direction.rotateY(java.lang.Math.toRadians(be.steeringAngle)), Vector3d()).normalize()
 
                 val velocity = be.pointVelocity(ship, worldBlockPos)
