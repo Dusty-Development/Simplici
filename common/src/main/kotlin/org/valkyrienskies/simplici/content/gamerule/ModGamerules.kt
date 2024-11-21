@@ -3,6 +3,8 @@ package org.valkyrienskies.simplici.content.gamerule
 import net.minecraft.world.level.GameRules
 
 object ModGamerules {
+    // VS2 \\
+    val SHIP_SPLITTING: GameRules.Key<GameRules.BooleanValue> = GameRules.register("shipSplitting", GameRules.Category.UPDATES, GameRules.BooleanValue.create(false))
 
     // FUEL \\
     val FUEL_CONSUMPTION_PERCENTAGE: GameRules.Key<GameRules.IntegerValue> = GameRules.register("fuelConsumptionPercentage", GameRules.Category.MISC, GameRules.IntegerValue.create(100))

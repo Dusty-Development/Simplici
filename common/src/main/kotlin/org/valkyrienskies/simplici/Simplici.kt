@@ -28,8 +28,6 @@ object Simplici {
         ModNetworking.registerServer()
 
         ModGamerules.register()
-
-        ValkyrienSkiesMod.vsCore.hooks.enableConnectivity = false
     }
 
     @JvmStatic
