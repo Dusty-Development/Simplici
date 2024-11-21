@@ -42,7 +42,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
 {
 
     abstract val wheelRadius: Double
-    //abstract val wheelOffset: Double
+    abstract val wheelOffset: Double
     abstract val wheelMaxDistance: GameRules.Key<GameRules.IntegerValue> // From center of block to center of wheel in rest
     abstract val wheelRestDistance: GameRules.Key<GameRules.IntegerValue>
 
