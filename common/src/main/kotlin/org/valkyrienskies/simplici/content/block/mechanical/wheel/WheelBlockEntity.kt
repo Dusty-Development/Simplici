@@ -3,6 +3,7 @@ package org.valkyrienskies.simplici.content.block.mechanical.wheel
 import io.netty.buffer.Unpooled
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.data.tags.TagsProvider
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.GameRules
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -109,8 +111,7 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
                 ClipContext.Fluid.NONE,
                 null
             )
-            var clipResult = level!!.clipIncludeShips(clipContext, false)
-            if (ship != null) clipResult = level!!.clipIncludeShips(clipContext, false, ship.id)
+            val clipResult = level!!.clipIncludeShips(clipContext, false, ship?.id)
 
             if (clipResult.type == HitResult.Type.BLOCK) {
                 val hitShip = level.getShipObjectManagingPos(clipResult.blockPos)
@@ -145,12 +146,15 @@ abstract class WheelBlockEntity(blockEntityType: BlockEntityType<*>, pos: BlockP
         if(ship != null && wheelData.colliding) {
             val worldBlockPos = ship.transform.shipToWorld.transformPosition(blockPos.center.toJOML())
             val direction = blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD()
-            val globalDir = ship.transform.transformDirectionNoScalingFromShipToWorld(direction.rotateY(java.lang.Math.toRadians(steeringAngle + 90)), Vector3d()).normalize()
+            val globalDir = ship.transform.transformDirectionNoScalingFromShipToWorld(direction.rotateY(Math.toRadians(steeringAngle + 90)), Vector3d()).normalize()
 
             val velocity = pointVelocity(ship, worldBlockPos)
             var floorVelocity = wheelData.floorVel
             if(wheelData.floorVel == null) floorVelocity = Vector3d()
             val localVelocity = velocity.sub(floorVelocity, Vector3d()).dot(globalDir)
+
+            if((floorVelocity?.length() ?: 0.0) >= 1.0 && wheelData.floorBlockPos?.let { level!!.getBlockState(it) } == Blocks.GRASS_BLOCK)
+                level?.addParticle(ParticleTypes.EXPLOSION, true, worldBlockPos.x, worldBlockPos.y - wheelData.floorCastDistance - wheelRadius, worldBlockPos.z, 0.0,0.025,0.0)
 
             if(localVelocity.absoluteValue >= ((level!!.gameRules.getInt(ModGamerules.WHEEL_SLIDE_THRESHOLD) * 0.01) * 0.9) && wheelData.floorFrictionMultiplier > 0.5)
                 level?.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, worldBlockPos.x, worldBlockPos.y - wheelData.floorCastDistance - wheelRadius, worldBlockPos.z, 0.0,0.025,0.0)
